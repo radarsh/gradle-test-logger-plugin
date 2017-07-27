@@ -12,9 +12,9 @@ import static org.fusesource.jansi.Ansi.ansi
 
 class TestLoggerPlugin implements Plugin<Project> {
 
+
     @Override
     void apply(Project project) {
-
         Set classes = [] as Set
 
         project.tasks.find { it.name == 'test' }.configure {
