@@ -1,8 +1,31 @@
 plugins {
     id 'groovy'
+    id 'maven-publish'
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
     compile gradleApi()
     compile localGroovy()
+    compile 'org.fusesource.jansi:jansi:1.16'
+}
+
+task sourceJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        module(MavenPublication) {
+            from components.java
+
+            artifact(sourceJar) {
+                classifier = 'sources'
+            }
+        }
+    }
 }
