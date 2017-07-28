@@ -2,13 +2,13 @@ package com.adarshr.gradle.plugins
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 
-import java.text.DecimalFormat
-
-import static org.fusesource.jansi.Ansi.Erase
+import static org.fusesource.jansi.Ansi.Erase.ALL
 import static org.fusesource.jansi.Ansi.ansi
+import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
 class TestLoggerPlugin implements Plugin<Project> {
 
@@ -16,34 +16,40 @@ class TestLoggerPlugin implements Plugin<Project> {
     void apply(Project project) {
         Set classes = [] as Set
 
-        project.tasks.find { it.name == 'test' }.configure {
-            maxParallelForks = 1
+        project.tasks.find { it.name == 'test' }.configure(getTestConfiguration(project, classes))
+    }
 
-            testLogging {
-                lifecycle.events = []
-            }
+    private static Closure getTestConfiguration(project, Set classes) {
+        test {
+            maxParallelForks = 1
+            testLogging.lifecycle.events = []
+
+            def log = { project.logger.lifecycle(it.toString()) }
 
             beforeTest { TestDescriptor descriptor ->
-                if (classes.contains(descriptor.className)) {
-                    project.logger.lifecycle ansi().bold().a('  Test ').reset().fgDefault().a(descriptor.name).reset().fgYellow().a(' STARTED').reset().cursorUpLine().toString()
-                } else {
+                if (!classes.contains(descriptor.className)) {
                     classes << descriptor.className
-                    project.logger.lifecycle ansi().bold().fgBrightYellow().a(descriptor.className).reset().toString()
-
-                    project.logger.lifecycle ansi().bold().a('  Test ').reset().fgDefault().a(descriptor.name).reset().fgYellow().a(' STARTED').reset().cursorUpLine().toString()
+                    log ansi().bold().fgBrightYellow().a(descriptor.className).reset()
                 }
+
+                log ansi().bold().a('  Test ').fgDefault().a(descriptor.name).fgYellow().a(' STARTED').reset().cursorUpLine()
             }
-            afterTest { TestDescriptor descriptor, TestResult result ->
-                def duration = " - ${new DecimalFormat('#.##').format((result.endTime - result.startTime) / 1000)}s"
 
-                if (result.resultType.name() == 'SUCCESS') {
-                    project.logger.lifecycle ansi().eraseLine(Erase.ALL).bold().a('  Test ').reset().fgDefault().a(descriptor.name).reset().fgGreen().a(' PASSED').fgDefault().a(duration).reset().toString()
-                } else if (result.resultType.name() == 'FAILURE') {
-                    project.logger.lifecycle ansi().eraseLine(Erase.ALL).bold().a('  Test ').reset().fgDefault().a(descriptor.name).reset().fgRed().a(' FAILED').fgDefault().a(duration).reset().toString()
-                } else {
-                    project.logger.lifecycle ansi().eraseLine(Erase.ALL).bold().a('  Test ').reset().fgDefault().a(descriptor.name).reset().fgYellow().a(' SKIPPED').fgDefault().a(duration).reset().toString()
+            afterTest { TestDescriptor descriptor, TestResult result ->
+                def prefix = ansi().eraseLine(ALL).bold().a('  Test ').fgDefault().a(descriptor.name)
+
+                switch (result.resultType) {
+                    case SUCCESS: prefix.fgGreen().a(' PASSED'); break
+                    case FAILURE: prefix.fgRed().a(' FAILED'); break
+                    case SKIPPED: prefix.fgYellow().a(' SKIPPED'); break
                 }
+
+                log prefix.reset()
             }
         }
+    }
+
+    private static Closure test(@DelegatesTo(Test) closure) {
+        closure
     }
 }
