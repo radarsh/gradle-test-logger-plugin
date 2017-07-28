@@ -41,5 +41,12 @@ jobs:
       # run tests!
       - run: gradle test
 
-
+      - run: |
+          mkdir -p /test-reports/
+          find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} /test-reports/ \;
+          when: always
+      - store_test_results:
+          path: /test-reports
+      - store_artifacts:
+          path: /test-reports
 
