@@ -1,4 +1,4 @@
-.gradle
+.gradle/
 /build/
 gradle-app.setting
 !gradle-wrapper.jar
@@ -8,6 +8,6 @@ gradle-app.setting
 .idea/
 *.iml
 
-src/test/resources/sample-spock-tests/gradle
-src/test/resources/sample-spock-tests/.gradle
-src/test/resources/sample-spock-tests/build
+src/test/resources/sample-spock-tests/gradle/
+src/test/resources/sample-spock-tests/.gradle/
+src/test/resources/sample-spock-tests/build/
