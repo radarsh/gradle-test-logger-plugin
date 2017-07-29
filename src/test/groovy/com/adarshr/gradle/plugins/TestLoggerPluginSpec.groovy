@@ -32,7 +32,7 @@ class TestLoggerPluginSpec extends Specification {
                 $E[1m  Test $E[39mthis test should be skipped$E[33m STARTED$E[m$E[F
                 $E[2K$E[1m  Test $E[39mthis test should be skipped$E[33m SKIPPED$E[m
             """.stripIndent()
-            escapeJava(actual).replace('\\n', '\n') == escapeJava(expected).replace('\\n', '\n')
+            normalize(actual) == normalize(expected)
         and:
             result.task(":test").outcome == FAILED
     }
@@ -51,6 +51,21 @@ class TestLoggerPluginSpec extends Specification {
     private static String getLoggerOutput(String text, String startMarker, String endMarker) {
         def lines = text.readLines()
         def loggerLines = lines.subList(lines.indexOf(startMarker) + 1, lines.indexOf(endMarker) - 1)
-        "\n${loggerLines.join('\n')}\n"
+        loggerLines.join('\n')
+    }
+
+    private static String normalize(String input) {
+        def escaped = escapeJava(input).replace('\\n', '\n').trim()
+        def groupedBySpec = [:]
+
+        escaped.readLines().each { line ->
+            if (line.contains('Spec')) {
+                groupedBySpec."${line}" = [line]
+            } else {
+                groupedBySpec[groupedBySpec.keySet().last()] << line
+            }
+        }
+
+        groupedBySpec.sort { it.key }.values().flatten().join('\n')
     }
 }
