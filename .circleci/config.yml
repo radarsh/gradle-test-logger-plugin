@@ -1,54 +1,45 @@
-# Java Gradle CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-java/ for more details
-#
 version: 2
 jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
+    build:
+        docker:
+            - image: circleci/openjdk:8-jdk
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
+        working_directory: ~/repo
 
-    working_directory: ~/repo
+        environment:
+            JVM_OPTS: -Xmx3200m
+            TERM: dumb
 
-    environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
+        steps:
+            - checkout
 
-    steps:
-      - checkout
+            - restore_cache:
+                keys:
+                    - v1-dependencies-{{ checksum "build.gradle" }}
+                    - v1-dependencies-
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "build.gradle" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+            - run:
+                name: Download dependencies
+                command: ./gradlew dependencies
 
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "build.gradle" }}
+            - save_cache:
+                paths:
+                    - ~/.m2
+                key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run:
-          name: Run tests
-          command: gradle clean test
+            - run:
+                name: Run tests
+                command: ./gradlew clean test
 
-      - run:
-          name: Save reports
-          command: |
-            mkdir -p ~/test-reports/
-            find . -type f -regex "./build/test-results/.*xml" -exec cp {} ~/test-reports/ \;
-          when: always
+            - run:
+                name: Save reports
+                command: |
+                    mkdir -p ~/test-reports/
+                    find . -type f -regex "./build/test-results/.*xml" -exec cp {} ~/test-reports/ \;
+                when: always
 
-      - store_test_results:
-          path: ~/test-reports/
+            - store_test_results:
+                path: ~/test-reports/
 
-      - store_artifacts:
-          path: ~/test-reports/
+            - store_artifacts:
+                path: ~/test-reports/
