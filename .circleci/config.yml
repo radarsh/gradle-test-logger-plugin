@@ -42,4 +42,4 @@ jobs:
                 path: ~/test-reports/
 
             - store_artifacts:
-                path: ~/test-reports/
+                path: build/reports/tests/test
