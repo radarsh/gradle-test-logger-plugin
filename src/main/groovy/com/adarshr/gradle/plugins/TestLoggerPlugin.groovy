@@ -1,50 +1,46 @@
 package com.adarshr.gradle.plugins
 
+import com.adarshr.gradle.plugins.theme.Theme
+import com.adarshr.gradle.plugins.theme.ThemeFactory
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 
-import static org.fusesource.jansi.Ansi.Erase.ALL
-import static org.fusesource.jansi.Ansi.ansi
-import static org.gradle.api.tasks.testing.TestResult.ResultType.*
-
 class TestLoggerPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        Set classes = [] as Set
+        project.extensions.create('testlogger', TestLoggerExtension)
 
-        project.tasks.find { it.name == 'test' }.configure(getTestConfiguration(project, classes))
+        project.tasks.find {it.name == 'test'}.doFirst {
+            it.configure(getTestConfiguration(project))
+        }
     }
 
-    private static Closure getTestConfiguration(project, Set classes) {
+    private static Closure getTestConfiguration(project) {
+        Set classes = []
+
         test {
             maxParallelForks = 1
             testLogging.lifecycle.events = []
+//            jvmArgs '-Dfile.encoding=UTF-8'
+//            systemProperty 'file.encoding', 'UTF-8'
 
-            def log = { project.logger.lifecycle(it.toString()) }
+            Theme theme = ThemeFactory.loadTheme(project.testlogger.theme)
 
             beforeTest { TestDescriptor descriptor ->
                 if (!classes.contains(descriptor.className)) {
                     classes << descriptor.className
-                    log ansi().bold().fgBrightYellow().a(descriptor.className).reset()
+                    project.logger.lifecycle theme.testCase(descriptor)
                 }
 
-                log ansi().bold().a('  Test ').fgDefault().a(descriptor.name).fgYellow().a(' STARTED').reset().cursorUpLine()
+                project.logger.lifecycle theme.beforeTest(descriptor)
             }
 
             afterTest { TestDescriptor descriptor, TestResult result ->
-                def prefix = ansi().eraseLine(ALL).bold().a('  Test ').fgDefault().a(descriptor.name)
-
-                switch (result.resultType) {
-                    case SUCCESS: prefix.fgGreen().a(' PASSED'); break
-                    case FAILURE: prefix.fgRed().a(' FAILED'); break
-                    case SKIPPED: prefix.fgYellow().a(' SKIPPED'); break
-                }
-
-                log prefix.reset()
+                project.logger.lifecycle theme.afterTest(descriptor, result)
             }
         }
     }

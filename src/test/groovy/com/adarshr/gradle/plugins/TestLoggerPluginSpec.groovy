@@ -18,19 +18,19 @@ class TestLoggerPluginSpec extends Specification {
             def actual = getLoggerOutput(result.output, ':test', '6 tests completed, 2 failed, 2 skipped')
             def expected = """
                 $E[1;93mcom.adarshr.test.FirstSpec$E[m
-                $E[1m  Test $E[39mthis test should pass$E[33m STARTED$E[m$E[F
-                $E[2K$E[1m  Test $E[39mthis test should pass$E[32m PASSED$E[m
-                $E[1m  Test $E[39mthis test should fail$E[33m STARTED$E[m$E[F
-                $E[2K$E[1m  Test $E[39mthis test should fail$E[31m FAILED$E[m
-                $E[1m  Test $E[39mthis test should be skipped$E[33m STARTED$E[m$E[F
-                $E[2K$E[1m  Test $E[39mthis test should be skipped$E[33m SKIPPED$E[m
+                $E[1m  Test $E[mthis test should pass$E[33m STARTED$E[m$E[F
+                $E[2K$E[1m  Test $E[mthis test should pass$E[32m PASSED$E[m
+                $E[1m  Test $E[mthis test should fail$E[33m STARTED$E[m$E[F
+                $E[2K$E[1m  Test $E[mthis test should fail$E[31m FAILED$E[m
+                $E[1m  Test $E[mthis test should be skipped$E[33m STARTED$E[m$E[F
+                $E[2K$E[1m  Test $E[mthis test should be skipped$E[33m SKIPPED$E[m
                 $E[1;93mcom.adarshr.test.SecondSpec$E[m
-                $E[1m  Test $E[39mthis test should pass$E[33m STARTED$E[m$E[F
-                $E[2K$E[1m  Test $E[39mthis test should pass$E[32m PASSED$E[m
-                $E[1m  Test $E[39mthis test should fail$E[33m STARTED$E[m$E[F
-                $E[2K$E[1m  Test $E[39mthis test should fail$E[31m FAILED$E[m
-                $E[1m  Test $E[39mthis test should be skipped$E[33m STARTED$E[m$E[F
-                $E[2K$E[1m  Test $E[39mthis test should be skipped$E[33m SKIPPED$E[m
+                $E[1m  Test $E[mthis test should pass$E[33m STARTED$E[m$E[F
+                $E[2K$E[1m  Test $E[mthis test should pass$E[32m PASSED$E[m
+                $E[1m  Test $E[mthis test should fail$E[33m STARTED$E[m$E[F
+                $E[2K$E[1m  Test $E[mthis test should fail$E[31m FAILED$E[m
+                $E[1m  Test $E[mthis test should be skipped$E[33m STARTED$E[m$E[F
+                $E[2K$E[1m  Test $E[mthis test should be skipped$E[33m SKIPPED$E[m
             """.stripIndent()
             normalize(actual) == normalize(expected)
         and:
