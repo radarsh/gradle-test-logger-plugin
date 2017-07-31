@@ -1,13 +1,13 @@
-package com.adarshr.gradle.plugins.theme
+package com.adarshr.gradle.testlogger.theme
 
-import static com.adarshr.gradle.plugins.theme.ThemeType.MOCHA
-import static com.adarshr.gradle.plugins.theme.ThemeType.STANDARD
-
+import static com.adarshr.gradle.testlogger.theme.ThemeType.*
 
 class ThemeFactory {
 
     static Theme loadTheme(ThemeType themeType) {
         switch (themeType) {
+            case PLAIN:
+                return new PlainTheme()
             case STANDARD:
                 return new StandardTheme()
             case MOCHA:

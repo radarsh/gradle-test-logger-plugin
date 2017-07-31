@@ -1,4 +1,4 @@
-package com.adarshr.gradle.plugins
+package com.adarshr.gradle.testlogger
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
@@ -8,6 +8,11 @@ import static groovy.json.StringEscapeUtils.escapeJava
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 
 class TestLoggerPluginSpec extends Specification {
+
+    /*
+    - Test theme switching by configuration
+    - Test theme switching based on console flag
+     */
 
     private static final char E = '\u001B'
 

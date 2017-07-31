@@ -1,4 +1,4 @@
-package com.adarshr.gradle.plugins.theme
+package com.adarshr.gradle.testlogger.theme
 
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
@@ -7,7 +7,7 @@ import static org.fusesource.jansi.Ansi.Erase.ALL
 import static org.fusesource.jansi.Ansi.ansi
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
-class MochaTheme implements Theme {
+class StandardTheme implements Theme {
 
     @Override
     String testCase(TestDescriptor descriptor) {
@@ -16,7 +16,7 @@ class MochaTheme implements Theme {
 
     @Override
     String beforeTest(TestDescriptor descriptor) {
-        ansi().bold().a('  Test ').reset().a(descriptor.name).fgYellow().a(' \u2737').reset().cursorUpLine().toString()
+        ansi().bold().a('  Test ').reset().a(descriptor.name).fgYellow().a(' STARTED').reset().cursorUpLine().toString()
     }
 
     @Override
@@ -24,11 +24,11 @@ class MochaTheme implements Theme {
         def prefix = ansi().eraseLine(ALL).bold().a('  Test ').reset().a(descriptor.name)
 
         switch (result.resultType) {
-            case SUCCESS: prefix.fgGreen().a(' \u2713'); break
-            case FAILURE: prefix.fgRed().a(' \u2717'); break
-            case SKIPPED: prefix.fgYellow().a(' \u2700'); break
+            case SUCCESS: prefix.fgGreen().a(' PASSED'); break
+            case FAILURE: prefix.fgRed().a(' FAILED'); break
+            case SKIPPED: prefix.fgYellow().a(' SKIPPED'); break
         }
 
-        prefix.reset().toString() + '|' + ('\u2713' as char)
+        prefix.reset().toString()
     }
 }

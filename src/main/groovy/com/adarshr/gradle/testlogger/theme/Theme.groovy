@@ -1,4 +1,4 @@
-package com.adarshr.gradle.plugins.theme
+package com.adarshr.gradle.testlogger.theme
 
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult

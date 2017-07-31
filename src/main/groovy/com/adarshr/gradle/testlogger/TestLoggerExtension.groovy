@@ -1,8 +1,8 @@
-package com.adarshr.gradle.plugins
+package com.adarshr.gradle.testlogger
 
-import com.adarshr.gradle.plugins.theme.ThemeType
+import com.adarshr.gradle.testlogger.theme.ThemeType
 
-import static com.adarshr.gradle.plugins.theme.ThemeType.STANDARD
+import static com.adarshr.gradle.testlogger.theme.ThemeType.STANDARD
 
 class TestLoggerExtension {
 

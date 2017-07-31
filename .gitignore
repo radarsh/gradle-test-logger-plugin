@@ -9,6 +9,6 @@ gradle-app.setting
 *.iml
 out/
 
-src/test/resources/sample-spock-tests/gradle/
-src/test/resources/sample-spock-tests/.gradle/
-src/test/resources/sample-spock-tests/build/
+src/test/resources/*/gradle/
+src/test/resources/*/.gradle/
+src/test/resources/*/build/
