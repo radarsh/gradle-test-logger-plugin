@@ -10,10 +10,12 @@ class TestLoggerPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.extensions.create('testlogger', TestLoggerExtension)
 
-        Test test = project.tasks.getByName('test') as Test
+        project.afterEvaluate {
+            Test test = project.tasks.getByName('test') as Test
 
-        test.maxParallelForks = 1
-        test.testLogging.lifecycle.events = []
-        test.addTestListener(new TestLoggerTestListener(project))
+            test.maxParallelForks = 1
+            test.testLogging.lifecycle.events = []
+            test.addTestListener(new TestLoggerTestListener(project))
+        }
     }
 }

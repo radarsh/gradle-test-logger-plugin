@@ -21,7 +21,8 @@ class TestLoggerTestListener implements TestListener {
     TestLoggerTestListener(Project project) {
         classes = []
         logger = project.logger
-        plainConsole = project.gradle.startParameter.consoleOutput == Plain
+        plainConsole = project.gradle.startParameter.consoleOutput == Plain || project.testlogger.theme == PLAIN
+
 
         if (plainConsole) {
             theme = ThemeFactory.loadTheme(PLAIN)
@@ -42,16 +43,14 @@ class TestLoggerTestListener implements TestListener {
 
     @Override
     void beforeTest(TestDescriptor descriptor) {
-        if (plainConsole) {
-            return
-        }
-
         if (!classes.contains(descriptor.className)) {
             classes << descriptor.className
             logger.lifecycle theme.testCase(descriptor)
         }
 
-        logger.lifecycle theme.beforeTest(descriptor)
+        if (!plainConsole) {
+            logger.lifecycle theme.beforeTest(descriptor)
+        }
     }
 
     @Override

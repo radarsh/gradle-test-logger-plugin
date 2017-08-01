@@ -1,0 +1,15 @@
+plugins {
+    id 'groovy'
+    id 'com.adarshr.test-logger'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'org.codehaus.groovy:groovy-all:2.4.12'
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+}
+
