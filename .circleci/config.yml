@@ -1,36 +1,29 @@
-version: 2
+version: 2.0
+
 jobs:
     build:
         docker:
             - image: circleci/openjdk:8-jdk
-
         working_directory: ~/repo
-
         environment:
             JVM_OPTS: -Xmx3200m
             TERM: dumb
-
         steps:
             - checkout
-
             - restore_cache:
                 keys:
                     - v1-dependencies-{{ checksum "build.gradle" }}
                     - v1-dependencies-
-
             - run:
                 name: Download dependencies
                 command: ./gradlew dependencies
-
             - save_cache:
                 paths:
                     - ~/.m2
                 key: v1-dependencies-{{ checksum "build.gradle" }}
-
             - run:
                 name: Run tests
                 command: ./gradlew clean test
-
             - run:
                 name: Save reports
                 command: |
@@ -39,9 +32,7 @@ jobs:
                     find . -type f -regex "./build/test-results/.*xml" -exec cp {} ~/results \;
                     cp -r build/reports/tests/test/* ~/reports
                 when: always
-
             - store_test_results:
                 path: ~/results
-
             - store_artifacts:
                 path: ~/reports
