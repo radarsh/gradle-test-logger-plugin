@@ -13,10 +13,10 @@ import static org.gradle.api.logging.configuration.ConsoleOutput.Plain
 
 class TestLoggerTestListener implements TestListener {
 
-    boolean plainConsole
-    Theme theme
-    Logger logger
-    Set classes
+    private final boolean plainConsole
+    private final Theme theme
+    private final Logger logger
+    private final Set classes
 
     TestLoggerTestListener(Project project) {
         classes = []
@@ -33,12 +33,10 @@ class TestLoggerTestListener implements TestListener {
 
     @Override
     void beforeSuite(TestDescriptor suite) {
-
     }
 
     @Override
     void afterSuite(TestDescriptor suite, TestResult result) {
-
     }
 
     @Override

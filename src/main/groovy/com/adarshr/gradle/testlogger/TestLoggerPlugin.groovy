@@ -13,9 +13,16 @@ class TestLoggerPlugin implements Plugin<Project> {
         project.afterEvaluate {
             Test test = project.tasks.getByName('test') as Test
 
-            test.maxParallelForks = 1
+            assertSequentialTestExecution(test)
+
             test.testLogging.lifecycle.events = []
             test.addTestListener(new TestLoggerTestListener(project))
+        }
+    }
+
+    private static void assertSequentialTestExecution(Test test) {
+        if (test.maxParallelForks != 1) {
+            throw new IllegalArgumentException('Parallel execution is not supported')
         }
     }
 }
