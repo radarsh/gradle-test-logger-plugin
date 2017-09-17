@@ -13,7 +13,6 @@ class TestLoggerPluginSpec extends Specification {
     - Test theme switching by configuration
     - Test theme switching based on console flag
      */
-
     private static final char E = '\u001B'
 
     def "log spock tests"() {

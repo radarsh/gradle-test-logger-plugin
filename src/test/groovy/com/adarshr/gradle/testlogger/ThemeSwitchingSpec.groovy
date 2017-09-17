@@ -1,7 +1,7 @@
 package com.adarshr.gradle.testlogger
 
+import com.adarshr.gradle.testlogger.renderer.AnsiConsoleRenderer
 import org.apache.commons.io.FileUtils
-import org.fusesource.jansi.Ansi
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
@@ -17,6 +17,17 @@ class ThemeSwitchingSpec extends Specification {
     private static final def START_MARKER = '[[ START ]]'
     private static final def END_MARKER = '[[ END ]]'
 
+    private static final def MARKERS = """
+        test {
+            doFirst {
+                logger.lifecycle '$START_MARKER'
+            }
+            doLast {
+                logger.lifecycle '$END_MARKER'
+            }
+        }
+    """
+
     @Rule
     TemporaryFolder temporaryFolder
 
@@ -27,14 +38,7 @@ class ThemeSwitchingSpec extends Specification {
                     theme 'plain'
                 }
                 
-                test {
-                    doFirst {
-                        logger.lifecycle '$START_MARKER'
-                    }
-                    doLast {
-                        logger.lifecycle '$END_MARKER'
-                    }
-                }
+                $MARKERS
             """)
         then:
             def actualLines = getLoggerOutput(result.output)
@@ -45,6 +49,8 @@ class ThemeSwitchingSpec extends Specification {
             result.task(":test").outcome == SUCCESS
     }
 
+    def ansi = new AnsiConsoleRenderer()
+
     def "log spock tests when standard theme is set"() {
         when:
             def result = run('single-spock-test', """
@@ -52,22 +58,14 @@ class ThemeSwitchingSpec extends Specification {
                     theme 'standard'
                 }
                 
-                test {
-                    doFirst {
-                        logger.lifecycle '$START_MARKER'
-                    }
-                    doLast {
-                        logger.lifecycle '$END_MARKER'
-                    }
-                }
+                $MARKERS
             """)
         then:
             def actualLines = getLoggerOutput(result.output)
             actualLines.size() == 3
-            actualLines[0] == ansi().bold().fgBrightYellow().a('com.adarshr.test.SingleSpec').reset().toString()
-            actualLines[0] == ansi().bold().render('@|yellow com.adarshr.test.SingleSpec|@').toString()  //fgBrightYellow().a('com.adarshr.test.SingleSpec').reset().toString()
-            actualLines[1] == ansi().bold().a('  Test ').reset().a('this is a single test').fgYellow().a(' STARTED').reset().cursorUpLine().toString()
-            actualLines[2] == ansi().eraseLine(ALL).bold().a('  Test ').reset().a('this is a single test').fgGreen().a(' PASSED').reset().toString()
+            actualLines[0] == ansi.render('[bold,bright-yellow]com.adarshr.test.SingleSpec[/]')
+            actualLines[1] == ansi.render('[bold]  Test [/]this is a single test[yellow] STARTED[/][cursor-up-line]')
+            actualLines[2] == ansi.render('[erase-line,bold]  Test [/]this is a single test[green] PASSED[/]')
         and:
             result.task(":test").outcome == SUCCESS
     }
