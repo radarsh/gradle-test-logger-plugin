@@ -2,7 +2,7 @@ package com.adarshr.gradle.testlogger.renderer
 
 import org.fusesource.jansi.Ansi
 
-import static org.fusesource.jansi.Ansi.Erase.ALL
+import static org.fusesource.jansi.Ansi.Erase.*
 import static org.fusesource.jansi.Ansi.ansi
 
 class RenderingContext {
@@ -15,7 +15,9 @@ class RenderingContext {
         yellow: { Ansi ansi -> ansi.fgYellow() },
         'bright-yellow': { Ansi ansi -> ansi.fgBrightYellow() },
         'cursor-up-line': { Ansi ansi -> ansi.cursorUpLine() },
-        'erase-line': { Ansi ansi -> ansi.eraseLine(ALL) },
+        'erase-all': { Ansi ansi -> ansi.eraseLine(ALL) },
+        'erase-ahead': { Ansi ansi -> ansi.eraseLine(FORWARD) },
+        'erase-back': { Ansi ansi -> ansi.eraseLine(BACKWARD) },
         '/': { Ansi ansi -> ansi.reset() }
     ]
 

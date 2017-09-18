@@ -17,12 +17,11 @@ class TestLoggerTestListener implements TestListener {
 
     private final boolean plainConsole
     private final Theme theme
-    private final Set classes
     private final Logger logger
     private final ConsoleRenderer renderer
+    private boolean firstSuite = true
 
     TestLoggerTestListener(Project project) {
-        classes = []
         logger = project.logger
         renderer = new AnsiConsoleRenderer()
         plainConsole = project.gradle.startParameter.consoleOutput == Plain || project.testlogger.theme == PLAIN
@@ -31,22 +30,25 @@ class TestLoggerTestListener implements TestListener {
 
     @Override
     void beforeSuite(TestDescriptor suite) {
+        if (firstSuite) {
+            logger.lifecycle('')
+            firstSuite = false
+        }
+
+        if (suite.className) {
+            logger.lifecycle renderer.render(theme.beforeSuite(suite))
+        }
     }
 
     @Override
     void afterSuite(TestDescriptor suite, TestResult result) {
+        if (suite.className) {
+            logger.lifecycle('')
+        }
     }
 
     @Override
     void beforeTest(TestDescriptor descriptor) {
-        if (!classes.contains(descriptor.className)) {
-            classes << descriptor.className
-            logger.lifecycle renderer.render(theme.testCase(descriptor))
-        }
-
-        if (!plainConsole) {
-            logger.lifecycle renderer.render(theme.beforeTest(descriptor))
-        }
     }
 
     @Override

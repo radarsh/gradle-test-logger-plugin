@@ -14,13 +14,8 @@ class PlainTheme implements Theme {
     ]
 
     @Override
-    String testCase(TestDescriptor descriptor) {
+    String beforeSuite(TestDescriptor descriptor) {
         descriptor.className
-    }
-
-    @Override
-    String beforeTest(TestDescriptor descriptor) {
-        ''
     }
 
     @Override
