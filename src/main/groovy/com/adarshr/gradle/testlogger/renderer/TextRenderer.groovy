@@ -1,6 +1,6 @@
 package com.adarshr.gradle.testlogger.renderer
 
-interface ConsoleRenderer {
+interface TextRenderer {
 
     String render(String input)
 }

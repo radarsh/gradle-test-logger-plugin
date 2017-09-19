@@ -2,7 +2,7 @@ package com.adarshr.gradle.testlogger.renderer
 
 import static com.adarshr.gradle.testlogger.renderer.CharHandlers.HANDLERS
 
-class AnsiConsoleRenderer implements ConsoleRenderer {
+class AnsiTextRenderer implements TextRenderer {
 
     @Override
     String render(String input) {

@@ -6,9 +6,9 @@ import spock.lang.Unroll
 import static org.fusesource.jansi.Ansi.Erase.ALL
 import static org.fusesource.jansi.Ansi.ansi
 
-class AnsiConsoleRendererSpec extends Specification {
+class AnsiTextRendererSpec extends Specification {
 
-    def renderer = new AnsiConsoleRenderer()
+    def renderer = new AnsiTextRenderer()
 
     @Unroll
     def "render #input"() {

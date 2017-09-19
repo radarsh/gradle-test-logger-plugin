@@ -1,6 +1,6 @@
 package com.adarshr.gradle.testlogger
 
-import com.adarshr.gradle.testlogger.renderer.AnsiConsoleRenderer
+import com.adarshr.gradle.testlogger.renderer.AnsiTextRenderer
 import org.apache.commons.io.FileUtils
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
@@ -8,8 +8,6 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static org.fusesource.jansi.Ansi.Erase.ALL
-import static org.fusesource.jansi.Ansi.ansi
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class ThemeSwitchingSpec extends Specification {
@@ -49,7 +47,7 @@ class ThemeSwitchingSpec extends Specification {
             result.task(":test").outcome == SUCCESS
     }
 
-    def ansi = new AnsiConsoleRenderer()
+    def ansi = new AnsiTextRenderer()
 
     def "log spock tests when standard theme is set"() {
         when:
