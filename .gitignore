@@ -9,6 +9,6 @@ gradle-app.setting
 *.iml
 out/
 
-src/test/resources/*/gradle/
-src/test/resources/*/.gradle/
-src/test/resources/*/build/
+src/functional-test/resources/*/gradle/
+src/functional-test/resources/*/.gradle/
+src/functional-test/resources/*/build/
