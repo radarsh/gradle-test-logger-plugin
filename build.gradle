@@ -2,10 +2,25 @@ plugins {
     id 'groovy'
     id 'java-gradle-plugin'
     id 'maven-publish'
+    id 'idea'
 }
 
 repositories {
     mavenCentral()
+}
+
+sourceSets {
+    functionalTest {
+        groovy {
+            srcDir 'src/functional-test/groovy'
+            compileClasspath += sourceSets.main.output
+        }
+    }
+}
+
+test {
+    testClassesDirs += sourceSets.functionalTest.output.classesDirs
+    classpath += sourceSets.functionalTest.runtimeClasspath
 }
 
 dependencies {
@@ -13,24 +28,31 @@ dependencies {
     compile localGroovy()
     compile 'org.fusesource.jansi:jansi:1.16'
 
+    testCompile gradleTestKit()
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
         exclude module: 'groovy-all'
     }
+    testCompile 'commons-io:commons-io:2.5'
+
+    functionalTestCompile localGroovy()
+    functionalTestCompile gradleTestKit()
+    functionalTestCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+        exclude module: 'groovy-all'
+    }
+    functionalTestCompile 'commons-io:commons-io:2.5'
 }
 
-task sourceJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-publishing {
-    publications {
-        module(MavenPublication) {
-            from components.java
-
-            artifact(sourceJar) {
-                classifier = 'sources'
-            }
+gradlePlugin {
+    plugins {
+        testLoggerPlugin {
+            id = 'com.adarshr.test-logger'
+            implementationClass = 'com.adarshr.gradle.testlogger.TestLoggerPlugin'
         }
+    }
+}
+
+idea {
+    module {
+        testSourceDirs += file('src/functional-test/groovy')
     }
 }
