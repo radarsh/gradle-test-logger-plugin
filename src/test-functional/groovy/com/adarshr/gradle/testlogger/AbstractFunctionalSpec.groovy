@@ -51,7 +51,7 @@ abstract class AbstractFunctionalSpec extends Specification {
             .withProjectDir(projectDir)
             .withPluginClasspath()
             .withDebug(true)
-            .withArguments('clean', 'test', '--stacktrace')
+            .withArguments('clean', 'test')
             .forwardOutput()
             .build()
     }

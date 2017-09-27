@@ -21,6 +21,7 @@ sourceSets {
 test {
     testClassesDirs += sourceSets.functionalTest.output.classesDirs
     classpath += sourceSets.functionalTest.runtimeClasspath
+    systemProperty 'file.encoding', 'UTF-8'
 }
 
 dependencies {

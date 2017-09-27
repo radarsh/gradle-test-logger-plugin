@@ -9,9 +9,15 @@ import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
 class MochaThemeSpec extends Specification {
 
+    private static final def ORIGINAL_OS = System.getProperty('os.name')
+
     def theme = new MochaTheme()
     def testDescriptorMock = Mock(TestDescriptor)
     def testResultMock = Mock(TestResult)
+
+    def cleanup() {
+        System.setProperty('os.name', ORIGINAL_OS)
+    }
 
     def "before suite"() {
         given:
