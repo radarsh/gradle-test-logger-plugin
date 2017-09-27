@@ -15,13 +15,13 @@ class AnsiTextRenderer implements TextRenderer {
             }
 
             if (context.inTag) {
-                context.tagBuilder << ch
+                context.tag << ch
                 return
             }
 
-            context.ansi.a(ch)
+            context << ch
         }
 
-        context.ansi
+        context
     }
 }

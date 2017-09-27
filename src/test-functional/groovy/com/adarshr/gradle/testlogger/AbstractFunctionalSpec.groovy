@@ -10,7 +10,7 @@ import spock.lang.Specification
 
 
 @SuppressWarnings('GrMethodMayBeStatic')
-class AbstractFunctionalSpec extends Specification {
+abstract class AbstractFunctionalSpec extends Specification {
 
     @Rule
     TemporaryFolder temporaryFolder
@@ -32,7 +32,7 @@ class AbstractFunctionalSpec extends Specification {
     protected BuildResult run(String project) {
         GradleRunner.create()
             .withGradleVersion('4.2')
-            .withProjectDir(new File("src/functional-test/resources/${project}"))
+            .withProjectDir(new File("src/test-functional/resources/${project}"))
             .withPluginClasspath()
             .withDebug(true)
             .withArguments('clean', 'test')
@@ -40,10 +40,9 @@ class AbstractFunctionalSpec extends Specification {
             .buildAndFail()
     }
 
-
     protected BuildResult run(String project, String buildFragment) {
         def projectDir = new File(temporaryFolder.root, project)
-        FileUtils.copyDirectoryToDirectory(new File("src/functional-test/resources/${project}"), temporaryFolder.root)
+        FileUtils.copyDirectoryToDirectory(new File("src/test-functional/resources/${project}"), temporaryFolder.root)
         def buildFile = new File(projectDir, 'build.gradle')
         buildFile << buildFragment
 
@@ -52,7 +51,7 @@ class AbstractFunctionalSpec extends Specification {
             .withProjectDir(projectDir)
             .withPluginClasspath()
             .withDebug(true)
-            .withArguments('clean', 'test')
+            .withArguments('clean', 'test', '--stacktrace')
             .forwardOutput()
             .build()
     }

@@ -8,7 +8,7 @@ class CharHandlers {
 
     private static final CharHandler leftBracket = { char ch, RenderingContext context ->
         if (context.escaped) {
-            context.ansi.a(ch)
+            context << ch
             context.escaped = false
             return
         }
@@ -18,7 +18,7 @@ class CharHandlers {
 
     private static final CharHandler rightBracket = { char ch, RenderingContext context ->
         if (context.escaped) {
-            context.ansi.a(ch)
+            context << ch
             context.escaped = false
             return
         }

@@ -12,7 +12,7 @@ repositories {
 sourceSets {
     functionalTest {
         groovy {
-            srcDir 'src/functional-test/groovy'
+            srcDir 'src/test-functional/groovy'
             compileClasspath += sourceSets.main.output
         }
     }
@@ -32,6 +32,7 @@ dependencies {
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
         exclude module: 'groovy-all'
     }
+    testCompile 'net.bytebuddy:byte-buddy:1.7.5'
     testCompile 'commons-io:commons-io:2.5'
 
     functionalTestCompile localGroovy()
@@ -53,6 +54,6 @@ gradlePlugin {
 
 idea {
     module {
-        testSourceDirs += file('src/functional-test/groovy')
+        testSourceDirs += file('src/test-functional/groovy')
     }
 }
