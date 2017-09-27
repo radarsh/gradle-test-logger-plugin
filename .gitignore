@@ -1,5 +1,5 @@
 .gradle/
-/build/
+build/
 gradle-app.setting
 !gradle-wrapper.jar
 .gradletasknamecache
@@ -8,7 +8,3 @@ gradle-app.setting
 .idea/
 *.iml
 out/
-
-src/test-functional/resources/*/gradle/
-src/test-functional/resources/*/.gradle/
-src/test-functional/resources/*/build/
