@@ -1,5 +1,7 @@
 package com.adarshr.gradle.testlogger
 
+import spock.util.environment.OperatingSystem
+
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class ThemeSwitchingSpec extends AbstractFunctionalSpec {
@@ -9,9 +11,10 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
             def result = run('single-spock-test', "testlogger { theme 'plain' }")
         then:
             def actualLines = getLoggerOutput(result.output)
-            actualLines.size() == 2
+            actualLines.size() == 3
             actualLines[0] == render('com.adarshr.test.SingleSpec')
-            actualLines[1] == render('  Test this is a single test PASSED')
+            actualLines[1] == render('')
+            actualLines[2] == render('  Test this is a single test PASSED')
         and:
             result.task(":test").outcome == SUCCESS
     }
@@ -37,8 +40,12 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
             actualLines.size() == 3
             actualLines[0] == render('  [bold]com.adarshr.test.SingleSpec[/]')
             actualLines[1] == render('')
-            actualLines[2] == render('    [erase-ahead,green]✔[/] this is a single test')
+            actualLines[2] == render("    [erase-ahead,green]${symbol}[/] this is a single test")
         and:
             result.task(":test").outcome == SUCCESS
+    }
+
+    private static String getSymbol() {
+        OperatingSystem.current.windows ? '√' : '✔'
     }
 }

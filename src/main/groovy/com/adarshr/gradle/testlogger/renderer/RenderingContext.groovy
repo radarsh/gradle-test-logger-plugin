@@ -5,7 +5,7 @@ import org.fusesource.jansi.Ansi
 import static org.fusesource.jansi.Ansi.Erase.*
 import static org.fusesource.jansi.Ansi.ansi
 
-class RenderingContext {
+class RenderingContext implements Appendable {
 
     private static final def TAG_MAPPING = [
         bold: { Ansi ansi -> ansi.bold() },
@@ -21,18 +21,22 @@ class RenderingContext {
         '/': { Ansi ansi -> ansi.reset() }
     ]
 
-    Ansi ansi = ansi()
-    StringBuilder tagBuilder = new StringBuilder()
-    boolean inTag = false
-    boolean escaped = false
+    private final Ansi ansi
+    StringBuilder tag
+    boolean inTag
+    boolean escaped
+
+    RenderingContext() {
+        ansi = ansi()
+        tag = new StringBuilder()
+    }
 
     void beginTag() {
         inTag = true
     }
 
     void endTag() {
-        def tag = tagBuilder.toString()
-        def tags = tag.split(',')
+        def tags = tag.toString().split(',')
         tags.each {
             if (TAG_MAPPING.containsKey(it)) {
                 def mapping = TAG_MAPPING[it]
@@ -43,7 +47,30 @@ class RenderingContext {
             }
         }
 
-        tagBuilder = new StringBuilder()
+        this.tag = new StringBuilder()
         inTag = false
+    }
+
+    @Override
+    RenderingContext append(CharSequence csq) {
+        ansi.a(csq)
+        this
+    }
+
+    @Override
+    RenderingContext append(CharSequence csq, int start, int end) {
+        ansi.a(csq, start, end)
+        this
+    }
+
+    @Override
+    RenderingContext append(char c) {
+        ansi.a(c)
+        this
+    }
+
+    @Override
+    String toString() {
+        ansi.toString()
     }
 }
