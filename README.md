@@ -2,3 +2,11 @@
 
 A Gradle plugin for printing beautiful logs on the console while running tests.
 
+## Standard theme
+
+![Standard theme](docs/standard-theme.gif)
+
+## Mocha theme
+
+![Mocha theme](docs/mocha-theme.gif)
+
