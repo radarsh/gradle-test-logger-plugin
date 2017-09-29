@@ -14,3 +14,22 @@ publishing {
         }
     }
 }
+
+pluginBundle {
+    website = 'https://github.com/radarsh/gradle-test-logger-plugin'
+    vcsUrl = 'https://github.com/radarsh/gradle-test-logger-plugin'
+    description = 'A Gradle plugin for printing beautiful logs on the console while running tests'
+    tags = ['test', 'logging', 'console', 'terminal', 'groovy']
+
+    plugins {
+        testLoggerPlugin {
+            id = 'com.adarshr.test-logger'
+            displayName = 'Gradle Test Logger Plugin'
+        }
+    }
+
+    mavenCoordinates {
+        groupId = project.group
+        artifactId = project.name
+    }
+}

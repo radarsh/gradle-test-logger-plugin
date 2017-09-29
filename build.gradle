@@ -2,8 +2,11 @@ plugins {
     id 'groovy'
     id 'java-gradle-plugin'
     id 'maven-publish'
+    id 'com.gradle.plugin-publish' version '0.9.8'
     id 'idea'
 }
+
+apply from: 'gradle/publishing.gradle'
 
 repositories {
     mavenCentral()
