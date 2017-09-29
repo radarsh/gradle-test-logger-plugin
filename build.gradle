@@ -1,0 +1,63 @@
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+    id 'com.gradle.plugin-publish' version '0.9.8'
+    id 'idea'
+}
+
+apply from: 'gradle/publishing.gradle'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    functionalTest {
+        groovy {
+            srcDir 'src/test-functional/groovy'
+            compileClasspath += sourceSets.main.output
+        }
+    }
+}
+
+test {
+    testClassesDirs += sourceSets.functionalTest.output.classesDirs
+    classpath += sourceSets.functionalTest.runtimeClasspath
+    systemProperty 'file.encoding', 'UTF-8'
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    compile 'org.fusesource.jansi:jansi:1.16'
+
+    testCompile gradleTestKit()
+    testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+        exclude module: 'groovy-all'
+    }
+    testCompile 'net.bytebuddy:byte-buddy:1.7.5'
+    testCompile 'commons-io:commons-io:2.5'
+
+    functionalTestCompile localGroovy()
+    functionalTestCompile gradleTestKit()
+    functionalTestCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+        exclude module: 'groovy-all'
+    }
+    functionalTestCompile 'commons-io:commons-io:2.5'
+}
+
+gradlePlugin {
+    plugins {
+        testLoggerPlugin {
+            id = 'com.adarshr.test-logger'
+            implementationClass = 'com.adarshr.gradle.testlogger.TestLoggerPlugin'
+        }
+    }
+}
+
+idea {
+    module {
+        testSourceDirs += file('src/test-functional/groovy')
+    }
+}
