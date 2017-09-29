@@ -16,7 +16,7 @@ A Gradle plugin for printing beautiful logs on the console while running tests.
 
 ```groovy
 plugins {
-    id 'com.adarshr.test-logger' version '1.0.0'
+    id 'com.adarshr.test-logger' version '0.0.1'
 }
 ```
 
@@ -30,7 +30,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.adarshr:gradle-test-logger-plugin:1.0.0'
+        classpath 'com.adarshr:gradle-test-logger-plugin:0.0.1'
     }
 }
 
