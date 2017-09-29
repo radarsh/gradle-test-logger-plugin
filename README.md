@@ -65,4 +65,4 @@ symbols when using the `mocha` theme.
 
 ### How to disable colours and Unicode symbols at runtime such as on Jenkins consoles?
 
-You can switch off ANSI escape sequences and Unicode symbols by running the Gradle build with the argument `--console=plain`
+You can switch off ANSI control characters and Unicode symbols by adding `--console=plain` to your Gradle command line.
