@@ -36,3 +36,42 @@ jobs:
                 path: ~/results
             - store_artifacts:
                 path: ~/reports
+
+    publish:
+        docker:
+            - image: circleci/openjdk:8-jdk
+        working_directory: ~/repo
+        environment:
+            JVM_OPTS: -Xmx3200m
+            TERM: dumb
+        steps:
+            - checkout
+            - restore_cache:
+                keys:
+                    - v1-dependencies-{{ checksum "build.gradle" }}
+                    - v1-dependencies-
+            - run:
+                name: Download dependencies
+                command: ./gradlew dependencies
+            - save_cache:
+                paths:
+                    - ~/.m2
+                key: v1-dependencies-{{ checksum "build.gradle" }}
+            - run:
+                name: Publish plugin
+                command:
+                    ./gradlew clean publishPlugins
+                    -Pgradle.publish.key=${GRADLE_PUBLISH_KEY}
+                    -Pgradle.publish.secret=${GRADLE_PUBLISH_SECRET}
+
+workflows:
+    version: 2
+    build-and-publish:
+        jobs:
+            - build
+            - publish:
+                requires:
+                    - build
+                filters:
+                    branches:
+                        only: master
