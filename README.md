@@ -1,4 +1,6 @@
-# Gradle Test Logger Plugin [![CircleCI](https://circleci.com/gh/radarsh/gradle-test-logger-plugin.svg?style=svg)](https://circleci.com/gh/radarsh/gradle-test-logger-plugin)
+# Gradle Test Logger Plugin
+[![CircleCI](https://circleci.com/gh/radarsh/gradle-test-logger-plugin.svg?style=svg)](https://circleci.com/gh/radarsh/gradle-test-logger-plugin)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/tilx39y8fv2w3ffc/branch/develop?svg=true)](https://ci.appveyor.com/project/radarsh/gradle-test-logger-plugin/branch/develop)
 
 A Gradle plugin for printing beautiful logs on the console while running tests.
 
