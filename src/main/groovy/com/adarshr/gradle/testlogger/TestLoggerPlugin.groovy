@@ -12,12 +12,12 @@ class TestLoggerPlugin implements Plugin<Project> {
         project.extensions.create('testlogger', TestLoggerExtension)
 
         project.afterEvaluate {
-            Test test = project.tasks.getByName('test') as Test
+            project.tasks.withType(Test).each { test ->
+                assertSequentialTestExecution(test)
 
-            assertSequentialTestExecution(test)
-
-            test.testLogging.lifecycle.events = []
-            test.addTestListener(new TestEventLogger(project))
+                test.testLogging.lifecycle.events = []
+                test.addTestListener(new TestEventLogger(project))
+            }
         }
     }
 

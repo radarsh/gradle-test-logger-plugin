@@ -1,6 +1,7 @@
 package com.adarshr.gradle.testlogger
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
+import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class TestLoggerPluginSpec extends AbstractFunctionalSpec {
 
@@ -23,5 +24,21 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             actual[10] == render('[bold]  Test [/]this test should be skipped[erase-ahead,yellow] SKIPPED[/]')
         and:
             result.task(":test").outcome == FAILED
+    }
+
+    def "hook into any task of type test"() {
+        when:
+            def result = run('single-spock-test', '''
+                testlogger { theme 'plain' }
+                task anotherTask(type: Test) { }
+            ''', 'clean anotherTask')
+        then:
+            def actualLines = getLoggerOutput(result.output)
+            actualLines.size() == 3
+            actualLines[0] == render('com.adarshr.test.SingleSpec')
+            actualLines[1] == render('')
+            actualLines[2] == render('  Test this is a single test PASSED')
+        and:
+            result.task(':anotherTask').outcome == SUCCESS
     }
 }

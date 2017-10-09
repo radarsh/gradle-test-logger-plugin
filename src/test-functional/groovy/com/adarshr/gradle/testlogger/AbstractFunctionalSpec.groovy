@@ -40,7 +40,7 @@ abstract class AbstractFunctionalSpec extends Specification {
             .buildAndFail()
     }
 
-    protected BuildResult run(String project, String buildFragment) {
+    protected BuildResult run(String project, String buildFragment, String args = 'clean test') {
         def projectDir = new File(temporaryFolder.root, project)
         FileUtils.copyDirectoryToDirectory(new File("src/test-functional/resources/${project}"), temporaryFolder.root)
         def buildFile = new File(projectDir, 'build.gradle')
@@ -51,7 +51,7 @@ abstract class AbstractFunctionalSpec extends Specification {
             .withProjectDir(projectDir)
             .withPluginClasspath()
             .withDebug(true)
-            .withArguments('clean', 'test')
+            .withArguments(args.split(' '))
             .forwardOutput()
             .build()
     }

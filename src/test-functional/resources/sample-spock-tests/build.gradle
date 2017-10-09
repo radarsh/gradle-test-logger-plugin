@@ -13,7 +13,7 @@ dependencies {
     testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
 }
 
-test {
+tasks.withType(Test) {
     def total = 2
     def count = 0
 
