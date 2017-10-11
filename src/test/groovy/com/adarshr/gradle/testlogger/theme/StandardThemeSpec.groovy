@@ -26,15 +26,15 @@ class StandardThemeSpec extends Specification {
     def "after test with result type #resultType"() {
         given:
             testResultMock.resultType >> resultType
-            testDescriptorMock.name >> 'method'
+            testDescriptorMock.name >> 'test name [escaped]'
         when:
             def actual = theme.afterTest(testDescriptorMock, testResultMock)
         then:
             actual == expected
         where:
             resultType | expected
-            SUCCESS    | '[bold]  Test [/]method[erase-ahead,green] PASSED[/]'
-            FAILURE    | '[bold]  Test [/]method[erase-ahead,red] FAILED[/]'
-            SKIPPED    | '[bold]  Test [/]method[erase-ahead,yellow] SKIPPED[/]'
+            SUCCESS    | '[bold]  Test [/]test name \\[escaped\\][erase-ahead,green] PASSED[/]'
+            FAILURE    | '[bold]  Test [/]test name \\[escaped\\][erase-ahead,red] FAILED[/]'
+            SKIPPED    | '[bold]  Test [/]test name \\[escaped\\][erase-ahead,yellow] SKIPPED[/]'
     }
 }
