@@ -33,18 +33,18 @@ class MochaThemeSpec extends Specification {
         given:
             System.setProperty('os.name', os)
             testResultMock.resultType >> resultType
-            testDescriptorMock.name >> 'method'
+            testDescriptorMock.name >> 'test name [escaped]'
         when:
             def actual = theme.afterTest(testDescriptorMock, testResultMock)
         then:
             actual == expected
         where:
             os            | resultType | expected
-            'Windows 8.1' | SUCCESS    | '    [erase-ahead,green]√[/] method'
-            'Windows 8.1' | FAILURE    | '    [erase-ahead,red]X method[/]'
-            'Windows 8.1' | SKIPPED    | '    [erase-ahead,yellow]% method[/]'
-            'Linux'       | SUCCESS    | '    [erase-ahead,green]✔[/] method'
-            'Linux'       | FAILURE    | '    [erase-ahead,red]✘ method[/]'
-            'Linux'       | SKIPPED    | '    [erase-ahead,yellow]✂ method[/]'
+            'Windows 8.1' | SUCCESS    | '    [erase-ahead,green]√[/] test name \\[escaped\\]'
+            'Windows 8.1' | FAILURE    | '    [erase-ahead,red]X test name \\[escaped\\][/]'
+            'Windows 8.1' | SKIPPED    | '    [erase-ahead,yellow]% test name \\[escaped\\][/]'
+            'Linux'       | SUCCESS    | '    [erase-ahead,green]✔[/] test name \\[escaped\\]'
+            'Linux'       | FAILURE    | '    [erase-ahead,red]✘ test name \\[escaped\\][/]'
+            'Linux'       | SKIPPED    | '    [erase-ahead,yellow]✂ test name \\[escaped\\][/]'
     }
 }

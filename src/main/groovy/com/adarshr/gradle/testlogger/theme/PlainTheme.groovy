@@ -5,7 +5,7 @@ import org.gradle.api.tasks.testing.TestResult
 
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
-class PlainTheme implements Theme {
+class PlainTheme extends AbstractTheme {
 
     private static final Map RESULT_TYPE_MAPPING = [
         (SUCCESS): 'PASSED',
@@ -15,11 +15,11 @@ class PlainTheme implements Theme {
 
     @Override
     String beforeSuite(TestDescriptor descriptor) {
-        "${descriptor.className}\n"
+        "${escape(descriptor.className)}\n"
     }
 
     @Override
     String afterTest(TestDescriptor descriptor, TestResult result) {
-        "  Test ${descriptor.name} ${RESULT_TYPE_MAPPING[result.resultType]}"
+        "  Test ${escape(descriptor.name)} ${RESULT_TYPE_MAPPING[result.resultType]}"
     }
 }

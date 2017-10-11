@@ -6,19 +6,19 @@ import org.gradle.api.tasks.testing.TestResult.ResultType
 
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
-class MochaTheme implements Theme {
+class MochaTheme extends AbstractTheme {
 
     @Override
     String beforeSuite(TestDescriptor descriptor) {
-        "  [bold]${descriptor.className}[/]\n"
+        "  [bold]${escape(descriptor.className)}[/]\n"
     }
 
     @Override
     String afterTest(TestDescriptor descriptor, TestResult result) {
         switch (result.resultType) {
-            case SUCCESS: return "    [erase-ahead,green]${getSymbol(result.resultType)}[/] ${descriptor.name}"
-            case FAILURE: return "    [erase-ahead,red]${getSymbol(result.resultType)} ${descriptor.name}[/]"
-            case SKIPPED: return "    [erase-ahead,yellow]${getSymbol(result.resultType)} ${descriptor.name}[/]"
+            case SUCCESS: return "    [erase-ahead,green]${getSymbol(result.resultType)}[/] ${escape(descriptor.name)}"
+            case FAILURE: return "    [erase-ahead,red]${getSymbol(result.resultType)} ${escape(descriptor.name)}[/]"
+            case SKIPPED: return "    [erase-ahead,yellow]${getSymbol(result.resultType)} ${escape(descriptor.name)}[/]"
             default: return ''
         }
     }
