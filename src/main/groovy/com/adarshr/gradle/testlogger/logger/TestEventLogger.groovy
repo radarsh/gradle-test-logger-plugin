@@ -15,7 +15,7 @@ class TestEventLogger implements TestListener {
     private final boolean plainConsole
     private final Theme theme
     private final ConsoleLogger logger
-    private boolean firstSuite = true
+    private boolean logBeforeSuite
 
     TestEventLogger(Project project) {
         logger = new ConsoleLogger(project.logger)
@@ -25,25 +25,29 @@ class TestEventLogger implements TestListener {
 
     @Override
     void beforeSuite(TestDescriptor suite) {
-        if (firstSuite) {
+        if (!suite.parent) {
             logger.log ''
-            firstSuite = false
         }
 
-        if (suite.className) {
+        if (logBeforeSuite && suite.className) {
             logger.log theme.beforeSuite(suite)
         }
     }
 
     @Override
     void afterSuite(TestDescriptor suite, TestResult result) {
-        if (suite.className) {
+        if (suite.className && result.testCount) {
             logger.log ''
+            logBeforeSuite = false
         }
     }
 
     @Override
     void beforeTest(TestDescriptor descriptor) {
+        if (!logBeforeSuite) {
+            logBeforeSuite = true
+            beforeSuite(descriptor)
+        }
     }
 
     @Override

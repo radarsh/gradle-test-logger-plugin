@@ -8,39 +8,42 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
 
     def "log spock tests when plain theme is set"() {
         when:
-            def result = run('single-spock-test', "testlogger { theme 'plain' }")
+            def result = runSingle("testlogger { theme 'plain' }")
         then:
-            def actualLines = getLoggerOutput(result.output)
-            actualLines.size() == 3
-            actualLines[0] == render('com.adarshr.test.SingleSpec')
-            actualLines[1] == render('')
-            actualLines[2] == render('  Test this is a single test PASSED')
+            def lines = getLoggerOutput(result.output)
+        and:
+            lines.size() == 3
+            lines[0] == render('com.adarshr.test.SingleSpec')
+            lines[1] == render('')
+            lines[2] == render('  Test this is a single test PASSED')
         and:
             result.task(":test").outcome == SUCCESS
     }
 
     def "log spock tests when standard theme is set"() {
         when:
-            def result = run('single-spock-test', "testlogger { theme 'standard' }")
+            def result = runSingle("testlogger { theme 'standard' }")
         then:
-            def actualLines = getLoggerOutput(result.output)
-            actualLines.size() == 3
-            actualLines[0] == render('[bold,bright-yellow]com.adarshr.test.SingleSpec[/]')
-            actualLines[1] == render('')
-            actualLines[2] == render('[bold]  Test [/]this is a single test[erase-ahead,green] PASSED[/]')
+            def lines = getLoggerOutput(result.output)
+        and:
+            lines.size() == 3
+            lines[0] == render('[bold,bright-yellow]com.adarshr.test.SingleSpec[/]')
+            lines[1] == render('')
+            lines[2] == render('[bold]  Test [/]this is a single test[erase-ahead,green] PASSED[/]')
         and:
             result.task(":test").outcome == SUCCESS
     }
 
     def "log spock tests when mocha theme is set"() {
         when:
-            def result = run('single-spock-test', "testlogger { theme 'mocha' }")
+            def result = runSingle("testlogger { theme 'mocha' }")
         then:
-            def actualLines = getLoggerOutput(result.output)
-            actualLines.size() == 3
-            actualLines[0] == render('  [bold]com.adarshr.test.SingleSpec[/]')
-            actualLines[1] == render('')
-            actualLines[2] == render("    [erase-ahead,green]${symbol}[/] this is a single test")
+            def lines = getLoggerOutput(result.output)
+        and:
+            lines.size() == 3
+            lines[0] == render('  [bold]com.adarshr.test.SingleSpec[/]')
+            lines[1] == render('')
+            lines[2] == render("    [erase-ahead,green]${symbol}[/] this is a single test")
         and:
             result.task(":test").outcome == SUCCESS
     }
