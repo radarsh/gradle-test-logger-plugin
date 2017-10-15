@@ -74,7 +74,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             lines[4..7].join('\n') == render(
                 '''|
                    |  java.lang.AssertionError: expected:<1> but was:<2>
-                   |      at com.adarshr.test.FirstTest.thisTestShouldFail(FirstTest.java:16)
+                   |      at com.adarshr.test.FirstTest.thisTestShouldFail(FirstTest.java:21)
                    |[/]'''.stripMargin())
             lines[8] == render('[bold]  Test [/]thisTestShouldPass[erase-ahead,green] PASSED[/]')
             lines[9] == render('')
@@ -85,7 +85,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             lines[14..17].join('\n') == render(
                 '''|
                    |  java.lang.AssertionError: expected:<1> but was:<2>
-                   |      at com.adarshr.test.SecondTest.thisTestShouldFail(SecondTest.java:16)
+                   |      at com.adarshr.test.SecondTest.thisTestShouldFail(SecondTest.java:21)
                    |[/]'''.stripMargin())
             lines[18] == render('[bold]  Test [/]thisTestShouldPass[erase-ahead,green] PASSED[/]')
         and:
