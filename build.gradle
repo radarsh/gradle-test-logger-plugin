@@ -48,6 +48,7 @@ dependencies {
         exclude module: 'groovy-all'
     }
     testCompile 'net.bytebuddy:byte-buddy:1.7.5'
+    testCompile 'org.objenesis:objenesis:2.6'
     testCompile 'commons-io:commons-io:2.5'
 
     functionalTestCompile localGroovy()

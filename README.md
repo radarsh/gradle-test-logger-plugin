@@ -55,12 +55,23 @@ The following themes are currently supported:
 2. `standard` - displays colours but no Unicode symbols
 3. `mocha` - similar to what [mochajs](https://github.com/mochajs/mocha) prints, with colours and Unicode symbols
 
+### Showing exceptions
+
+By default, the `showExceptions` flag is turned on. This shows why the tests failed including the location of the
+failure. Of course, you can switch off this slightly more verbose logging by setting `showExceptions` to `false`.
+
+```groovy
+testlogger {
+    showExceptions false
+}
+```
+
 ## FAQ
 
 ### Does it work on Windows?
 
-Mostly. The `standard` and `plain` themes work out of the box but you might have to make a few modifications to your system settings to see Unicode
-symbols when using the `mocha` theme.
+Mostly. The `standard` and `plain` themes work out of the box but you might have to make a few modifications to your
+system settings to see Unicode symbols when using the `mocha` theme.
 
 1. Set or update `JAVA_OPTS` with the system property `-Dfile.encoding=UTF-8`
 2. Change the terminal code page to 65001 by executing `chcp 65001`

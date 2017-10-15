@@ -9,17 +9,17 @@ class FirstSpec extends Specification {
 
     def "this test should pass"() {
         expect:
-            true
+            1 == 1
     }
 
     def "this test should fail"() {
         expect:
-            false
+            1 == 2
     }
 
     @Ignore
     def "this test should be skipped"() {
         expect:
-            true
+            1 == 2
     }
 }
