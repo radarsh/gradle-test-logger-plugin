@@ -1,16 +1,19 @@
 package com.adarshr.gradle.testlogger
 
 import com.adarshr.gradle.testlogger.renderer.AnsiTextRenderer
-import org.apache.commons.io.FileUtils
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.UnexpectedBuildFailure
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import static org.apache.commons.io.FileUtils.copyDirectoryToDirectory
 
 @SuppressWarnings('GrMethodMayBeStatic')
 abstract class AbstractFunctionalSpec extends Specification {
+
+    private static final String TEST_ROOT = 'src/test-functional/resources'
 
     @Rule
     TemporaryFolder temporaryFolder
@@ -29,30 +32,30 @@ abstract class AbstractFunctionalSpec extends Specification {
         ansi.render(ansiText)
     }
 
-    protected BuildResult run(String project) {
-        GradleRunner.create()
-            .withGradleVersion('4.2')
-            .withProjectDir(new File("src/test-functional/resources/${project}"))
-            .withPluginClasspath()
-            .withDebug(true)
-            .withArguments('clean', 'test')
-            .forwardOutput()
-            .buildAndFail()
+    protected BuildResult run(String project, String args) {
+        runProject(new File("${TEST_ROOT}/${project}"), args)
     }
 
-    protected BuildResult run(String project, String buildFragment) {
+    protected BuildResult run(String project, String buildFragment, String args) {
         def projectDir = new File(temporaryFolder.root, project)
-        FileUtils.copyDirectoryToDirectory(new File("src/test-functional/resources/${project}"), temporaryFolder.root)
-        def buildFile = new File(projectDir, 'build.gradle')
-        buildFile << buildFragment
+        copyDirectoryToDirectory(new File("${TEST_ROOT}/${project}"), temporaryFolder.root)
+        new File(projectDir, 'build.gradle') << buildFragment
 
-        GradleRunner.create()
-            .withGradleVersion('4.2')
-            .withProjectDir(projectDir)
-            .withPluginClasspath()
-            .withDebug(true)
-            .withArguments('clean', 'test')
-            .forwardOutput()
-            .build()
+        runProject(projectDir, args)
+    }
+
+    private BuildResult runProject(File projectDir, String args) {
+        try {
+            GradleRunner.create()
+                .withGradleVersion('4.2')
+                .withProjectDir(projectDir)
+                .withPluginClasspath()
+                .withDebug(true)
+                .withArguments(args.split(' '))
+                .forwardOutput()
+                .build()
+        } catch (UnexpectedBuildFailure e) {
+            e.buildResult
+        }
     }
 }

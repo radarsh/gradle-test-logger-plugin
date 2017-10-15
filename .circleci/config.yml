@@ -16,14 +16,14 @@ jobs:
                     - v1-dependencies-
             - run:
                 name: Download dependencies
-                command: ./gradlew dependencies
+                command: ./gradlew dependencies --no-daemon --console=plain
             - save_cache:
                 paths:
                     - ~/.m2
                 key: v1-dependencies-{{ checksum "build.gradle" }}
             - run:
                 name: Run tests
-                command: ./gradlew clean test
+                command: ./gradlew clean test --no-daemon --console=plain
             - run:
                 name: Save reports
                 command: |
@@ -52,7 +52,7 @@ jobs:
                     - v1-dependencies-
             - run:
                 name: Download dependencies
-                command: ./gradlew dependencies
+                command: ./gradlew dependencies --no-daemon --console=plain
             - save_cache:
                 paths:
                     - ~/.m2
@@ -60,7 +60,7 @@ jobs:
             - run:
                 name: Publish plugin
                 command:
-                    ./gradlew clean publishPlugins
+                    ./gradlew clean publishPlugins --no-daemon --console=plain
                     -Pgradle.publish.key=${GRADLE_PUBLISH_KEY}
                     -Pgradle.publish.secret=${GRADLE_PUBLISH_SECRET}
 

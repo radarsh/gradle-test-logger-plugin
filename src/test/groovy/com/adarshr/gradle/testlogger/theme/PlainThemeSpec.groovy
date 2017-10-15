@@ -1,5 +1,6 @@
 package com.adarshr.gradle.testlogger.theme
 
+import com.adarshr.gradle.testlogger.TestLoggerExtension
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 import spock.lang.Specification
@@ -9,7 +10,13 @@ import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
 class PlainThemeSpec extends Specification {
 
-    def theme = new PlainTheme()
+    // right at the top to minimise line number changes
+    private static AssertionError getException() {
+        new AssertionError('This is wrong')
+    }
+
+    def testLoggerExtensionMock = Mock(TestLoggerExtension)
+    def theme = new PlainTheme(testLoggerExtensionMock)
     def testDescriptorMock = Mock(TestDescriptor)
     def testResultMock = Mock(TestResult)
 
@@ -17,7 +24,7 @@ class PlainThemeSpec extends Specification {
         given:
             testDescriptorMock.className >> 'ClassName'
         when:
-            def actual = theme.beforeSuite(testDescriptorMock)
+            def actual = theme.suiteText(testDescriptorMock)
         then:
             actual == 'ClassName\n'
     }
@@ -26,15 +33,62 @@ class PlainThemeSpec extends Specification {
     def "after test with result type #resultType"() {
         given:
             testResultMock.resultType >> resultType
-            testDescriptorMock.name >> 'method'
+            testDescriptorMock.name >> 'test name [escaped]'
         when:
-            def actual = theme.afterTest(testDescriptorMock, testResultMock)
+            def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
             actual == expected
         where:
             resultType | expected
-            SUCCESS    | '  Test method PASSED'
-            FAILURE    | '  Test method FAILED'
-            SKIPPED    | '  Test method SKIPPED'
+            SUCCESS    | '  Test test name \\[escaped\\] PASSED'
+            FAILURE    | '  Test test name \\[escaped\\] FAILED'
+            SKIPPED    | '  Test test name \\[escaped\\] SKIPPED'
+    }
+
+    def "after test with result type failure and showExceptions true"() {
+        given:
+            testLoggerExtensionMock.showExceptions >> true
+            theme = new StandardTheme(testLoggerExtensionMock)
+        and:
+            testResultMock.resultType >> FAILURE
+            testResultMock.exception >> exception
+            testDescriptorMock.name >> 'floppy test'
+            testDescriptorMock.className >> this.class.name
+        when:
+            def actual = theme.testText(testDescriptorMock, testResultMock)
+        then:
+            actual ==
+                '''|[bold]  Test [/]floppy test[erase-ahead,red] FAILED
+                   |
+                   |  java.lang.AssertionError: This is wrong
+                   |      at com.adarshr.gradle.testlogger.theme.PlainThemeSpec.getException(PlainThemeSpec.groovy:15)
+                   |[/]'''.stripMargin()
+    }
+
+    def "exception text when showExceptions is true"() {
+        given:
+            testLoggerExtensionMock.showExceptions >> true
+            theme = new StandardTheme(testLoggerExtensionMock)
+        and:
+            testResultMock.resultType >> FAILURE
+            testResultMock.exception >> exception
+            testDescriptorMock.name >> 'floppy test'
+            testDescriptorMock.className >> this.class.name
+        expect:
+            theme.exceptionText(testDescriptorMock, testResultMock) ==
+                '''|
+                   |
+                   |  java.lang.AssertionError: This is wrong
+                   |      at com.adarshr.gradle.testlogger.theme.PlainThemeSpec.getException(PlainThemeSpec.groovy:15)
+                   |'''.stripMargin()
+    }
+
+    def "exception text when showExceptions is false"() {
+        given:
+            testLoggerExtensionMock.showExceptions >> false
+            testResultMock.resultType >> FAILURE
+            testDescriptorMock.name >> 'floppy test'
+        expect:
+            !theme.exceptionText(testDescriptorMock, testResultMock)
     }
 }

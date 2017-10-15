@@ -13,22 +13,18 @@ dependencies {
     testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
 }
 
-test {
-    def total = 1
-    def count = 0
+tasks.withType(Test) {
+    boolean start = false
 
-    beforeSuite { suite ->
-        if (suite.name.startsWith('com.adarshr')) {
-            count++
-        }
-
-        if (count == 1) {
+    beforeTest { suite ->
+        if (!start && suite.className.startsWith('com.adarshr')) {
+            start = true
             logger.lifecycle '[[ START ]]'
         }
     }
 
     afterSuite { suite, result ->
-        if (count == total && suite.name.startsWith('com.adarshr')) {
+        if (!suite.parent) {
             logger.lifecycle '[[ END ]]'
         }
     }

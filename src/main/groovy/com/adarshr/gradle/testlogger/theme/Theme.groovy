@@ -5,7 +5,9 @@ import org.gradle.api.tasks.testing.TestResult
 
 interface Theme {
 
-    String beforeSuite(TestDescriptor descriptor)
+    String suiteText(TestDescriptor descriptor)
 
-    String afterTest(TestDescriptor descriptor, TestResult result)
+    String testText(TestDescriptor descriptor, TestResult result)
+
+    String exceptionText(TestDescriptor descriptor, TestResult result)
 }
