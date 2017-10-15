@@ -13,21 +13,17 @@ dependencies {
 }
 
 tasks.withType(Test) {
-    def total = 2
-    def count = 0
+    boolean start = false
 
-    beforeSuite { suite ->
-        if (suite.name.startsWith('com.adarshr')) {
-            count++
-        }
-
-        if (count == 1) {
+    beforeTest { suite ->
+        if (!start && suite.className.startsWith('com.adarshr')) {
+            start = true
             logger.lifecycle '[[ START ]]'
         }
     }
 
     afterSuite { suite, result ->
-        if (count == total && suite.name.startsWith('com.adarshr')) {
+        if (!suite.parent) {
             logger.lifecycle '[[ END ]]'
         }
     }

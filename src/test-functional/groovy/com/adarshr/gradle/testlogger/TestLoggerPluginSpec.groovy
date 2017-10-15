@@ -11,7 +11,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         then:
             def lines = getLoggerOutput(result.output)
         and:
-            lines.size() == 27
+            lines.size() == 28
             lines[0] == render('[bold,bright-yellow]com.adarshr.test.FirstSpec[/]')
             lines[1] == render('')
             lines[2] == render('[bold]  Test [/]this test should pass[erase-ahead,green] PASSED[/]')
@@ -41,6 +41,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                    |      at com.adarshr.test.SecondSpec.this test should fail(SecondSpec.groovy:17)
                    |[/]'''.stripMargin())
             lines[26] == render('[bold]  Test [/]this test should be skipped[erase-ahead,yellow] SKIPPED[/]')
+            lines[27] == render('')
         and:
             result.task(":test").outcome == FAILED
     }
@@ -88,10 +89,11 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         then:
             def lines = getLoggerOutput(result.output)
         and:
-            lines.size() == 3
+            lines.size() == 4
             lines[0] == render('[bold,bright-yellow]com.adarshr.test.SecondSpec[/]')
             lines[1] == render('')
             lines[2] == render('[bold]  Test [/]this test should pass[erase-ahead,green] PASSED[/]')
+            lines[3] == render('')
         and:
             result.task(":test").outcome == SUCCESS
     }
@@ -105,10 +107,11 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         then:
             def lines = getLoggerOutput(result.output)
         and:
-            lines.size() == 3
+            lines.size() == 4
             lines[0] == render('com.adarshr.test.SingleSpec')
             lines[1] == render('')
             lines[2] == render('  Test this is a single test PASSED')
+            lines[3] == render('')
         and:
             result.task(':anotherTask').outcome == SUCCESS
     }

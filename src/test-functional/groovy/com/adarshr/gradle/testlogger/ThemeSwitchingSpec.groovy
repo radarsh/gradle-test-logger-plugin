@@ -12,10 +12,11 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
         then:
             def lines = getLoggerOutput(result.output)
         and:
-            lines.size() == 3
+            lines.size() == 4
             lines[0] == render('com.adarshr.test.SingleSpec')
             lines[1] == render('')
             lines[2] == render('  Test this is a single test PASSED')
+            lines[3] == render('')
         and:
             result.task(":test").outcome == SUCCESS
     }
@@ -26,10 +27,11 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
         then:
             def lines = getLoggerOutput(result.output)
         and:
-            lines.size() == 3
+            lines.size() == 4
             lines[0] == render('[bold,bright-yellow]com.adarshr.test.SingleSpec[/]')
             lines[1] == render('')
             lines[2] == render('[bold]  Test [/]this is a single test[erase-ahead,green] PASSED[/]')
+            lines[3] == render('')
         and:
             result.task(":test").outcome == SUCCESS
     }
@@ -40,10 +42,11 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
         then:
             def lines = getLoggerOutput(result.output)
         and:
-            lines.size() == 3
+            lines.size() == 4
             lines[0] == render('  [bold]com.adarshr.test.SingleSpec[/]')
             lines[1] == render('')
             lines[2] == render("    [erase-ahead,green]${symbol}[/] this is a single test")
+            lines[3] == render('')
         and:
             result.task(":test").outcome == SUCCESS
     }
