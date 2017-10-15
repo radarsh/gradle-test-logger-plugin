@@ -62,11 +62,11 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
 
     def "log junit4 tests"() {
         when:
-            def result = run('sample-junit4-tests', 'clean test')
+            def result = run('sample-junit4-tests', 'clean test --tests *First*')
         then:
             def lines = getLoggerOutput(result.output)
         and:
-            lines.size() == 19
+            lines.size() == 10
             lines[0] == render('[bold,bright-yellow]com.adarshr.test.FirstTest[/]')
             lines[1] == render('')
             lines[2] == render('[bold]  Test [/]thisTestShouldBeSkipped[erase-ahead,yellow] SKIPPED[/]')
@@ -78,16 +78,6 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                    |[/]'''.stripMargin())
             lines[8] == render('[bold]  Test [/]thisTestShouldPass[erase-ahead,green] PASSED[/]')
             lines[9] == render('')
-            lines[10] == render('[bold,bright-yellow]com.adarshr.test.SecondTest[/]')
-            lines[11] == render('')
-            lines[12] == render('[bold]  Test [/]thisTestShouldBeSkipped[erase-ahead,yellow] SKIPPED[/]')
-            lines[13] == render('[bold]  Test [/]thisTestShouldFail[erase-ahead,red] FAILED')
-            lines[14..17].join('\n') == render(
-                '''|
-                   |  java.lang.AssertionError: expected:<1> but was:<2>
-                   |      at com.adarshr.test.SecondTest.thisTestShouldFail(SecondTest.java:21)
-                   |[/]'''.stripMargin())
-            lines[18] == render('[bold]  Test [/]thisTestShouldPass[erase-ahead,green] PASSED[/]')
         and:
             result.task(":test").outcome == FAILED
     }
