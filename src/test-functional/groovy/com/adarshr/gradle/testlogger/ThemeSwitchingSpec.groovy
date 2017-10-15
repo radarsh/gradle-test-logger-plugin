@@ -8,7 +8,7 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
 
     def "log spock tests when plain theme is set"() {
         when:
-            def result = runSingle('single-spock-test', "testlogger { theme 'plain' }")
+            def result = run('single-spock-test', "testlogger { theme 'plain' }", 'clean test')
         then:
             def lines = getLoggerOutput(result.output)
         and:
@@ -22,7 +22,7 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
 
     def "log spock tests when standard theme is set"() {
         when:
-            def result = runSingle('single-spock-test', "testlogger { theme 'standard' }")
+            def result = run('single-spock-test', "testlogger { theme 'standard' }", 'clean test')
         then:
             def lines = getLoggerOutput(result.output)
         and:
@@ -36,7 +36,7 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
 
     def "log spock tests when mocha theme is set"() {
         when:
-            def result = runSingle('single-spock-test', "testlogger { theme 'mocha' }")
+            def result = run('single-spock-test', "testlogger { theme 'mocha' }", 'clean test')
         then:
             def lines = getLoggerOutput(result.output)
         and:

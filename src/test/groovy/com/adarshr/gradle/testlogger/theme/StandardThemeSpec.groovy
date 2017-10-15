@@ -47,7 +47,6 @@ class StandardThemeSpec extends Specification {
 
     def "after test with result type failure and showExceptions true"() {
         given:
-            System.setProperty('os.name', 'Linux')
             testLoggerExtensionMock.showExceptions >> true
             theme = new StandardTheme(testLoggerExtensionMock)
         and:
