@@ -32,13 +32,13 @@ abstract class AbstractFunctionalSpec extends Specification {
         ansi.render(ansiText)
     }
 
-    protected BuildResult runMultiple(String args = 'clean test') {
-        runProject(new File("${TEST_ROOT}/sample-spock-tests"), args)
+    protected BuildResult runMultiple(String project, String args = 'clean test') {
+        runProject(new File("${TEST_ROOT}/${project}"), args)
     }
 
-    protected BuildResult runSingle(String buildFragment, String args = 'clean test') {
-        def projectDir = new File(temporaryFolder.root, 'single-spock-test')
-        copyDirectoryToDirectory(new File("${TEST_ROOT}/single-spock-test"), temporaryFolder.root)
+    protected BuildResult runSingle(String project, String buildFragment, String args = 'clean test') {
+        def projectDir = new File(temporaryFolder.root, project)
+        copyDirectoryToDirectory(new File("${TEST_ROOT}/${project}"), temporaryFolder.root)
         new File(projectDir, 'build.gradle') << buildFragment
 
         runProject(projectDir, args)

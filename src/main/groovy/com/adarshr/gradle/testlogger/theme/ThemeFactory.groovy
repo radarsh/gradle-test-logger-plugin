@@ -1,19 +1,21 @@
 package com.adarshr.gradle.testlogger.theme
 
+import com.adarshr.gradle.testlogger.TestLoggerExtension
+
 import static com.adarshr.gradle.testlogger.theme.ThemeType.*
 
 class ThemeFactory {
 
-    static Theme loadTheme(ThemeType themeType) {
-        switch (themeType) {
+    static Theme getTheme(TestLoggerExtension extension) {
+        switch (extension.theme) {
             case PLAIN:
-                return new PlainTheme()
+                return new PlainTheme(extension)
             case STANDARD:
-                return new StandardTheme()
+                return new StandardTheme(extension)
             case MOCHA:
-                return new MochaTheme()
+                return new MochaTheme(extension)
             default:
-                throw new IllegalArgumentException("Unsupported theme type ${themeType.name().toLowerCase()}")
+                throw new IllegalArgumentException("Unsupported theme type ${extension.theme.name().toLowerCase()}")
         }
     }
 }

@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'com.adarshr.test-logger'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+}
+
+tasks.withType(Test) {
+    def total = 2
+    def count = 0
+
+    beforeSuite { suite ->
+        if (suite.name.startsWith('com.adarshr')) {
+            count++
+        }
+
+        if (count == 1) {
+            logger.lifecycle '[[ START ]]'
+        }
+    }
+
+    afterSuite { suite, result ->
+        if (count == total && suite.name.startsWith('com.adarshr')) {
+            logger.lifecycle '[[ END ]]'
+        }
+    }
+}

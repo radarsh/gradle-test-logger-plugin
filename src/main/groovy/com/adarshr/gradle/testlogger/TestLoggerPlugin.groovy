@@ -9,7 +9,7 @@ class TestLoggerPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        project.extensions.create('testlogger', TestLoggerExtension)
+        project.extensions.create('testlogger', TestLoggerExtension, project)
 
         project.afterEvaluate {
             project.tasks.withType(Test).each { test ->
