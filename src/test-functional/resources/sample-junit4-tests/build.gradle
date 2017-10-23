@@ -11,25 +11,3 @@ repositories {
 dependencies {
     testCompile 'junit:junit:4.12'
 }
-
-tasks.withType(Test) {
-    boolean started = false
-    def suites = []
-
-    beforeTest { suite ->
-        if (suite.className.startsWith('com.adarshr') && !started) {
-            started = true
-            logger.lifecycle '__START__'
-        }
-        if (suite.className.startsWith('com.adarshr') && !suites.contains(suite.className)) {
-            logger.lifecycle "__SUITE=${suite.className}__"
-            suites << suite.className
-        }
-    }
-
-    afterSuite { suite, result ->
-        if (!suite.parent) {
-            logger.lifecycle '__END__'
-        }
-    }
-}

@@ -55,7 +55,7 @@ The following themes are currently supported:
 2. `standard` - displays colours but no Unicode symbols
 3. `mocha` - similar to what [mochajs](https://github.com/mochajs/mocha) prints, with colours and Unicode symbols
 
-### Showing exceptions
+### Hide exceptions
 
 By default, the `showExceptions` flag is turned on. This shows why the tests failed including the location of the
 failure. Of course, you can switch off this slightly more verbose logging by setting `showExceptions` to `false`.
@@ -65,6 +65,23 @@ testlogger {
     showExceptions false
 }
 ```
+
+### Define slow threshold
+
+Tests that are too slow will have their duration logged. However, "slow" is a relative terminology varying widely
+depending on the type of tests being executed, environment, kind of project and various other factors. Therefore you
+can define what you consider as slow to suit your needs.
+
+```groovy
+testlogger {
+    slowThreshold 5000
+}
+```
+
+The default value of `slowThreshold` is `1` second. So all tests that take longer than a second to run will have their
+actual execution time logged.
+
+If you want to turn off the logging of time taken completely, simply set the threshold to a very large value.
 
 ## FAQ
 

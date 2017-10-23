@@ -16,9 +16,14 @@ class StandardThemeSpec extends Specification {
     }
 
     def testLoggerExtensionMock = Mock(TestLoggerExtension)
-    def theme = new StandardTheme(testLoggerExtensionMock)
+    Theme theme
     def testDescriptorMock = Mock(TestDescriptor)
     def testResultMock = Mock(TestResult)
+
+    def setup() {
+        testLoggerExtensionMock.slowThreshold >> 2000
+        theme = new StandardTheme(testLoggerExtensionMock)
+    }
 
     def "before suite"() {
         given:
@@ -90,5 +95,17 @@ class StandardThemeSpec extends Specification {
             testDescriptorMock.name >> 'floppy test'
         expect:
             !theme.exceptionText(testDescriptorMock, testResultMock)
+    }
+
+    def "show time if slowThreshold is exceeded"() {
+        given:
+            testResultMock.resultType >> SUCCESS
+            testResultMock.startTime >> 1000000
+            testResultMock.endTime >> 1000000 + 10000
+            testDescriptorMock.name >> 'test name'
+        when:
+            def actual = theme.testText(testDescriptorMock, testResultMock)
+        then:
+            actual == '[bold]  Test [/]test name[erase-ahead,green] PASSED[/][red] (10s)[/]'
     }
 }

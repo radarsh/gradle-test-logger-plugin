@@ -7,7 +7,10 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
 
     def "log spock tests"() {
         when:
-            def result = run('sample-spock-tests', 'clean test')
+            def result = run(
+                'sample-spock-tests',
+                'clean test'
+            )
         then:
             def lines = getLoggerOutput(result.output)
         and:
@@ -48,7 +51,11 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
 
     def "run failing test with showExceptions false"() {
         when:
-            def result = run('sample-spock-tests', 'testlogger { showExceptions false }', 'clean test --tests *FirstSpec*fail')
+            def result = run(
+                'sample-spock-tests',
+                'testlogger { showExceptions false }',
+                'clean test --tests *FirstSpec*fail'
+            )
         then:
             def lines = getLoggerOutput(result.output)
         and:
@@ -63,7 +70,10 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
 
     def "log junit4 tests"() {
         when:
-            def result = run('sample-junit4-tests', 'clean test --tests *First*')
+            def result = run(
+                'sample-junit4-tests',
+                'clean test --tests *First*'
+            )
         then:
             def lines = getLoggerOutput(result.output)
         and:
@@ -85,7 +95,10 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
 
     def "do not print empty suites when filtering tests"() {
         when:
-            def result = run('sample-spock-tests', 'clean test --tests *SecondSpec*pass')
+            def result = run(
+                'sample-spock-tests',
+                'clean test --tests *SecondSpec*pass'
+            )
         then:
             def lines = getLoggerOutput(result.output)
         and:
@@ -100,10 +113,16 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
 
     def "hook into any task of type test"() {
         when:
-            def result = run('single-spock-test', '''
-                testlogger { theme 'plain' }
-                task anotherTask(type: Test) { }
-            ''', 'clean anotherTask')
+            def result = run(
+                'single-spock-test',
+                '''
+                    testlogger { 
+                        theme 'plain' 
+                    }
+                    task anotherTask(type: Test) { }
+                ''',
+                'clean anotherTask'
+            )
         then:
             def lines = getLoggerOutput(result.output)
         and:
@@ -114,5 +133,25 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             lines[3] == render('')
         and:
             result.task(':anotherTask').outcome == SUCCESS
+    }
+
+    def "show test execution time for slow tests"() {
+        when:
+            def result = run(
+                'slow-spock-test',
+                'testlogger { slowThreshold 1000 }',
+                'clean test'
+            )
+        then:
+            def lines = getLoggerOutput(result.output)
+        and:
+            lines.size() == 4
+            lines[0] == render('[bold,bright-yellow]com.adarshr.test.SlowSpec[/]')
+            lines[1] == render('')
+            lines[2].startsWith render('[bold]  Test [/]this is a slow test[erase-ahead,green] PASSED[/][red]')
+            lines[2] ==~ /.*\(3\.?\d?s\)\u001B\[m$/
+            lines[3] == render('')
+        and:
+            result.task(":test").outcome == SUCCESS
     }
 }

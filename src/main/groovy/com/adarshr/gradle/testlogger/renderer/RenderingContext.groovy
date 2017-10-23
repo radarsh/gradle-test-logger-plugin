@@ -13,6 +13,8 @@ class RenderingContext implements Appendable {
         'bright-red': { Ansi ansi -> ansi.fgBrightRed() },
         green: { Ansi ansi -> ansi.fgGreen() },
         yellow: { Ansi ansi -> ansi.fgYellow() },
+        cyan: { Ansi ansi -> ansi.fgCyan() },
+        magenta: { Ansi ansi -> ansi.fgMagenta() },
         'bright-yellow': { Ansi ansi -> ansi.fgBrightYellow() },
         'cursor-up-line': { Ansi ansi -> ansi.cursorUpLine() },
         'erase-all': { Ansi ansi -> ansi.eraseLine(ALL) },

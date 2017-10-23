@@ -21,6 +21,9 @@ class StandardTheme extends AbstractTheme {
         switch (result.resultType) {
             case SUCCESS:
                 line << '[erase-ahead,green] PASSED'
+                if (tooSlow(result)) {
+                    line << "[/][red] (${duration(result)})"
+                }
                 break
             case FAILURE:
                 line << '[erase-ahead,red] FAILED'
