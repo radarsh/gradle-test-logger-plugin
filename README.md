@@ -74,12 +74,14 @@ can define what you consider as slow to suit your needs.
 
 ```groovy
 testlogger {
-    slowThreshold 10*1000
+    slowThreshold 5000
 }
 ```
 
-The default value of `slowThreshold` is 2 seconds. So any tests that take longer than 2 seconds will have their
-execution time logged.
+The default value of `slowThreshold` is `1` second. So all tests that take longer than a second to run will have their
+actual execution time logged.
+
+If you want to turn off the logging of time taken completely, simply set the threshold to a very large value.
 
 ## FAQ
 

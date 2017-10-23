@@ -5,6 +5,7 @@ import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 import spock.lang.Specification
 import spock.lang.Unroll
+import spock.util.environment.OperatingSystem
 
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
@@ -18,9 +19,14 @@ class MochaThemeSpec extends Specification {
     private static final def ORIGINAL_OS = System.getProperty('os.name')
 
     def testLoggerExtensionMock = Mock(TestLoggerExtension)
-    def theme = new MochaTheme(testLoggerExtensionMock)
+    Theme theme
     def testDescriptorMock = Mock(TestDescriptor)
     def testResultMock = Mock(TestResult)
+
+    def setup() {
+        testLoggerExtensionMock.slowThreshold >> 2000
+        theme = new MochaTheme(testLoggerExtensionMock)
+    }
 
     def cleanup() {
         System.setProperty('os.name', ORIGINAL_OS)
@@ -72,7 +78,7 @@ class MochaThemeSpec extends Specification {
                 '''|    [erase-ahead,red]✘ floppy test[/][red]
                    |
                    |      java.lang.AssertionError: This is wrong
-                   |          at com.adarshr.gradle.testlogger.theme.MochaThemeSpec.getException(MochaThemeSpec.groovy:15)
+                   |          at com.adarshr.gradle.testlogger.theme.MochaThemeSpec.getException(MochaThemeSpec.groovy:16)
                    |[/]'''.stripMargin()
     }
 
@@ -90,7 +96,7 @@ class MochaThemeSpec extends Specification {
                 '''|[red]
                    |
                    |      java.lang.AssertionError: This is wrong
-                   |          at com.adarshr.gradle.testlogger.theme.MochaThemeSpec.getException(MochaThemeSpec.groovy:15)
+                   |          at com.adarshr.gradle.testlogger.theme.MochaThemeSpec.getException(MochaThemeSpec.groovy:16)
                    |[/]'''.stripMargin()
     }
 
@@ -101,5 +107,21 @@ class MochaThemeSpec extends Specification {
             testDescriptorMock.name >> 'floppy test'
         expect:
             !theme.exceptionText(testDescriptorMock, testResultMock)
+    }
+
+    def "show time if slowThreshold is exceeded"() {
+        given:
+            testResultMock.resultType >> SUCCESS
+            testResultMock.startTime >> 1000000
+            testResultMock.endTime >> 1000000 + 10000
+            testDescriptorMock.name >> 'test name'
+        when:
+            def actual = theme.testText(testDescriptorMock, testResultMock)
+        then:
+            actual == "    [erase-ahead,green]${symbol}[/] test name[red] (10s)[/]"
+    }
+
+    private static String getSymbol() {
+        OperatingSystem.current.windows ? '√' : '✔'
     }
 }

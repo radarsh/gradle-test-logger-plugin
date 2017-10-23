@@ -22,6 +22,9 @@ class MochaTheme extends AbstractTheme {
         switch (result.resultType) {
             case SUCCESS:
                 line << "    [erase-ahead,green]${getSymbol(result.resultType)}[/] ${escape(descriptor.name)}"
+                if (tooSlow(result)) {
+                    line << "[red] (${duration(result)})[/]"
+                }
                 break
             case FAILURE:
                 line << "    [erase-ahead,red]${getSymbol(result.resultType)} ${escape(descriptor.name)}[/]"

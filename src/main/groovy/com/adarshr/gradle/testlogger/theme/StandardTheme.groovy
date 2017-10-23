@@ -22,7 +22,7 @@ class StandardTheme extends AbstractTheme {
             case SUCCESS:
                 line << '[erase-ahead,green] PASSED'
                 if (tooSlow(result)) {
-                    line << "[/][magenta] (${duration(result)})"
+                    line << "[/][red] (${duration(result)})"
                 }
                 break
             case FAILURE:

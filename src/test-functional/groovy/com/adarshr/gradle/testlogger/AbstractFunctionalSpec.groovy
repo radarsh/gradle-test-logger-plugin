@@ -46,13 +46,15 @@ abstract class AbstractFunctionalSpec extends Specification {
     }
 
     protected BuildResult run(String project, String args) {
-        runProject(new File("${TEST_ROOT}/${project}"), args)
+        run(project, '', args)
     }
 
     protected BuildResult run(String project, String buildFragment, String args) {
         def projectDir = new File(temporaryFolder.root, project)
+        def buildFile = new File(projectDir, 'build.gradle')
         copyDirectoryToDirectory(new File("${TEST_ROOT}/${project}"), temporaryFolder.root)
-        new File(projectDir, 'build.gradle') << buildFragment
+        buildFile << new File(TEST_ROOT, 'test-marker.gradle').text
+        buildFile << buildFragment
 
         runProject(projectDir, args)
     }
