@@ -16,6 +16,8 @@ class TestLoggerExtension {
      */
     boolean showExceptions = true
 
+    long slowThreshold = 2000
+
     TestLoggerExtension(Project project) {
         this.theme = project.gradle.startParameter.consoleOutput == Plain ? PLAIN : this.theme
     }

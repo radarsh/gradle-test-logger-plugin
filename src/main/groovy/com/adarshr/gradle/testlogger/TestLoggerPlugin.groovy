@@ -1,6 +1,7 @@
 package com.adarshr.gradle.testlogger
 
 import com.adarshr.gradle.testlogger.logger.TestEventLogger
+import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
@@ -23,7 +24,7 @@ class TestLoggerPlugin implements Plugin<Project> {
 
     private static void assertSequentialTestExecution(Test test) {
         if (test.maxParallelForks != 1) {
-            throw new IllegalArgumentException('Parallel execution is not supported')
+            throw new GradleException('Parallel execution is not supported')
         }
     }
 }
