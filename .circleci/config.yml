@@ -25,6 +25,9 @@ jobs:
                 name: Run tests
                 command: ./gradlew clean test --no-daemon --console=plain
             - run:
+                name: Code coverage
+                command: ./gradlew jacocoTestReport coveralls --no-daemon --console=plain
+            - run:
                 name: Save reports
                 command: |
                     mkdir -p ~/results

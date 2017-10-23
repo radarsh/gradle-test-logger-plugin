@@ -1,5 +1,8 @@
 package com.adarshr.gradle.testlogger.util
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 final class TimeUtils {
 
     private static final int HOUR = 3600 * 1000
