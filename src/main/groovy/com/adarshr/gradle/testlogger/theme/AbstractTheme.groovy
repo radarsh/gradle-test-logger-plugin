@@ -10,10 +10,12 @@ abstract class AbstractTheme implements Theme {
 
     protected final boolean showExceptions
     protected final long slowThreshold
+    protected final boolean showSummary
 
     AbstractTheme(TestLoggerExtension extension) {
         this.showExceptions = extension.showExceptions
         this.slowThreshold = extension.slowThreshold
+        this.showSummary = extension.showSummary
     }
 
     @Override

@@ -18,6 +18,8 @@ class TestLoggerExtension {
 
     long slowThreshold = 1000
 
+    boolean showSummary = false
+
     TestLoggerExtension(Project project) {
         this.theme = project.gradle.startParameter.consoleOutput == Plain ? PLAIN : this.theme
     }

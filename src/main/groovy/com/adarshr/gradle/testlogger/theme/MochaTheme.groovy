@@ -38,12 +38,6 @@ class MochaTheme extends AbstractTheme {
         line
     }
 
-    @Override
-    String exceptionText(TestDescriptor descriptor, TestResult result) {
-        def line = super.exceptionText(descriptor, result, 6)
-        line ? "[red]${line}[/]" : ''
-    }
-
     private static String getSymbol(ResultType resultType) {
         switch (resultType) {
             case SUCCESS: return windows ? '√' : '✔'
@@ -54,5 +48,16 @@ class MochaTheme extends AbstractTheme {
 
     private static boolean getWindows() {
         System.getProperty('os.name').startsWith('Windows')
+    }
+
+    @Override
+    String exceptionText(TestDescriptor descriptor, TestResult result) {
+        def line = super.exceptionText(descriptor, result, 6)
+        line ? "[red]${line}[/]" : ''
+    }
+
+    @Override
+    String summaryText(TestDescriptor descriptor, TestResult result) {
+        return null
     }
 }

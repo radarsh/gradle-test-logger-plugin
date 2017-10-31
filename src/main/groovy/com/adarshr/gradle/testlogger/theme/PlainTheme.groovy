@@ -34,4 +34,9 @@ class PlainTheme extends AbstractTheme {
 
         line
     }
+
+    @Override
+    String summaryText(TestDescriptor descriptor, TestResult result) {
+        return null
+    }
 }

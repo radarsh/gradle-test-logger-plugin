@@ -36,6 +36,10 @@ class TestEventLogger implements TestListener {
             logger.log ''
             logBeforeSuite = false
         }
+
+        if (!suite.parent) {
+            logger.log theme.summaryText(suite, result)
+        }
     }
 
     @Override

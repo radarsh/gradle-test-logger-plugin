@@ -7,21 +7,24 @@ import static org.fusesource.jansi.Ansi.ansi
 
 class RenderingContext implements Appendable {
 
+    //@formatter:off
     private static final def TAG_MAPPING = [
-        bold: { Ansi ansi -> ansi.bold() },
-        red: { Ansi ansi -> ansi.fgRed() },
-        'bright-red': { Ansi ansi -> ansi.fgBrightRed() },
-        green: { Ansi ansi -> ansi.fgGreen() },
-        yellow: { Ansi ansi -> ansi.fgYellow() },
-        cyan: { Ansi ansi -> ansi.fgCyan() },
-        magenta: { Ansi ansi -> ansi.fgMagenta() },
-        'bright-yellow': { Ansi ansi -> ansi.fgBrightYellow() },
+        bold            : { Ansi ansi -> ansi.bold() },
+        red             : { Ansi ansi -> ansi.fgRed() },
+        'bright-red'    : { Ansi ansi -> ansi.fgBrightRed() },
+        green           : { Ansi ansi -> ansi.fgGreen() },
+        yellow          : { Ansi ansi -> ansi.fgYellow() },
+        cyan            : { Ansi ansi -> ansi.fgCyan() },
+        blue            : { Ansi ansi -> ansi.fgBlue() },
+        magenta         : { Ansi ansi -> ansi.fgMagenta() },
+        'bright-yellow' : { Ansi ansi -> ansi.fgBrightYellow() },
         'cursor-up-line': { Ansi ansi -> ansi.cursorUpLine() },
-        'erase-all': { Ansi ansi -> ansi.eraseLine(ALL) },
-        'erase-ahead': { Ansi ansi -> ansi.eraseLine(FORWARD) },
-        'erase-back': { Ansi ansi -> ansi.eraseLine(BACKWARD) },
-        '/': { Ansi ansi -> ansi.reset() }
+        'erase-all'     : { Ansi ansi -> ansi.eraseLine(ALL) },
+        'erase-ahead'   : { Ansi ansi -> ansi.eraseLine(FORWARD) },
+        'erase-back'    : { Ansi ansi -> ansi.eraseLine(BACKWARD) },
+        '/'             : { Ansi ansi -> ansi.reset() }
     ]
+    // @formatter:on
 
     private final Ansi ansi
     StringBuilder tag

@@ -36,4 +36,18 @@ class StandardTheme extends AbstractTheme {
 
         line << '[/]'
     }
+
+    @Override
+    String summaryText(TestDescriptor descriptor, TestResult result) {
+        def line = new StringBuilder("[bold,blue]Executed ${result.testCount} tests in ${duration(result)}")
+
+        if (result.failedTestCount) {
+            line << " with ${result.failedTestCount} failures"
+        }
+        if (result.skippedTestCount) {
+            line << " and ${result.skippedTestCount} skips"
+        }
+
+        line << '[/]'
+    }
 }
