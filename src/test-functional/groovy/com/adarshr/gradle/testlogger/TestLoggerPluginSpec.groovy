@@ -160,4 +160,24 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         and:
             result.task(":test").outcome == SUCCESS
     }
+
+    def "hide summary display"() {
+        when:
+            def result = run(
+                'single-spock-test',
+                '''
+                    testlogger { 
+                        showSummary false
+                    }
+                ''',
+                'clean test'
+            )
+        then:
+            def output = getLoggerOutput(result.output)
+        and:
+            output.lines.size() == 4
+            !output.summary
+        and:
+            result.task(":test").outcome == SUCCESS
+    }
 }

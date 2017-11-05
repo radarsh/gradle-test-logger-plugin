@@ -86,6 +86,17 @@ actual execution time logged.
 
 If you want to turn off the logging of time taken completely, simply set the threshold to a very large value.
 
+### Hide summary
+
+By default, a useful summary containing a breakdown of passing, failing and skipped tests along with the total time
+taken to execute all the tests is shown. Of course, you can disable this if you prefer a more succinct output.
+
+```groovy
+testlogger {
+    showSummary false
+}
+```
+
 ## FAQ
 
 ### Does it work on Windows?
