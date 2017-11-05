@@ -108,4 +108,34 @@ class PlainThemeSpec extends Specification {
         then:
             actual == '  Test test name PASSED (10s)'
     }
+
+    @Unroll
+    def "summary text given #success success, #failure failed and #skipped skipped tests"() {
+        given:
+            testLoggerExtensionMock.showSummary >> true
+            testResultMock.successfulTestCount >> success
+            testResultMock.failedTestCount >> failure
+            testResultMock.skippedTestCount >> skipped
+            testResultMock.testCount >> success + failure + skipped
+            testResultMock.startTime >> 1000000
+            testResultMock.endTime >> 1000000 + 10000
+            testResultMock.resultType >> (failure ? FAILURE : SUCCESS) // what Gradle would do
+        and:
+            theme = new PlainTheme(testLoggerExtensionMock)
+        when:
+            def actual = theme.summaryText(testDescriptorMock, testResultMock)
+        then:
+            actual == summaryText
+        where:
+            summaryText                                                 | success | failure | skipped
+            'SUCCESS: Executed 10 tests in 10s\n'                       | 10      | 0       | 0
+            'SUCCESS: Executed 7 tests in 10s (2 skipped)\n'            | 5       | 0       | 2
+            'FAILURE: Executed 8 tests in 10s (3 failed)\n'             | 5       | 3       | 0
+            'FAILURE: Executed 10 tests in 10s (3 failed, 2 skipped)\n' | 5       | 3       | 2
+    }
+
+    def "summary when showSummary is false"() {
+        expect:
+            !theme.summaryText(testDescriptorMock, testResultMock)
+    }
 }

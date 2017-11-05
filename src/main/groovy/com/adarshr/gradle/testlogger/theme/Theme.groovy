@@ -10,4 +10,6 @@ interface Theme {
     String testText(TestDescriptor descriptor, TestResult result)
 
     String exceptionText(TestDescriptor descriptor, TestResult result)
+
+    String summaryText(TestDescriptor descriptor, TestResult result)
 }

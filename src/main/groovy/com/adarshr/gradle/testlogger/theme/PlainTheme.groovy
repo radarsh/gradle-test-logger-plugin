@@ -34,4 +34,38 @@ class PlainTheme extends AbstractTheme {
 
         line
     }
+
+    @Override
+    String summaryText(TestDescriptor descriptor, TestResult result) {
+        if (!showSummary) {
+            return ''
+        }
+
+        def line = new StringBuilder()
+
+        line << "${result.resultType}: "
+        line << "Executed ${result.testCount} tests in ${duration(result)}"
+
+        def breakdown = getBreakdown(result)
+
+        if (breakdown) {
+            line << ' (' << breakdown.join(', ') << ')'
+        }
+
+        line << '\n'
+    }
+
+    private static List getBreakdown(TestResult result) {
+        def breakdown = []
+
+        if (result.failedTestCount) {
+            breakdown << "${result.failedTestCount} failed"
+        }
+
+        if (result.skippedTestCount) {
+            breakdown << "${result.skippedTestCount} skipped"
+        }
+
+        breakdown
+    }
 }

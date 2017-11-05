@@ -38,12 +38,6 @@ class MochaTheme extends AbstractTheme {
         line
     }
 
-    @Override
-    String exceptionText(TestDescriptor descriptor, TestResult result) {
-        def line = super.exceptionText(descriptor, result, 6)
-        line ? "[red]${line}[/]" : ''
-    }
-
     private static String getSymbol(ResultType resultType) {
         switch (resultType) {
             case SUCCESS: return windows ? '√' : '✔'
@@ -54,5 +48,30 @@ class MochaTheme extends AbstractTheme {
 
     private static boolean getWindows() {
         System.getProperty('os.name').startsWith('Windows')
+    }
+
+    @Override
+    String exceptionText(TestDescriptor descriptor, TestResult result) {
+        def line = super.exceptionText(descriptor, result, 6)
+        line ? "[red]${line}[/]" : ''
+    }
+
+    @Override
+    String summaryText(TestDescriptor descriptor, TestResult result) {
+        if (!showSummary) {
+            return ''
+        }
+
+        def line = new StringBuilder()
+        line << "  [green]${result.successfulTestCount} passing (${duration(result)})"
+
+        if (result.skippedTestCount) {
+            line << "\n  [yellow]${result.skippedTestCount} pending"
+        }
+        if (result.failedTestCount) {
+            line << "\n  [red]${result.failedTestCount} failing"
+        }
+
+        line << '[/]\n'
     }
 }
