@@ -12,7 +12,7 @@ class TestLoggerExtension {
 
     ThemeType theme = STANDARD
     boolean showExceptions = true
-    long slowThreshold = 1000
+    long slowThreshold = 2000
     boolean showSummary = true
 
     private final ConsoleOutput consoleType

@@ -56,7 +56,8 @@ The following themes are currently supported:
 
 1. `plain` - displays no colours or Unicode symbols
 2. `standard` - displays colours but no Unicode symbols
-3. `mocha` - similar to what [mochajs](https://github.com/mochajs/mocha) prints, with colours and Unicode symbols
+3. `mocha` - similar to what [Mocha's](https://github.com/mochajs/mocha) [spec reporter](https://mochajs.org/#spec)
+prints, with colours and Unicode symbols
 
 ### Hide exceptions
 
@@ -81,10 +82,15 @@ testlogger {
 }
 ```
 
-The default value of `slowThreshold` is `1` second. So all tests that take longer than a second to run will have their
+The default value of `slowThreshold` is `2` seconds. So all tests that take longer than a second to run will have their
 actual execution time logged.
 
 If you want to turn off the logging of time taken completely, simply set the threshold to a very large value.
+
+Please note that in themes that support colours, the duration is displayed using a warning style if it is greater than
+half the slow threshold. For instance, if `slowThreshold` is 5 seconds any tests that take longer than 2.5 seconds to
+run would have their durations logged using a warning style and those that take longer than 5 seconds to run using an
+error style.
 
 ### Hide summary
 

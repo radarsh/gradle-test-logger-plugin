@@ -60,6 +60,10 @@ abstract class AbstractTheme implements Theme {
         (result.endTime - result.startTime) >= slowThreshold
     }
 
+    protected boolean mediumSlow(TestResult result) {
+        (result.endTime - result.startTime) >= slowThreshold / 2
+    }
+
     protected String duration(TestResult result) {
         TimeUtils.humanDuration(result.endTime - result.startTime)
     }

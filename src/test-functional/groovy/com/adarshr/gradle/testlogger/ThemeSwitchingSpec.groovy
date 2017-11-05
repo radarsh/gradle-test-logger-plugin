@@ -74,9 +74,9 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
             def lines = getLoggerOutput(result.output).lines
         and:
             lines.size() == 4
-            lines[0] == render('  [bold]com.adarshr.test.SingleSpec[/]')
+            lines[0] == render('  [default]com.adarshr.test.SingleSpec[/]')
             lines[1] == render('')
-            lines[2] == render("    [erase-ahead,green]${symbol}[/] this is a single test")
+            lines[2] == render("    [erase-ahead,green]${symbol}[grey] this is a single test[/]")
             lines[3] == render('')
         and:
             result.task(":test").outcome == SUCCESS

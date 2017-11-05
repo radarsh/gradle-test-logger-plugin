@@ -12,7 +12,7 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     String suiteText(TestDescriptor descriptor) {
-        "  [bold]${escape(descriptor.className)}[/]\n"
+        "  [default]${escape(descriptor.className)}[/]\n"
     }
 
     @Override
@@ -21,9 +21,11 @@ class MochaTheme extends AbstractTheme {
 
         switch (result.resultType) {
             case SUCCESS:
-                line << "    [erase-ahead,green]${getSymbol(result.resultType)}[/] ${escape(descriptor.name)}"
+                line << "    [erase-ahead,green]${getSymbol(result.resultType)}[grey] ${escape(descriptor.name)}[/]"
                 if (tooSlow(result)) {
                     line << "[red] (${duration(result)})[/]"
+                } else if (mediumSlow(result)) {
+                    line << "[yellow] (${duration(result)})[/]"
                 }
                 break
             case FAILURE:
@@ -31,7 +33,7 @@ class MochaTheme extends AbstractTheme {
                 line << exceptionText(descriptor, result)
                 break
             case SKIPPED:
-                line << "    [erase-ahead,yellow]${getSymbol(result.resultType)} ${escape(descriptor.name)}[/]"
+                line << "    [erase-ahead,cyan]${getSymbol(result.resultType)} ${escape(descriptor.name)}[/]"
                 break
         }
 
@@ -42,7 +44,7 @@ class MochaTheme extends AbstractTheme {
         switch (resultType) {
             case SUCCESS: return windows ? '√' : '✔'
             case FAILURE: return windows ? 'X' : '✘'
-            case SKIPPED: return windows ? '%' : '✂'
+            case SKIPPED: return '-'
         }
     }
 
@@ -63,10 +65,10 @@ class MochaTheme extends AbstractTheme {
         }
 
         def line = new StringBuilder()
-        line << "  [green]${result.successfulTestCount} passing (${duration(result)})"
+        line << "  [green]${result.successfulTestCount} passing [grey](${duration(result)})"
 
         if (result.skippedTestCount) {
-            line << "\n  [yellow]${result.skippedTestCount} pending"
+            line << "\n  [cyan]${result.skippedTestCount} pending"
         }
         if (result.failedTestCount) {
             line << "\n  [red]${result.failedTestCount} failing"

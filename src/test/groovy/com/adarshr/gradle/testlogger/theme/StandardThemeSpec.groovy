@@ -109,6 +109,18 @@ class StandardThemeSpec extends Specification {
             actual == '[bold]  Test [/]test name[erase-ahead,green] PASSED[/][red] (10s)[/]'
     }
 
+    def "show time if slowThreshold is approaching"() {
+        given:
+            testResultMock.resultType >> SUCCESS
+            testResultMock.startTime >> 1000000
+            testResultMock.endTime >> 1000000 + 1500 // slow threshold is 2s
+            testDescriptorMock.name >> 'test name'
+        when:
+            def actual = theme.testText(testDescriptorMock, testResultMock)
+        then:
+            actual == '[bold]  Test [/]test name[erase-ahead,green] PASSED[/][yellow] (1.5s)[/]'
+    }
+
     @Unroll
     def "summary text given #success success, #failure failed and #skipped skipped tests"() {
         given:
