@@ -38,7 +38,7 @@ class MochaThemeSpec extends Specification {
         when:
             def actual = theme.suiteText(testDescriptorMock)
         then:
-            actual == '  [bold]ClassName[/]\n'
+            actual == '  [default]ClassName[/]\n'
     }
 
     @Unroll
@@ -53,12 +53,12 @@ class MochaThemeSpec extends Specification {
             actual == expected
         where:
             os            | resultType | expected
-            'Windows 8.1' | SUCCESS    | '    [erase-ahead,green]√[/] test name \\[escaped\\]'
+            'Windows 8.1' | SUCCESS    | '    [erase-ahead,green]√[grey] test name \\[escaped\\][/]'
             'Windows 8.1' | FAILURE    | '    [erase-ahead,red]X test name \\[escaped\\][/]'
-            'Windows 8.1' | SKIPPED    | '    [erase-ahead,yellow]% test name \\[escaped\\][/]'
-            'Linux'       | SUCCESS    | '    [erase-ahead,green]✔[/] test name \\[escaped\\]'
+            'Windows 8.1' | SKIPPED    | '    [erase-ahead,cyan]- test name \\[escaped\\][/]'
+            'Linux'       | SUCCESS    | '    [erase-ahead,green]✔[grey] test name \\[escaped\\][/]'
             'Linux'       | FAILURE    | '    [erase-ahead,red]✘ test name \\[escaped\\][/]'
-            'Linux'       | SKIPPED    | '    [erase-ahead,yellow]✂ test name \\[escaped\\][/]'
+            'Linux'       | SKIPPED    | '    [erase-ahead,cyan]- test name \\[escaped\\][/]'
     }
 
     def "after test with result type failure and showExceptions true"() {
@@ -118,7 +118,19 @@ class MochaThemeSpec extends Specification {
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
-            actual == "    [erase-ahead,green]${symbol}[/] test name[red] (10s)[/]"
+            actual == "    [erase-ahead,green]${symbol}[grey] test name[/][red] (10s)[/]"
+    }
+
+    def "show time if slowThreshold is approaching"() {
+        given:
+            testResultMock.resultType >> SUCCESS
+            testResultMock.startTime >> 1000000
+            testResultMock.endTime >> 1000000 + 1500 // slow threshold is 2s
+            testDescriptorMock.name >> 'test name'
+        when:
+            def actual = theme.testText(testDescriptorMock, testResultMock)
+        then:
+            actual == "    [erase-ahead,green]${symbol}[grey] test name[/][yellow] (1.5s)[/]"
     }
 
     @Unroll
@@ -139,11 +151,11 @@ class MochaThemeSpec extends Specification {
         then:
             actual == summaryText
         where:
-            summaryText                                                            | success | failure | skipped
-            '  [green]10 passing (10s)[/]\n'                                       | 10      | 0       | 0
-            '  [green]5 passing (10s)\n  [yellow]2 pending[/]\n'                   | 5       | 0       | 2
-            '  [green]5 passing (10s)\n  [red]3 failing[/]\n'                      | 5       | 3       | 0
-            '  [green]5 passing (10s)\n  [yellow]2 pending\n  [red]3 failing[/]\n' | 5       | 3       | 2
+            summaryText                                                                | success | failure | skipped
+            '  [green]10 passing [grey](10s)[/]\n'                                     | 10      | 0       | 0
+            '  [green]5 passing [grey](10s)\n  [cyan]2 pending[/]\n'                   | 5       | 0       | 2
+            '  [green]5 passing [grey](10s)\n  [red]3 failing[/]\n'                    | 5       | 3       | 0
+            '  [green]5 passing [grey](10s)\n  [cyan]2 pending\n  [red]3 failing[/]\n' | 5       | 3       | 2
     }
 
     def "summary when showSummary is false"() {
