@@ -14,7 +14,26 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
                 'clean test'
             )
         then:
-            def lines = getLoggerOutput(result.output)
+            def lines = getLoggerOutput(result.output).lines
+        and:
+            lines.size() == 4
+            lines[0] == render('com.adarshr.test.SingleSpec')
+            lines[1] == render('')
+            lines[2] == render('  Test this is a single test PASSED')
+            lines[3] == render('')
+        and:
+            result.task(":test").outcome == SUCCESS
+    }
+
+    def "fallback to plain theme when --console plain is specified"() {
+        when:
+            def result = run(
+                'single-spock-test',
+                "testlogger { theme 'standard' }",
+                'clean test --console plain'
+            )
+        then:
+            def lines = getLoggerOutput(result.output).lines
         and:
             lines.size() == 4
             lines[0] == render('com.adarshr.test.SingleSpec')
@@ -33,7 +52,7 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
                 'clean test'
             )
         then:
-            def lines = getLoggerOutput(result.output)
+            def lines = getLoggerOutput(result.output).lines
         and:
             lines.size() == 4
             lines[0] == render('[bold,bright-yellow]com.adarshr.test.SingleSpec[/]')
@@ -52,7 +71,7 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
                 'clean test'
             )
         then:
-            def lines = getLoggerOutput(result.output)
+            def lines = getLoggerOutput(result.output).lines
         and:
             lines.size() == 4
             lines[0] == render('  [bold]com.adarshr.test.SingleSpec[/]')

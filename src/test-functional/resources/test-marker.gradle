@@ -15,8 +15,16 @@ tasks.withType(Test) {
 
     afterSuite { suite, result ->
         if (!suite.parent) {
-            logger.lifecycle '__END__'
+            logger.lifecycle '__SUMMARY__'
+        }
+    }
+
+    // Do after evaluate to make sure this listener comes after the plugin's
+    afterEvaluate {
+        afterSuite { suite, result ->
+            if (!suite.parent) {
+                logger.lifecycle '__END__'
+            }
         }
     }
 }
-

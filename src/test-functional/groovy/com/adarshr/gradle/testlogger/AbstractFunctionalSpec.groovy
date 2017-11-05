@@ -20,14 +20,16 @@ abstract class AbstractFunctionalSpec extends Specification {
 
     private static final def START_MARKER = '__START__'
     private static final def END_MARKER = '__END__'
+    private static final def SUMMARY_MARKER = '__SUMMARY__'
     private static final def SUITE_MARKER = '__SUITE='
     private static final def SUITE_MARKER_REGEX = $/$SUITE_MARKER(.*)__/$
 
     private AnsiTextRenderer ansi = new AnsiTextRenderer()
 
-    protected List<String> getLoggerOutput(String text) {
+    protected TestLoggerOutput getLoggerOutput(String text) {
         def allLines = text.readLines()
-        def lines = allLines.subList(allLines.indexOf(START_MARKER) + 1, allLines.indexOf(END_MARKER))
+        def lines = allLines.subList(allLines.indexOf(START_MARKER) + 1, allLines.indexOf(SUMMARY_MARKER))
+        def summary = allLines.subList(allLines.indexOf(SUMMARY_MARKER) + 1, allLines.indexOf(END_MARKER))
         def map = new LinkedHashMap<String, List<String>>()
 
         lines.each { line ->
@@ -38,7 +40,7 @@ abstract class AbstractFunctionalSpec extends Specification {
             }
         }
 
-        map.sort().values().flatten()
+        new TestLoggerOutput(lines: map.sort().values().flatten(), summary: summary)
     }
 
     protected String render(String ansiText) {

@@ -58,6 +58,20 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     String summaryText(TestDescriptor descriptor, TestResult result) {
-        return null
+        if (!showSummary) {
+            return ''
+        }
+
+        def line = new StringBuilder()
+        line << "  [green]${result.successfulTestCount} passing (${duration(result)})"
+
+        if (result.skippedTestCount) {
+            line << "\n  [yellow]${result.skippedTestCount} pending"
+        }
+        if (result.failedTestCount) {
+            line << "\n  [red]${result.failedTestCount} failing"
+        }
+
+        line << '[/]\n'
     }
 }

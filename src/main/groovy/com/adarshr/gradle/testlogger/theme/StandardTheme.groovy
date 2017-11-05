@@ -39,15 +39,36 @@ class StandardTheme extends AbstractTheme {
 
     @Override
     String summaryText(TestDescriptor descriptor, TestResult result) {
-        def line = new StringBuilder("[bold,blue]Executed ${result.testCount} tests in ${duration(result)}")
+        if (!showSummary) {
+            return ''
+        }
+
+        def colour = result.resultType == FAILURE ? 'red' : 'green'
+        def line = new StringBuilder()
+
+        line << "[bold,${colour}]${result.resultType}: "
+        line << "[default]Executed ${result.testCount} tests in ${duration(result)}"
+
+        def breakdown = getBreakdown(result)
+
+        if (breakdown) {
+            line << ' (' << breakdown.join(', ') << ')'
+        }
+
+        line << '[/]\n'
+    }
+
+    private static List getBreakdown(TestResult result) {
+        def breakdown = []
 
         if (result.failedTestCount) {
-            line << " with ${result.failedTestCount} failures"
-        }
-        if (result.skippedTestCount) {
-            line << " and ${result.skippedTestCount} skips"
+            breakdown << "${result.failedTestCount} failed"
         }
 
-        line << '[/]'
+        if (result.skippedTestCount) {
+            breakdown << "${result.skippedTestCount} skipped"
+        }
+
+        breakdown
     }
 }

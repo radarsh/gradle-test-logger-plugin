@@ -121,6 +121,36 @@ class MochaThemeSpec extends Specification {
             actual == "    [erase-ahead,green]${symbol}[/] test name[red] (10s)[/]"
     }
 
+    @Unroll
+    def "summary text given #success success, #failure failed and #skipped skipped tests"() {
+        given:
+            testLoggerExtensionMock.showSummary >> true
+            testResultMock.successfulTestCount >> success
+            testResultMock.failedTestCount >> failure
+            testResultMock.skippedTestCount >> skipped
+            testResultMock.testCount >> success + failure + skipped
+            testResultMock.startTime >> 1000000
+            testResultMock.endTime >> 1000000 + 10000
+            testResultMock.resultType >> (failure ? FAILURE : SUCCESS) // what Gradle would do
+        and:
+            theme = new MochaTheme(testLoggerExtensionMock)
+        when:
+            def actual = theme.summaryText(testDescriptorMock, testResultMock)
+        then:
+            actual == summaryText
+        where:
+            summaryText                                                            | success | failure | skipped
+            '  [green]10 passing (10s)[/]\n'                                       | 10      | 0       | 0
+            '  [green]5 passing (10s)\n  [yellow]2 pending[/]\n'                   | 5       | 0       | 2
+            '  [green]5 passing (10s)\n  [red]3 failing[/]\n'                      | 5       | 3       | 0
+            '  [green]5 passing (10s)\n  [yellow]2 pending\n  [red]3 failing[/]\n' | 5       | 3       | 2
+    }
+
+    def "summary when showSummary is false"() {
+        expect:
+            !theme.summaryText(testDescriptorMock, testResultMock)
+    }
+
     private static String getSymbol() {
         OperatingSystem.current.windows ? '√' : '✔'
     }

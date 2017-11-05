@@ -38,7 +38,11 @@ class TestEventLogger implements TestListener {
         }
 
         if (!suite.parent) {
-            logger.log theme.summaryText(suite, result)
+            def summary = theme.summaryText(suite, result)
+
+            if (summary) {
+                logger.log theme.summaryText(suite, result)
+            }
         }
     }
 
