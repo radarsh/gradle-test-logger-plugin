@@ -18,14 +18,29 @@ abstract class AbstractFunctionalSpec extends Specification {
     @Rule
     TemporaryFolder temporaryFolder
 
-    protected static final def START_MARKER = '[[ START ]]'
-    protected static final def END_MARKER = '[[ END ]]'
+    private static final def START_MARKER = '__START__'
+    private static final def END_MARKER = '__END__'
+    private static final def SUMMARY_MARKER = '__SUMMARY__'
+    private static final def SUITE_MARKER = '__SUITE='
+    private static final def SUITE_MARKER_REGEX = $/$SUITE_MARKER(.*)__/$
 
     private AnsiTextRenderer ansi = new AnsiTextRenderer()
 
-    protected List<String> getLoggerOutput(String text) {
-        def lines = text.readLines()
-        lines.subList(lines.indexOf(START_MARKER) + 1, lines.indexOf(END_MARKER))
+    protected TestLoggerOutput getLoggerOutput(String text) {
+        def allLines = text.readLines()
+        def lines = allLines.subList(allLines.indexOf(START_MARKER) + 1, allLines.indexOf(SUMMARY_MARKER))
+        def summary = allLines.subList(allLines.indexOf(SUMMARY_MARKER) + 1, allLines.indexOf(END_MARKER))
+        def map = new LinkedHashMap<String, List<String>>()
+
+        lines.each { line ->
+            if (line.startsWith(SUITE_MARKER)) {
+                map << [(line.replaceFirst(SUITE_MARKER_REGEX, '$1')): []]
+            } else {
+                map.values().last() << line
+            }
+        }
+
+        new TestLoggerOutput(lines: map.sort().values().flatten(), summary: summary)
     }
 
     protected String render(String ansiText) {
@@ -33,13 +48,15 @@ abstract class AbstractFunctionalSpec extends Specification {
     }
 
     protected BuildResult run(String project, String args) {
-        runProject(new File("${TEST_ROOT}/${project}"), args)
+        run(project, '', args)
     }
 
     protected BuildResult run(String project, String buildFragment, String args) {
         def projectDir = new File(temporaryFolder.root, project)
+        def buildFile = new File(projectDir, 'build.gradle')
         copyDirectoryToDirectory(new File("${TEST_ROOT}/${project}"), temporaryFolder.root)
-        new File(projectDir, 'build.gradle') << buildFragment
+        buildFile << new File(TEST_ROOT, 'test-marker.gradle').text
+        buildFile << buildFragment
 
         runProject(projectDir, args)
     }
@@ -47,7 +64,7 @@ abstract class AbstractFunctionalSpec extends Specification {
     private BuildResult runProject(File projectDir, String args) {
         try {
             GradleRunner.create()
-                .withGradleVersion('4.2')
+                .withGradleVersion('4.3')
                 .withProjectDir(projectDir)
                 .withPluginClasspath()
                 .withDebug(true)

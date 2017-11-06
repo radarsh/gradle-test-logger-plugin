@@ -21,6 +21,11 @@ class StandardTheme extends AbstractTheme {
         switch (result.resultType) {
             case SUCCESS:
                 line << '[erase-ahead,green] PASSED'
+                if (tooSlow(result)) {
+                    line << "[/][red] (${duration(result)})"
+                } else if (mediumSlow(result)) {
+                    line << "[/][yellow] (${duration(result)})"
+                }
                 break
             case FAILURE:
                 line << '[erase-ahead,red] FAILED'
@@ -32,5 +37,40 @@ class StandardTheme extends AbstractTheme {
         }
 
         line << '[/]'
+    }
+
+    @Override
+    String summaryText(TestDescriptor descriptor, TestResult result) {
+        if (!showSummary) {
+            return ''
+        }
+
+        def colour = result.resultType == FAILURE ? 'red' : 'green'
+        def line = new StringBuilder()
+
+        line << "[bold,${colour}]${result.resultType}: "
+        line << "[default]Executed ${result.testCount} tests in ${duration(result)}"
+
+        def breakdown = getBreakdown(result)
+
+        if (breakdown) {
+            line << ' (' << breakdown.join(', ') << ')'
+        }
+
+        line << '[/]\n'
+    }
+
+    private static List getBreakdown(TestResult result) {
+        def breakdown = []
+
+        if (result.failedTestCount) {
+            breakdown << "${result.failedTestCount} failed"
+        }
+
+        if (result.skippedTestCount) {
+            breakdown << "${result.skippedTestCount} skipped"
+        }
+
+        breakdown
     }
 }

@@ -11,20 +11,3 @@ repositories {
 dependencies {
     testCompile 'junit:junit:4.12'
 }
-
-tasks.withType(Test) {
-    boolean start = false
-
-    beforeTest { suite ->
-        if (!start && suite.className.startsWith('com.adarshr')) {
-            start = true
-            logger.lifecycle '[[ START ]]'
-        }
-    }
-
-    afterSuite { suite, result ->
-        if (!suite.parent) {
-            logger.lifecycle '[[ END ]]'
-        }
-    }
-}

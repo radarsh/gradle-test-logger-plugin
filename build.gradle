@@ -8,8 +8,10 @@ plugins {
     id 'groovy'
     id 'java-gradle-plugin'
     id 'maven-publish'
-    id 'com.gradle.plugin-publish' version '0.9.8'
     id 'idea'
+    id 'jacoco'
+    id 'com.gradle.plugin-publish' version '0.9.8'
+    id 'com.github.kt3k.coveralls' version '2.8.2'
 }
 
 def thisPlugin =
@@ -17,6 +19,7 @@ def thisPlugin =
         .loadScriptByName('com/adarshr/gradle/testlogger/TestLoggerPlugin.groovy')
 
 apply from: 'gradle/publishing.gradle'
+apply from: 'gradle/coverage.gradle'
 apply plugin: thisPlugin
 
 repositories {

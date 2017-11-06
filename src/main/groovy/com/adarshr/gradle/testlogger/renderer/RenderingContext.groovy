@@ -7,19 +7,31 @@ import static org.fusesource.jansi.Ansi.ansi
 
 class RenderingContext implements Appendable {
 
+    //@formatter:off
     private static final def TAG_MAPPING = [
-        bold: { Ansi ansi -> ansi.bold() },
-        red: { Ansi ansi -> ansi.fgRed() },
-        'bright-red': { Ansi ansi -> ansi.fgBrightRed() },
-        green: { Ansi ansi -> ansi.fgGreen() },
-        yellow: { Ansi ansi -> ansi.fgYellow() },
-        'bright-yellow': { Ansi ansi -> ansi.fgBrightYellow() },
-        'cursor-up-line': { Ansi ansi -> ansi.cursorUpLine() },
-        'erase-all': { Ansi ansi -> ansi.eraseLine(ALL) },
-        'erase-ahead': { Ansi ansi -> ansi.eraseLine(FORWARD) },
-        'erase-back': { Ansi ansi -> ansi.eraseLine(BACKWARD) },
-        '/': { Ansi ansi -> ansi.reset() }
+        'bold'              : { Ansi ansi -> ansi.bold() },
+        'bold-off'          : { Ansi ansi -> ansi.boldOff() },
+        'default'           : { Ansi ansi -> ansi.fgDefault() },
+        'grey'              : { Ansi ansi -> ansi.fgBrightBlack()},
+        'red'               : { Ansi ansi -> ansi.fgRed() },
+        'bright-red'        : { Ansi ansi -> ansi.fgBrightRed() },
+        'green'             : { Ansi ansi -> ansi.fgGreen() },
+        'bright-green'      : { Ansi ansi -> ansi.fgBrightGreen() },
+        'yellow'            : { Ansi ansi -> ansi.fgYellow() },
+        'bright-yellow'     : { Ansi ansi -> ansi.fgBrightYellow() },
+        'cyan'              : { Ansi ansi -> ansi.fgCyan() },
+        'bright-cyan'       : { Ansi ansi -> ansi.fgBrightCyan() },
+        'blue'              : { Ansi ansi -> ansi.fgBlue() },
+        'bright-blue'       : { Ansi ansi -> ansi.fgBrightBlue() },
+        'magenta'           : { Ansi ansi -> ansi.fgMagenta() },
+        'bright-magenta'    : { Ansi ansi -> ansi.fgBrightMagenta() },
+        'cursor-up-line'    : { Ansi ansi -> ansi.cursorUpLine() },
+        'erase-all'         : { Ansi ansi -> ansi.eraseLine(ALL) },
+        'erase-ahead'       : { Ansi ansi -> ansi.eraseLine(FORWARD) },
+        'erase-back'        : { Ansi ansi -> ansi.eraseLine(BACKWARD) },
+        '/'                 : { Ansi ansi -> ansi.reset() }
     ]
+    // @formatter:on
 
     private final Ansi ansi
     StringBuilder tag

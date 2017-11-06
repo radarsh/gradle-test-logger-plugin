@@ -16,9 +16,14 @@ class StandardThemeSpec extends Specification {
     }
 
     def testLoggerExtensionMock = Mock(TestLoggerExtension)
-    def theme = new StandardTheme(testLoggerExtensionMock)
+    Theme theme
     def testDescriptorMock = Mock(TestDescriptor)
     def testResultMock = Mock(TestResult)
+
+    def setup() {
+        testLoggerExtensionMock.slowThreshold >> 2000
+        theme = new StandardTheme(testLoggerExtensionMock)
+    }
 
     def "before suite"() {
         given:
@@ -90,5 +95,59 @@ class StandardThemeSpec extends Specification {
             testDescriptorMock.name >> 'floppy test'
         expect:
             !theme.exceptionText(testDescriptorMock, testResultMock)
+    }
+
+    def "show time if slowThreshold is exceeded"() {
+        given:
+            testResultMock.resultType >> SUCCESS
+            testResultMock.startTime >> 1000000
+            testResultMock.endTime >> 1000000 + 10000
+            testDescriptorMock.name >> 'test name'
+        when:
+            def actual = theme.testText(testDescriptorMock, testResultMock)
+        then:
+            actual == '[bold]  Test [/]test name[erase-ahead,green] PASSED[/][red] (10s)[/]'
+    }
+
+    def "show time if slowThreshold is approaching"() {
+        given:
+            testResultMock.resultType >> SUCCESS
+            testResultMock.startTime >> 1000000
+            testResultMock.endTime >> 1000000 + 1500 // slow threshold is 2s
+            testDescriptorMock.name >> 'test name'
+        when:
+            def actual = theme.testText(testDescriptorMock, testResultMock)
+        then:
+            actual == '[bold]  Test [/]test name[erase-ahead,green] PASSED[/][yellow] (1.5s)[/]'
+    }
+
+    @Unroll
+    def "summary text given #success success, #failure failed and #skipped skipped tests"() {
+        given:
+            testLoggerExtensionMock.showSummary >> true
+            testResultMock.successfulTestCount >> success
+            testResultMock.failedTestCount >> failure
+            testResultMock.skippedTestCount >> skipped
+            testResultMock.testCount >> success + failure + skipped
+            testResultMock.startTime >> 1000000
+            testResultMock.endTime >> 1000000 + 10000
+            testResultMock.resultType >> (failure ? FAILURE : SUCCESS) // what Gradle would do
+        and:
+            theme = new StandardTheme(testLoggerExtensionMock)
+        when:
+            def actual = theme.summaryText(testDescriptorMock, testResultMock)
+        then:
+            actual == summaryText
+        where:
+            summaryText                                                                       | success | failure | skipped
+            '[bold,green]SUCCESS: [default]Executed 10 tests in 10s[/]\n'                     | 10      | 0       | 0
+            '[bold,green]SUCCESS: [default]Executed 7 tests in 10s (2 skipped)[/]\n'          | 5       | 0       | 2
+            '[bold,red]FAILURE: [default]Executed 8 tests in 10s (3 failed)[/]\n'             | 5       | 3       | 0
+            '[bold,red]FAILURE: [default]Executed 10 tests in 10s (3 failed, 2 skipped)[/]\n' | 5       | 3       | 2
+    }
+
+    def "summary when showSummary is false"() {
+        expect:
+            !theme.summaryText(testDescriptorMock, testResultMock)
     }
 }

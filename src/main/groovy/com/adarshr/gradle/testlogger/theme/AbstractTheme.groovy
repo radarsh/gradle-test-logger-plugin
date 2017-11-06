@@ -1,6 +1,7 @@
 package com.adarshr.gradle.testlogger.theme
 
 import com.adarshr.gradle.testlogger.TestLoggerExtension
+import com.adarshr.gradle.testlogger.util.TimeUtils
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 
@@ -8,9 +9,13 @@ import org.gradle.api.tasks.testing.TestResult
 abstract class AbstractTheme implements Theme {
 
     protected final boolean showExceptions
+    protected final long slowThreshold
+    protected final boolean showSummary
 
     AbstractTheme(TestLoggerExtension extension) {
         this.showExceptions = extension.showExceptions
+        this.slowThreshold = extension.slowThreshold
+        this.showSummary = extension.showSummary
     }
 
     @Override
@@ -27,9 +32,10 @@ abstract class AbstractTheme implements Theme {
 
     protected String exceptionText(TestDescriptor descriptor, TestResult result, int indent) {
         def line = new StringBuilder()
-        def indentation = ' ' * indent
 
         if (showExceptions) {
+            def indentation = ' ' * indent
+
             line << '\n\n'
 
             line << result.exception.toString().trim().readLines().collect {
@@ -48,5 +54,17 @@ abstract class AbstractTheme implements Theme {
         }
 
         line
+    }
+
+    protected boolean tooSlow(TestResult result) {
+        (result.endTime - result.startTime) >= slowThreshold
+    }
+
+    protected boolean mediumSlow(TestResult result) {
+        (result.endTime - result.startTime) >= slowThreshold / 2
+    }
+
+    protected String duration(TestResult result) {
+        TimeUtils.humanDuration(result.endTime - result.startTime)
     }
 }
