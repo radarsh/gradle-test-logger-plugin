@@ -139,11 +139,11 @@ class StandardThemeSpec extends Specification {
         then:
             actual == summaryText
         where:
-            summaryText                                                                       | success | failure | skipped
-            '[bold,green]SUCCESS: [default]Executed 10 tests in 10s[/]\n'                     | 10      | 0       | 0
-            '[bold,green]SUCCESS: [default]Executed 7 tests in 10s (2 skipped)[/]\n'          | 5       | 0       | 2
-            '[bold,red]FAILURE: [default]Executed 8 tests in 10s (3 failed)[/]\n'             | 5       | 3       | 0
-            '[bold,red]FAILURE: [default]Executed 10 tests in 10s (3 failed, 2 skipped)[/]\n' | 5       | 3       | 2
+            summaryText                                                                                   | success | failure | skipped
+            '[erase-ahead,bold,green]SUCCESS: [default]Executed 10 tests in 10s[/]\n'                     | 10      | 0       | 0
+            '[erase-ahead,bold,green]SUCCESS: [default]Executed 7 tests in 10s (2 skipped)[/]\n'          | 5       | 0       | 2
+            '[erase-ahead,bold,red]FAILURE: [default]Executed 8 tests in 10s (3 failed)[/]\n'             | 5       | 3       | 0
+            '[erase-ahead,bold,red]FAILURE: [default]Executed 10 tests in 10s (3 failed, 2 skipped)[/]\n' | 5       | 3       | 2
     }
 
     def "summary when showSummary is false"() {
