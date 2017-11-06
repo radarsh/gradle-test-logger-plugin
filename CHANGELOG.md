@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.1.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.1.1) (2017-11-06)
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.1.0...v1.1.1)
+
+**Fixed bugs:**
+
+- Summary doesn't fully overwrite existing lines [\#39](https://github.com/radarsh/gradle-test-logger-plugin/issues/39)
+
+**Merged pull requests:**
+
+- Erase ahead before writing summary text [\#41](https://github.com/radarsh/gradle-test-logger-plugin/pull/41) ([radarsh](https://github.com/radarsh))
+
 ## [v1.1.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.1.0) (2017-11-06)
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.0.1...v1.1.0)
 
