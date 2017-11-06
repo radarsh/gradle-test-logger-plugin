@@ -50,7 +50,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(":test").outcome == FAILED
         and:
             def summary = output.summary
-            summary[0].startsWith render('[bold,red]FAILURE: [default]Executed 6 tests in')
+            summary[0].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 6 tests in')
             summary[0].endsWith render('(2 failed, 2 skipped)[/]')
             summary[1] == render('')
     }

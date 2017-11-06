@@ -65,13 +65,13 @@ class MochaTheme extends AbstractTheme {
         }
 
         def line = new StringBuilder()
-        line << "  [green]${result.successfulTestCount} passing [grey](${duration(result)})"
+        line << "  [erase-ahead,green]${result.successfulTestCount} passing [grey](${duration(result)})"
 
         if (result.skippedTestCount) {
-            line << "\n  [cyan]${result.skippedTestCount} pending"
+            line << "\n  [erase-ahead,cyan]${result.skippedTestCount} pending"
         }
         if (result.failedTestCount) {
-            line << "\n  [red]${result.failedTestCount} failing"
+            line << "\n  [erase-ahead,red]${result.failedTestCount} failing"
         }
 
         line << '[/]\n'

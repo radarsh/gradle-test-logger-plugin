@@ -48,7 +48,7 @@ class StandardTheme extends AbstractTheme {
         def colour = result.resultType == FAILURE ? 'red' : 'green'
         def line = new StringBuilder()
 
-        line << "[bold,${colour}]${result.resultType}: "
+        line << "[erase-ahead,bold,${colour}]${result.resultType}: "
         line << "[default]Executed ${result.testCount} tests in ${duration(result)}"
 
         def breakdown = getBreakdown(result)
