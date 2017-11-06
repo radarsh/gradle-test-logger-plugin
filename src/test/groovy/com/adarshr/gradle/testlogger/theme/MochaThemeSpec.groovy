@@ -149,13 +149,26 @@ class MochaThemeSpec extends Specification {
         when:
             def actual = theme.summaryText(testDescriptorMock, testResultMock)
         then:
-            actual == summaryText
+            actual == summaryText.stripMargin()
         where:
-            summaryText                                                                | success | failure | skipped
-            '  [green]10 passing [grey](10s)[/]\n'                                     | 10      | 0       | 0
-            '  [green]5 passing [grey](10s)\n  [cyan]2 pending[/]\n'                   | 5       | 0       | 2
-            '  [green]5 passing [grey](10s)\n  [red]3 failing[/]\n'                    | 5       | 3       | 0
-            '  [green]5 passing [grey](10s)\n  [cyan]2 pending\n  [red]3 failing[/]\n' | 5       | 3       | 2
+            //@formatter:off
+            summaryText                                                 | success | failure | skipped
+            '''|  [erase-ahead,green]10 passing [grey](10s)[/]
+               |'''                                                     | 10      | 0       | 0
+
+            '''|  [erase-ahead,green]5 passing [grey](10s)
+               |  [erase-ahead,cyan]2 pending[/]
+               |'''                                                     | 5       | 0       | 2
+
+            '''|  [erase-ahead,green]5 passing [grey](10s)
+               |  [erase-ahead,red]3 failing[/]
+               |'''                                                     | 5       | 3       | 0
+
+            '''|  [erase-ahead,green]5 passing [grey](10s)
+               |  [erase-ahead,cyan]2 pending
+               |  [erase-ahead,red]3 failing[/]
+               |'''                                                     | 5       | 3       | 2
+            //@formatter:on
     }
 
     def "summary when showSummary is false"() {
