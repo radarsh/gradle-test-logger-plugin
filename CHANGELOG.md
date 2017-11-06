@@ -1,6 +1,6 @@
 # Change Log
 
-## [1.1.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.1.1) (2017-11-06)
+## [v1.1.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.1.1) (2017-11-06)
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.1.0...v1.1.1)
 
 **Fixed bugs:**
