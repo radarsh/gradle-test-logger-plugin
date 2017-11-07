@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.1.2](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.1.2) (2017-11-07)
+
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.1.1...v1.1.2)
+
+**Fixed bugs:**
+
+- Erase ahead should be added to suite text [\#42](https://github.com/radarsh/gradle-test-logger-plugin/issues/42)
+
+**Merged pull requests:**
+
+- Erase ahead before writing every line [\#43](https://github.com/radarsh/gradle-test-logger-plugin/pull/43) ([radarsh](https://github.com/radarsh))
+
 ## [v1.1.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.1.1) (2017-11-06)
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.1.0...v1.1.1)
 
