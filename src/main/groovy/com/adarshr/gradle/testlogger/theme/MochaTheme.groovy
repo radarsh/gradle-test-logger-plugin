@@ -12,32 +12,32 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     String suiteText(TestDescriptor descriptor) {
-        "  [default]${escape(descriptor.className)}[/]\n"
+        "  [erase-ahead,default]${escape(descriptor.className)}[/]\n"
     }
 
     @Override
     String testText(TestDescriptor descriptor, TestResult result) {
-        def line = new StringBuilder()
+        def line = new StringBuilder('    [erase-ahead]')
 
         switch (result.resultType) {
             case SUCCESS:
-                line << "    [erase-ahead,green]${getSymbol(result.resultType)}[grey] ${escape(descriptor.name)}[/]"
+                line << "[green]${getSymbol(result.resultType)}[grey] ${escape(descriptor.name)}"
                 if (tooSlow(result)) {
-                    line << "[red] (${duration(result)})[/]"
+                    line << "[red] (${duration(result)})"
                 } else if (mediumSlow(result)) {
-                    line << "[yellow] (${duration(result)})[/]"
+                    line << "[yellow] (${duration(result)})"
                 }
                 break
             case FAILURE:
-                line << "    [erase-ahead,red]${getSymbol(result.resultType)} ${escape(descriptor.name)}[/]"
+                line << "[red]${getSymbol(result.resultType)} ${escape(descriptor.name)}"
                 line << exceptionText(descriptor, result)
                 break
             case SKIPPED:
-                line << "    [erase-ahead,cyan]${getSymbol(result.resultType)} ${escape(descriptor.name)}[/]"
+                line << "[cyan]${getSymbol(result.resultType)} ${escape(descriptor.name)}"
                 break
         }
 
-        line
+        line << '[/]'
     }
 
     private static String getSymbol(ResultType resultType) {
@@ -54,8 +54,7 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     String exceptionText(TestDescriptor descriptor, TestResult result) {
-        def line = super.exceptionText(descriptor, result, 6)
-        line ? "[red]${line}[/]" : ''
+        super.exceptionText(descriptor, result, 6) ?: ''
     }
 
     @Override
