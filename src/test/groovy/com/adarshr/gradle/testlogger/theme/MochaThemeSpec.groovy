@@ -38,7 +38,7 @@ class MochaThemeSpec extends Specification {
         when:
             def actual = theme.suiteText(testDescriptorMock)
         then:
-            actual == '  [default]ClassName[/]\n'
+            actual == '  [erase-ahead,default]ClassName[/]\n'
     }
 
     @Unroll
@@ -53,12 +53,12 @@ class MochaThemeSpec extends Specification {
             actual == expected
         where:
             os            | resultType | expected
-            'Windows 8.1' | SUCCESS    | '    [erase-ahead,green]√[grey] test name \\[escaped\\][/]'
-            'Windows 8.1' | FAILURE    | '    [erase-ahead,red]X test name \\[escaped\\][/]'
-            'Windows 8.1' | SKIPPED    | '    [erase-ahead,cyan]- test name \\[escaped\\][/]'
-            'Linux'       | SUCCESS    | '    [erase-ahead,green]✔[grey] test name \\[escaped\\][/]'
-            'Linux'       | FAILURE    | '    [erase-ahead,red]✘ test name \\[escaped\\][/]'
-            'Linux'       | SKIPPED    | '    [erase-ahead,cyan]- test name \\[escaped\\][/]'
+            'Windows 8.1' | SUCCESS    | '    [erase-ahead][green]√[grey] test name \\[escaped\\][/]'
+            'Windows 8.1' | FAILURE    | '    [erase-ahead][red]X test name \\[escaped\\][/]'
+            'Windows 8.1' | SKIPPED    | '    [erase-ahead][cyan]- test name \\[escaped\\][/]'
+            'Linux'       | SUCCESS    | '    [erase-ahead][green]✔[grey] test name \\[escaped\\][/]'
+            'Linux'       | FAILURE    | '    [erase-ahead][red]✘ test name \\[escaped\\][/]'
+            'Linux'       | SKIPPED    | '    [erase-ahead][cyan]- test name \\[escaped\\][/]'
     }
 
     def "after test with result type failure and showExceptions true"() {
@@ -75,7 +75,7 @@ class MochaThemeSpec extends Specification {
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
             actual ==
-                '''|    [erase-ahead,red]✘ floppy test[/][red]
+                '''|    [erase-ahead][red]✘ floppy test
                    |
                    |      java.lang.AssertionError: This is wrong
                    |          at com.adarshr.gradle.testlogger.theme.MochaThemeSpec.getException(MochaThemeSpec.groovy:16)
@@ -93,11 +93,11 @@ class MochaThemeSpec extends Specification {
             testDescriptorMock.className >> this.class.name
         expect:
             theme.exceptionText(testDescriptorMock, testResultMock) ==
-                '''|[red]
+                '''|
                    |
                    |      java.lang.AssertionError: This is wrong
                    |          at com.adarshr.gradle.testlogger.theme.MochaThemeSpec.getException(MochaThemeSpec.groovy:16)
-                   |[/]'''.stripMargin()
+                   |'''.stripMargin()
     }
 
     def "exception text when showExceptions is false"() {
@@ -118,7 +118,7 @@ class MochaThemeSpec extends Specification {
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
-            actual == "    [erase-ahead,green]${symbol}[grey] test name[/][red] (10s)[/]"
+            actual == "    [erase-ahead][green]${symbol}[grey] test name[red] (10s)[/]"
     }
 
     def "show time if slowThreshold is approaching"() {
@@ -130,7 +130,7 @@ class MochaThemeSpec extends Specification {
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
-            actual == "    [erase-ahead,green]${symbol}[grey] test name[/][yellow] (1.5s)[/]"
+            actual == "    [erase-ahead][green]${symbol}[grey] test name[yellow] (1.5s)[/]"
     }
 
     @Unroll
