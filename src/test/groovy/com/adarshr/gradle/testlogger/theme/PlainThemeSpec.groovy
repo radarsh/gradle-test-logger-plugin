@@ -53,7 +53,7 @@ class PlainThemeSpec extends Specification {
     def "after test with result type failure and showExceptions true"() {
         given:
             testLoggerExtensionMock.showExceptions >> true
-            theme = new StandardTheme(testLoggerExtensionMock)
+            theme = new PlainTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
@@ -63,17 +63,17 @@ class PlainThemeSpec extends Specification {
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
             actual ==
-                '''|[bold]  Test [/]floppy test[erase-ahead,red] FAILED
+                '''|  Test floppy test FAILED
                    |
                    |  java.lang.AssertionError: This is wrong
                    |      at com.adarshr.gradle.testlogger.theme.PlainThemeSpec.getException(PlainThemeSpec.groovy:15)
-                   |[/]'''.stripMargin()
+                   |'''.stripMargin()
     }
 
     def "exception text when showExceptions is true"() {
         given:
             testLoggerExtensionMock.showExceptions >> true
-            theme = new StandardTheme(testLoggerExtensionMock)
+            theme = new PlainTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception

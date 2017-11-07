@@ -31,7 +31,7 @@ class StandardThemeSpec extends Specification {
         when:
             def actual = theme.suiteText(testDescriptorMock)
         then:
-            actual == '[bold,bright-yellow]ClassName[/]\n'
+            actual == '[erase-ahead,bold,bright-yellow]ClassName[/]\n'
     }
 
     @Unroll
@@ -45,9 +45,9 @@ class StandardThemeSpec extends Specification {
             actual == expected
         where:
             resultType | expected
-            SUCCESS    | '[bold]  Test [/]test name \\[escaped\\][erase-ahead,green] PASSED[/]'
-            FAILURE    | '[bold]  Test [/]test name \\[escaped\\][erase-ahead,red] FAILED[/]'
-            SKIPPED    | '[bold]  Test [/]test name \\[escaped\\][erase-ahead,yellow] SKIPPED[/]'
+            SUCCESS    | '[erase-ahead,bold]  Test [bold-off]test name \\[escaped\\][green] PASSED[/]'
+            FAILURE    | '[erase-ahead,bold]  Test [bold-off]test name \\[escaped\\][red] FAILED[/]'
+            SKIPPED    | '[erase-ahead,bold]  Test [bold-off]test name \\[escaped\\][yellow] SKIPPED[/]'
     }
 
     def "after test with result type failure and showExceptions true"() {
@@ -63,7 +63,7 @@ class StandardThemeSpec extends Specification {
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
             actual ==
-                '''|[bold]  Test [/]floppy test[erase-ahead,red] FAILED
+                '''|[erase-ahead,bold]  Test [bold-off]floppy test[red] FAILED
                    |
                    |  java.lang.AssertionError: This is wrong
                    |      at com.adarshr.gradle.testlogger.theme.StandardThemeSpec.getException(StandardThemeSpec.groovy:15)
@@ -106,7 +106,7 @@ class StandardThemeSpec extends Specification {
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
-            actual == '[bold]  Test [/]test name[erase-ahead,green] PASSED[/][red] (10s)[/]'
+            actual == '[erase-ahead,bold]  Test [bold-off]test name[green] PASSED[red] (10s)[/]'
     }
 
     def "show time if slowThreshold is approaching"() {
@@ -118,7 +118,7 @@ class StandardThemeSpec extends Specification {
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
-            actual == '[bold]  Test [/]test name[erase-ahead,green] PASSED[/][yellow] (1.5s)[/]'
+            actual == '[erase-ahead,bold]  Test [bold-off]test name[green] PASSED[yellow] (1.5s)[/]'
     }
 
     @Unroll
