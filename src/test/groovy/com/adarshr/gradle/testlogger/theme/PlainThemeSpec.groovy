@@ -97,7 +97,7 @@ class PlainThemeSpec extends Specification {
             !theme.exceptionText(testDescriptorMock, testResultMock)
     }
 
-    def "show time if slowThreshold is exceeded"() {
+    def "show duration if slowThreshold is exceeded"() {
         given:
             testResultMock.resultType >> SUCCESS
             testResultMock.startTime >> 1000000

@@ -22,14 +22,11 @@ class MochaTheme extends AbstractTheme {
         switch (result.resultType) {
             case SUCCESS:
                 line << "[green]${getSymbol(result.resultType)}[grey] ${escape(descriptor.name)}"
-                if (tooSlow(result)) {
-                    line << "[red] (${duration(result)})"
-                } else if (mediumSlow(result)) {
-                    line << "[yellow] (${duration(result)})"
-                }
+                showDurationIfSlow(result, line)
                 break
             case FAILURE:
                 line << "[red]${getSymbol(result.resultType)} ${escape(descriptor.name)}"
+                showDurationIfSlow(result, line)
                 line << exceptionText(descriptor, result)
                 break
             case SKIPPED:
@@ -38,6 +35,14 @@ class MochaTheme extends AbstractTheme {
         }
 
         line << '[/]'
+    }
+
+    private void showDurationIfSlow(TestResult result, StringBuilder line) {
+        if (tooSlow(result)) {
+            line << "[red] (${duration(result)})"
+        } else if (mediumSlow(result)) {
+            line << "[yellow] (${duration(result)})"
+        }
     }
 
     private static String getSymbol(ResultType resultType) {
@@ -54,7 +59,9 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     String exceptionText(TestDescriptor descriptor, TestResult result) {
-        super.exceptionText(descriptor, result, 6) ?: ''
+        def exceptionText = super.exceptionText(descriptor, result, 6)
+
+        exceptionText ? "[red]${exceptionText}" : ''
     }
 
     @Override

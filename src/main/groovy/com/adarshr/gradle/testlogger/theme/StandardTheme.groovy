@@ -21,14 +21,11 @@ class StandardTheme extends AbstractTheme {
         switch (result.resultType) {
             case SUCCESS:
                 line << '[green] PASSED'
-                if (tooSlow(result)) {
-                    line << "[red] (${duration(result)})"
-                } else if (mediumSlow(result)) {
-                    line << "[yellow] (${duration(result)})"
-                }
+                showDurationIfSlow(result, line)
                 break
             case FAILURE:
                 line << '[red] FAILED'
+                showDurationIfSlow(result, line)
                 line << exceptionText(descriptor, result)
                 break
             case SKIPPED:
@@ -37,6 +34,21 @@ class StandardTheme extends AbstractTheme {
         }
 
         line << '[/]'
+    }
+
+    private void showDurationIfSlow(TestResult result, StringBuilder line) {
+        if (tooSlow(result)) {
+            line << "[red] (${duration(result)})"
+        } else if (mediumSlow(result)) {
+            line << "[yellow] (${duration(result)})"
+        }
+    }
+
+    @Override
+    String exceptionText(TestDescriptor descriptor, TestResult result) {
+        def exceptionText = super.exceptionText(descriptor, result)
+
+        exceptionText ? "[red]${exceptionText}" : ''
     }
 
     @Override
