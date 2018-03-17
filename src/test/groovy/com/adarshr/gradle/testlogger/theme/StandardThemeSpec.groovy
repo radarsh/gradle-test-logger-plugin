@@ -63,7 +63,7 @@ class StandardThemeSpec extends Specification {
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
             actual ==
-                '''|[erase-ahead,bold]  Test [bold-off]floppy test[red] FAILED
+                '''|[erase-ahead,bold]  Test [bold-off]floppy test[red] FAILED[red]
                    |
                    |  java.lang.AssertionError: This is wrong
                    |      at com.adarshr.gradle.testlogger.theme.StandardThemeSpec.getException(StandardThemeSpec.groovy:15)
@@ -81,7 +81,7 @@ class StandardThemeSpec extends Specification {
             testDescriptorMock.className >> this.class.name
         expect:
             theme.exceptionText(testDescriptorMock, testResultMock) ==
-                '''|
+                '''|[red]
                    |
                    |  java.lang.AssertionError: This is wrong
                    |      at com.adarshr.gradle.testlogger.theme.StandardThemeSpec.getException(StandardThemeSpec.groovy:15)
@@ -97,28 +97,38 @@ class StandardThemeSpec extends Specification {
             !theme.exceptionText(testDescriptorMock, testResultMock)
     }
 
-    def "show time if slowThreshold is exceeded"() {
+    @Unroll
+    def "show duration if slowThreshold is exceeded for resultType #resultType"() {
         given:
-            testResultMock.resultType >> SUCCESS
+            testResultMock.resultType >> resultType
             testResultMock.startTime >> 1000000
             testResultMock.endTime >> 1000000 + 10000
             testDescriptorMock.name >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
-            actual == '[erase-ahead,bold]  Test [bold-off]test name[green] PASSED[red] (10s)[/]'
+            actual == text
+        where:
+            resultType | text
+            SUCCESS    | '[erase-ahead,bold]  Test [bold-off]test name[green] PASSED[red] (10s)[/]'
+            FAILURE    | '[erase-ahead,bold]  Test [bold-off]test name[red] FAILED[red] (10s)[/]'
     }
 
-    def "show time if slowThreshold is approaching"() {
+    @Unroll
+    def "show duration if slowThreshold is approaching for resultType #resultType"() {
         given:
-            testResultMock.resultType >> SUCCESS
+            testResultMock.resultType >> resultType
             testResultMock.startTime >> 1000000
             testResultMock.endTime >> 1000000 + 1500 // slow threshold is 2s
             testDescriptorMock.name >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
-            actual == '[erase-ahead,bold]  Test [bold-off]test name[green] PASSED[yellow] (1.5s)[/]'
+            actual == text
+        where:
+            resultType | text
+            SUCCESS    | '[erase-ahead,bold]  Test [bold-off]test name[green] PASSED[yellow] (1.5s)[/]'
+            FAILURE    | '[erase-ahead,bold]  Test [bold-off]test name[red] FAILED[yellow] (1.5s)[/]'
     }
 
     @Unroll

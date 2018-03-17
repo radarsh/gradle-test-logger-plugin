@@ -19,7 +19,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             lines[0] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.FirstSpec[/]')
             lines[1] == render('')
             lines[2] == render('[erase-ahead,bold]  Test [bold-off]this test should pass[green] PASSED[/]')
-            lines[3] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[red]')
             lines[4..11].join('\n') == render(
                 '''|
                    |  Condition not satisfied:
@@ -34,7 +34,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             lines[14] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.SecondSpec[/]')
             lines[15] == render('')
             lines[16] == render('[erase-ahead,bold]  Test [bold-off]this test should pass[green] PASSED[/]')
-            lines[17] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED')
+            lines[17] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[red]')
             lines[18..25].join('\n') == render(
                 '''|
                    |  Condition not satisfied:
@@ -87,7 +87,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             lines[0] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.FirstTest[/]')
             lines[1] == render('')
             lines[2] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldBeSkipped[yellow] SKIPPED[/]')
-            lines[3] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldFail[red] FAILED')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldFail[red] FAILED[red]')
             lines[4..7].join('\n') == render(
                 '''|
                    |  java.lang.AssertionError: expected:<1> but was:<2>
