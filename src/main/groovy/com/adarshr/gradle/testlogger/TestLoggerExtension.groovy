@@ -14,6 +14,7 @@ class TestLoggerExtension {
     boolean showExceptions = true
     long slowThreshold = 2000
     boolean showSummary = true
+    boolean showStandardStreams = false
 
     private final ConsoleOutput consoleType
 

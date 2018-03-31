@@ -230,4 +230,43 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         and:
             result.task(":test").outcome == SUCCESS
     }
+
+    def "show standard streams"() {
+        when:
+            def result = run(
+                'single-spock-test',
+                '''
+                    testlogger { 
+                        showStandardStreams true
+                    }
+                ''',
+                'clean test'
+            )
+        then:
+            def lines = getLoggerOutput(result.output).lines
+        and:
+            lines.size() == 20
+            lines[0] == render('[default]')
+            lines[1] == render('  stdout setupSpec')
+            lines[2] == render('  stderr setupSpec[/]')
+            lines[3] == render('')
+            lines[4] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.SingleSpec[/]')
+            lines[5] == render('')
+            lines[6] == render('[erase-ahead,bold]  Test [bold-off]this is a single test[green] PASSED[/]')
+            lines[7] == render('[default]')
+            lines[8] == render('    stdout setup')
+            lines[9] == render('    stderr setup')
+            lines[10] == render('    stdout expect')
+            lines[11] == render('    stderr expect')
+            lines[12] == render('    stdout cleanup')
+            lines[13] == render('    stderr cleanup[/]')
+            lines[14] == render('')
+            lines[15] == render('[default]')
+            lines[16] == render('  stdout cleanupSpec')
+            lines[17] == render('  stderr cleanupSpec[/]')
+            lines[18] == render('')
+            lines[19] == render('')
+        and:
+            result.task(":test").outcome == SUCCESS
+    }
 }

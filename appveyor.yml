@@ -1,6 +1,8 @@
 skip_tags: true
 test_script:
-    - gradlew clean test --no-daemon --console=plain
+    - gradlew clean test --no-daemon
 after_test:
     - ps: ./uploadTestResults.ps1
 build: off
+artifacts:
+    - path: build/reports/tests/test/**/*.*

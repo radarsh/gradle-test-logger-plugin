@@ -12,4 +12,8 @@ interface Theme {
     String exceptionText(TestDescriptor descriptor, TestResult result)
 
     String summaryText(TestDescriptor descriptor, TestResult result)
+
+    String suiteStandardStreamText(String lines)
+
+    String testStandardStreamText(String lines)
 }
