@@ -1,7 +1,30 @@
 # Change Log
 
-## [v1.1.2](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.1.2) (2017-11-07)
+## [v1.2.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.2.0)
 
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.1.2...v1.2.0)
+
+**Implemented enhancements:**
+
+- Add option to display STDOUT [\#50](https://github.com/radarsh/gradle-test-logger-plugin/issues/50)
+- Upgrade to Gradle 4.5.1 [\#48](https://github.com/radarsh/gradle-test-logger-plugin/issues/48)
+- JUnit 5 Support [\#47](https://github.com/radarsh/gradle-test-logger-plugin/issues/47)
+- Upgrade to Gradle 4.4 [\#45](https://github.com/radarsh/gradle-test-logger-plugin/issues/45)
+
+**Fixed bugs:**
+
+- Slow test that failed doesn't show the execution time [\#51](https://github.com/radarsh/gradle-test-logger-plugin/issues/51)
+- Could not create an instance of type com.adarshr.gradle.testlogger.TestLoggerExtension\_Decorated. [\#44](https://github.com/radarsh/gradle-test-logger-plugin/issues/44)
+
+**Merged pull requests:**
+
+- Display standard streams [\#54](https://github.com/radarsh/gradle-test-logger-plugin/pull/54) ([radarsh](https://github.com/radarsh))
+- JUnit5 support [\#53](https://github.com/radarsh/gradle-test-logger-plugin/pull/53) ([radarsh](https://github.com/radarsh))
+- Show duration for failed tests [\#52](https://github.com/radarsh/gradle-test-logger-plugin/pull/52) ([radarsh](https://github.com/radarsh))
+- Upgrade to Gradle 4.5.1 [\#49](https://github.com/radarsh/gradle-test-logger-plugin/pull/49) ([radarsh](https://github.com/radarsh))
+- Upgrade to Gradle 4.4 [\#46](https://github.com/radarsh/gradle-test-logger-plugin/pull/46) ([radarsh](https://github.com/radarsh))
+
+## [v1.1.2](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.1.2) (2017-11-07)
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.1.1...v1.1.2)
 
 **Fixed bugs:**
@@ -80,6 +103,7 @@
 - Add Configuration for AppVeyor [\#9](https://github.com/radarsh/gradle-test-logger-plugin/pull/9) ([baynezy](https://github.com/baynezy))
 
 ## [v1.0.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.0.0) (2017-09-29)
+
 **Implemented enhancements:**
 
 - Publish plugin [\#5](https://github.com/radarsh/gradle-test-logger-plugin/issues/5)

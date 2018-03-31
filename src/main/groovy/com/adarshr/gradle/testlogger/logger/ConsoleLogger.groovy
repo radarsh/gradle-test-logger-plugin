@@ -18,6 +18,12 @@ class ConsoleLogger {
     }
 
     void log(String text) {
-        logger.log(level, renderer.render(text))
+        if (text) {
+            logger.log(level, renderer.render(text))
+        }
+    }
+
+    void logNewLine() {
+        logger.log(level, '')
     }
 }

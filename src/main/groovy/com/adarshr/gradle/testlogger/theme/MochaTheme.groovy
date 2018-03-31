@@ -5,6 +5,7 @@ import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 import org.gradle.api.tasks.testing.TestResult.ResultType
 
+import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
 @InheritConstructors
@@ -12,7 +13,7 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     String suiteText(TestDescriptor descriptor) {
-        "  [erase-ahead,default]${escape(descriptor.className)}[/]\n"
+        "  [erase-ahead,default]${escape(descriptor.className)}[/]${lineSeparator()}"
     }
 
     @Override
@@ -22,14 +23,11 @@ class MochaTheme extends AbstractTheme {
         switch (result.resultType) {
             case SUCCESS:
                 line << "[green]${getSymbol(result.resultType)}[grey] ${escape(descriptor.name)}"
-                if (tooSlow(result)) {
-                    line << "[red] (${duration(result)})"
-                } else if (mediumSlow(result)) {
-                    line << "[yellow] (${duration(result)})"
-                }
+                showDurationIfSlow(result, line)
                 break
             case FAILURE:
                 line << "[red]${getSymbol(result.resultType)} ${escape(descriptor.name)}"
+                showDurationIfSlow(result, line)
                 line << exceptionText(descriptor, result)
                 break
             case SKIPPED:
@@ -38,6 +36,14 @@ class MochaTheme extends AbstractTheme {
         }
 
         line << '[/]'
+    }
+
+    private void showDurationIfSlow(TestResult result, StringBuilder line) {
+        if (tooSlow(result)) {
+            line << "[red] (${duration(result)})"
+        } else if (mediumSlow(result)) {
+            line << "[yellow] (${duration(result)})"
+        }
     }
 
     private static String getSymbol(ResultType resultType) {
@@ -54,7 +60,9 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     String exceptionText(TestDescriptor descriptor, TestResult result) {
-        super.exceptionText(descriptor, result, 6) ?: ''
+        def exceptionText = super.exceptionText(descriptor, result, 6)
+
+        exceptionText ? "[red]${exceptionText}" : ''
     }
 
     @Override
@@ -67,12 +75,39 @@ class MochaTheme extends AbstractTheme {
         line << "  [erase-ahead,green]${result.successfulTestCount} passing [grey](${duration(result)})"
 
         if (result.skippedTestCount) {
-            line << "\n  [erase-ahead,cyan]${result.skippedTestCount} pending"
+            line << "${lineSeparator()}  [erase-ahead,cyan]${result.skippedTestCount} pending"
         }
         if (result.failedTestCount) {
-            line << "\n  [erase-ahead,red]${result.failedTestCount} failing"
+            line << "${lineSeparator()}  [erase-ahead,red]${result.failedTestCount} failing"
         }
 
-        line << '[/]\n'
+        line << "[/]${lineSeparator()}"
+    }
+
+    @Override
+    String suiteStandardStreamText(String lines) {
+        standardStreamText(lines, 4)
+    }
+
+    @Override
+    String testStandardStreamText(String lines) {
+        standardStreamText(lines, 8)
+    }
+
+    private String standardStreamText(String lines, int indent) {
+        if (!showStandardStreams || !lines) {
+            return ''
+        }
+
+        lines = lines.replace('[', '\\[')
+
+        def indentation = ' ' * indent
+        def line = new StringBuilder("[grey]${lineSeparator()}")
+
+        line << lines.split($/${lineSeparator()}/$).collect {
+            "${indentation}${it}"
+        }.join(lineSeparator())
+
+        line << "[/]${lineSeparator()}"
     }
 }

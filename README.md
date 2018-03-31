@@ -21,7 +21,7 @@ A Gradle plugin for printing beautiful logs on the console while running tests.
 
 ```groovy
 plugins {
-    id 'com.adarshr.test-logger' version '1.1.2'
+    id 'com.adarshr.test-logger' version '1.2.0'
 }
 ```
 
@@ -35,7 +35,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.adarshr:gradle-test-logger-plugin:1.1.2'
+        classpath 'com.adarshr:gradle-test-logger-plugin:1.2.0'
     }
 }
 
@@ -100,6 +100,16 @@ taken to execute all the tests is shown. Of course, you can disable this if you 
 ```groovy
 testlogger {
     showSummary false
+}
+```
+
+### Show standard streams
+
+The display of standard output and error streams alongside the test logs can be controlled using the below configuration.
+
+```groovy
+testlogger {
+    showStandardStreams true
 }
 ```
 

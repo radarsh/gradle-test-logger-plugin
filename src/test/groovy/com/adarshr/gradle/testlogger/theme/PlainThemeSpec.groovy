@@ -6,6 +6,7 @@ import org.gradle.api.tasks.testing.TestResult
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
 class PlainThemeSpec extends Specification {
@@ -19,6 +20,7 @@ class PlainThemeSpec extends Specification {
     Theme theme
     def testDescriptorMock = Mock(TestDescriptor)
     def testResultMock = Mock(TestResult)
+    def streamLines = "Hello${lineSeparator()}World"
 
     def setup() {
         testLoggerExtensionMock.slowThreshold >> 2000
@@ -31,7 +33,7 @@ class PlainThemeSpec extends Specification {
         when:
             def actual = theme.suiteText(testDescriptorMock)
         then:
-            actual == 'ClassName\n'
+            actual == "ClassName${lineSeparator()}"
     }
 
     @Unroll
@@ -66,8 +68,8 @@ class PlainThemeSpec extends Specification {
                 '''|  Test floppy test FAILED
                    |
                    |  java.lang.AssertionError: This is wrong
-                   |      at com.adarshr.gradle.testlogger.theme.PlainThemeSpec.getException(PlainThemeSpec.groovy:15)
-                   |'''.stripMargin()
+                   |      at com.adarshr.gradle.testlogger.theme.PlainThemeSpec.getException(PlainThemeSpec.groovy:16)
+                   |'''.stripMargin().replace('\n', lineSeparator())
     }
 
     def "exception text when showExceptions is true"() {
@@ -84,8 +86,8 @@ class PlainThemeSpec extends Specification {
                 '''|
                    |
                    |  java.lang.AssertionError: This is wrong
-                   |      at com.adarshr.gradle.testlogger.theme.PlainThemeSpec.getException(PlainThemeSpec.groovy:15)
-                   |'''.stripMargin()
+                   |      at com.adarshr.gradle.testlogger.theme.PlainThemeSpec.getException(PlainThemeSpec.groovy:16)
+                   |'''.stripMargin().replace('\n', lineSeparator())
     }
 
     def "exception text when showExceptions is false"() {
@@ -97,7 +99,7 @@ class PlainThemeSpec extends Specification {
             !theme.exceptionText(testDescriptorMock, testResultMock)
     }
 
-    def "show time if slowThreshold is exceeded"() {
+    def "show duration if slowThreshold is exceeded"() {
         given:
             testResultMock.resultType >> SUCCESS
             testResultMock.startTime >> 1000000
@@ -127,15 +129,59 @@ class PlainThemeSpec extends Specification {
         then:
             actual == summaryText
         where:
-            summaryText                                                 | success | failure | skipped
-            'SUCCESS: Executed 10 tests in 10s\n'                       | 10      | 0       | 0
-            'SUCCESS: Executed 7 tests in 10s (2 skipped)\n'            | 5       | 0       | 2
-            'FAILURE: Executed 8 tests in 10s (3 failed)\n'             | 5       | 3       | 0
-            'FAILURE: Executed 10 tests in 10s (3 failed, 2 skipped)\n' | 5       | 3       | 2
+            summaryText                                                                 | success | failure | skipped
+            "SUCCESS: Executed 10 tests in 10s${lineSeparator()}"                       | 10      | 0       | 0
+            "SUCCESS: Executed 7 tests in 10s (2 skipped)${lineSeparator()}"            | 5       | 0       | 2
+            "FAILURE: Executed 8 tests in 10s (3 failed)${lineSeparator()}"             | 5       | 3       | 0
+            "FAILURE: Executed 10 tests in 10s (3 failed, 2 skipped)${lineSeparator()}" | 5       | 3       | 2
     }
 
     def "summary when showSummary is false"() {
         expect:
             !theme.summaryText(testDescriptorMock, testResultMock)
+    }
+
+    def "standard stream text"() {
+        given:
+            testLoggerExtensionMock.showStandardStreams >> true
+            theme = new PlainTheme(testLoggerExtensionMock)
+        expect:
+            theme.testStandardStreamText(streamLines) ==
+                '''|
+                   |    Hello
+                   |    World
+                   |'''.stripMargin().replace('\n', lineSeparator())
+
+    }
+
+    def "standard stream text when showStandardStreams is false"() {
+        given:
+            testLoggerExtensionMock.showStandardStreams >> false
+            theme = new PlainTheme(testLoggerExtensionMock)
+        expect:
+            !theme.testStandardStreamText(streamLines)
+
+    }
+
+    def "suite stream text"() {
+        given:
+            testLoggerExtensionMock.showStandardStreams >> true
+            theme = new PlainTheme(testLoggerExtensionMock)
+        expect:
+            theme.suiteStandardStreamText(streamLines) ==
+                '''|
+                   |  Hello
+                   |  World
+                   |'''.stripMargin().replace('\n', lineSeparator())
+
+    }
+
+    def "suite stream text when showStandardStreams is false"() {
+        given:
+            testLoggerExtensionMock.showStandardStreams >> false
+            theme = new PlainTheme(testLoggerExtensionMock)
+        expect:
+            !theme.suiteStandardStreamText(streamLines)
+
     }
 }
