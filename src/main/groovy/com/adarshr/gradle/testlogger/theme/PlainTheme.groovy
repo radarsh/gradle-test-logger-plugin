@@ -4,6 +4,7 @@ import groovy.transform.InheritConstructors
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 
+import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
 @InheritConstructors
@@ -17,7 +18,7 @@ class PlainTheme extends AbstractTheme {
 
     @Override
     String suiteText(TestDescriptor descriptor) {
-        "${escape(descriptor.className)}\n"
+        "${escape(descriptor.className)}${lineSeparator()}"
     }
 
     @Override
@@ -52,7 +53,7 @@ class PlainTheme extends AbstractTheme {
             line << ' (' << breakdown.join(', ') << ')'
         }
 
-        line << '\n'
+        line << lineSeparator()
     }
 
     private static List getBreakdown(TestResult result) {
@@ -67,5 +68,32 @@ class PlainTheme extends AbstractTheme {
         }
 
         breakdown
+    }
+
+    @Override
+    String suiteStandardStreamText(String lines) {
+        standardStreamText(lines, 2)
+    }
+
+    @Override
+    String testStandardStreamText(String lines) {
+        standardStreamText(lines, 4)
+    }
+
+    private String standardStreamText(String lines, int indent) {
+        if (!showStandardStreams || !lines) {
+            return ''
+        }
+
+        lines = lines.replace('[', '\\[')
+
+        def indentation = ' ' * indent
+        def line = new StringBuilder(lineSeparator())
+
+        line << lines.split($/${lineSeparator()}/$).collect {
+            "${indentation}${it}"
+        }.join(lineSeparator())
+
+        line << lineSeparator()
     }
 }

@@ -5,17 +5,21 @@ import com.adarshr.gradle.testlogger.util.TimeUtils
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 
+import static java.lang.System.lineSeparator
+
 @SuppressWarnings("GrMethodMayBeStatic")
 abstract class AbstractTheme implements Theme {
 
     protected final boolean showExceptions
     protected final long slowThreshold
     protected final boolean showSummary
+    protected final boolean showStandardStreams
 
     AbstractTheme(TestLoggerExtension extension) {
         this.showExceptions = extension.showExceptions
         this.slowThreshold = extension.slowThreshold
         this.showSummary = extension.showSummary
+        this.showStandardStreams = extension.showStandardStreams
     }
 
     @Override
@@ -36,21 +40,21 @@ abstract class AbstractTheme implements Theme {
         if (showExceptions) {
             def indentation = ' ' * indent
 
-            line << '\n\n'
+            line << "${lineSeparator()}${lineSeparator()}"
 
             line << result.exception.toString().trim().readLines().collect {
                 "${indentation}${escape(it)}"
-            }.join('\n')
+            }.join(lineSeparator())
 
-            line << '\n'
+            line << lineSeparator()
 
             line << result.exception.stackTrace.find {
                 it.className == descriptor.className
             }.collect {
                 "${indentation}    at ${escape(it.toString())}"
-            }.join('\n')
+            }.join(lineSeparator())
 
-            line << '\n'
+            line << lineSeparator()
         }
 
         line

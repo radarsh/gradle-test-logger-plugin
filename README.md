@@ -103,6 +103,16 @@ testlogger {
 }
 ```
 
+### Show standard streams
+
+The display of standard output and error streams alongside the test logs can be controlled using the below configuration.
+
+```groovy
+testlogger {
+    showStandardStreams true
+}
+```
+
 ## FAQ
 
 ### Does it work on Windows?

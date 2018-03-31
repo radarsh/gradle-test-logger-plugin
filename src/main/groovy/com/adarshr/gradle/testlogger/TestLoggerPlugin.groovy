@@ -17,7 +17,11 @@ class TestLoggerPlugin implements Plugin<Project> {
                 assertSequentialTestExecution(test)
 
                 test.testLogging.lifecycle.events = []
-                test.addTestListener(new TestEventLogger(project))
+
+                def testEventLogger = new TestEventLogger(project)
+
+                test.addTestListener(testEventLogger)
+                test.addTestOutputListener(testEventLogger)
             }
         }
     }
