@@ -12,11 +12,13 @@ class TestEventLogger implements TestListener, TestOutputListener {
     private final ConsoleLogger logger
     private boolean logBeforeSuite
     private final StringBuilder standardStreamCollector
+    private final List<String> suites
 
     TestEventLogger(Project project) {
         logger = new ConsoleLogger(project.logger)
         theme = ThemeFactory.getTheme(project.testlogger as TestLoggerExtension)
         standardStreamCollector = new StringBuilder()
+        suites = new ArrayList<>(100)
     }
 
     @Override
@@ -24,11 +26,8 @@ class TestEventLogger implements TestListener, TestOutputListener {
         logger.log theme.suiteStandardStreamText(standardStreamCollector.toString())
         standardStreamCollector.length = 0
 
-        if (!suite.parent) {
+        if (suite.className && suite.parent.className) {
             logger.logNewLine()
-        }
-
-        if (logBeforeSuite && suite.className) {
             logger.log theme.suiteText(suite)
         }
     }
@@ -39,21 +38,23 @@ class TestEventLogger implements TestListener, TestOutputListener {
         standardStreamCollector.length = 0
 
         if (suite.className && result.testCount) {
-            logger.logNewLine()
             logBeforeSuite = false
         }
 
         if (!suite.parent) {
+            logger.logNewLine()
             logger.log theme.summaryText(suite, result)
         }
     }
 
     @Override
     void beforeTest(TestDescriptor descriptor) {
-        if (!logBeforeSuite) {
-            logBeforeSuite = true
+        if (!suites.contains(descriptor.className)) {
+            suites << descriptor.className
             beforeSuite(descriptor)
         }
+
+        logBeforeSuite = true
     }
 
     @Override
