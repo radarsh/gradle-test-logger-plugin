@@ -94,12 +94,18 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
             def lines = getLoggerOutput(result.output).lines
         and:
             lines.size() == 4
-            lines[0] == render('com.adarshr.test.SingleSpec')
-            lines[1] == render('')
-            lines[2] == render('  Test this is a single test PASSED')
-            lines[3] == render('')
+            lines[0] == render('')
+            lines[1] == render('com.adarshr.test.SingleSpec')
+            lines[2] == render('')
+            lines[3] == render('  Test this is a single test PASSED')
         and:
             result.task(":test").outcome == SUCCESS
+        cleanup:
+            run(
+                'single-spock-test',
+                "testlogger { System.clearProperty('testlogger.theme') }",
+                'clean'
+            )
     }
 
     private static String getSymbol() {
