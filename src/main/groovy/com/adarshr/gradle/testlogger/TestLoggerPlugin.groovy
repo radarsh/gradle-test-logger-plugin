@@ -10,11 +10,12 @@ class TestLoggerPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        project.extensions.create('testlogger', TestLoggerExtension, project)
+        project.extensions.create('testlogger', TestLoggerExtension, project, overrides)
 
         project.afterEvaluate {
             project.tasks.withType(Test).each { test ->
                 assertSequentialTestExecution(test)
+                project.testlogger.applyOverrides()
 
                 test.testLogging.lifecycle.events = []
 
@@ -30,5 +31,13 @@ class TestLoggerPlugin implements Plugin<Project> {
         if (test.maxParallelForks != 1) {
             throw new GradleException('Parallel execution is not supported')
         }
+    }
+
+    private static Map<String, String> getOverrides() {
+        System.properties.findAll { key, value ->
+            key.startsWith 'testlogger.'
+        }.collectEntries { key, value ->
+            [(key.replace('testlogger.', '')): value]
+        } as Map<String, String>
     }
 }
