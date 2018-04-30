@@ -17,7 +17,7 @@ class StandardTheme extends AbstractTheme {
 
     @Override
     String testText(TestDescriptor descriptor, TestResult result) {
-        def line = new StringBuilder("[erase-ahead,bold]  Test [bold-off]${escape(descriptor.name)}")
+        def line = new StringBuilder("[erase-ahead,bold]  Test [bold-off]${escape(descriptor.displayName ?: descriptor.name)}")
 
         switch (result.resultType) {
             case SUCCESS:
