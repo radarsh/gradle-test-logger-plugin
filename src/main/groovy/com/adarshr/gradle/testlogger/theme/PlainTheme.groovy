@@ -23,7 +23,7 @@ class PlainTheme extends AbstractTheme {
 
     @Override
     String testText(TestDescriptor descriptor, TestResult result) {
-        def line = new StringBuilder("  Test ${escape(descriptor.name)} ${RESULT_TYPE_MAPPING[result.resultType]}")
+        def line = new StringBuilder("  Test ${escape(descriptor.displayName ?: descriptor.name)} ${RESULT_TYPE_MAPPING[result.resultType]}")
 
         if (tooSlow(result)) {
             line << " (${duration(result)})"

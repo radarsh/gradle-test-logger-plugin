@@ -16,9 +16,12 @@ class StandardThemeSpec extends Specification {
         new AssertionError('This is wrong')
     }
 
-    def testLoggerExtensionMock = Mock(TestLoggerExtension)
     Theme theme
-    def testDescriptorMock = Mock(TestDescriptor)
+
+    def testLoggerExtensionMock = Mock(TestLoggerExtension)
+    def testDescriptorMock = GroovyMock(TestDescriptor) {
+        getDisplayName() >> { testDescriptorMock.name }
+    }
     def testResultMock = Mock(TestResult)
     def streamLines = "Hello${lineSeparator()}World"
 
