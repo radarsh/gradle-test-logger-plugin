@@ -71,4 +71,8 @@ abstract class AbstractTheme implements Theme {
     protected String duration(TestResult result) {
         TimeUtils.humanDuration(result.endTime - result.startTime)
     }
+
+    protected String displayName(TestDescriptor descriptor) {
+        escape(descriptor.properties.displayName ?: descriptor.name)
+    }
 }
