@@ -19,20 +19,19 @@ class MochaTheme extends AbstractTheme {
     @Override
     String testText(TestDescriptor descriptor, TestResult result) {
         def line = new StringBuilder('    [erase-ahead]')
-        def displayName = escape(descriptor.displayName ?: descriptor.name)
 
         switch (result.resultType) {
             case SUCCESS:
-                line << "[green]${getSymbol(result.resultType)}[grey] ${displayName}"
+                line << "[green]${getSymbol(result.resultType)}[grey] ${displayName(descriptor)}"
                 showDurationIfSlow(result, line)
                 break
             case FAILURE:
-                line << "[red]${getSymbol(result.resultType)} ${displayName}"
+                line << "[red]${getSymbol(result.resultType)} ${displayName(descriptor)}"
                 showDurationIfSlow(result, line)
                 line << exceptionText(descriptor, result)
                 break
             case SKIPPED:
-                line << "[cyan]${getSymbol(result.resultType)} ${displayName}"
+                line << "[cyan]${getSymbol(result.resultType)} ${displayName(descriptor)}"
                 break
         }
 
