@@ -44,6 +44,19 @@ apply plugin: 'com.adarshr.test-logger'
 
 ## Configuration
 
+All the below configuration settings can either be specified in `build.gradle` file or be set at runtime using system
+properties or both. For instance, we could have `theme` set to `mocha` in `build.gradle` file but it can be overridden
+to be `standard` at runtime by using `-Dtestlogger.theme=standard` on the command line. Since they're system properties
+we have a number of ways of specifying them including `JAVA_OPTS` and `gradle.properties`.
+
+The convention used for determining the name of the system property is `testlogger.<configuration setting>`.
+
+- [Switch themes](#switch-themes)
+- [Hide exceptions](#hide-exceptions)
+- [Define slow threshold](#define-slow-threshold)
+- [Hide summary](#hide-summary)
+- [Show standard streams](#show-standard-streams)
+
 ### Switch themes
 
 ```groovy
