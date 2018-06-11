@@ -16,8 +16,8 @@ class PlainThemeSpec extends Specification {
         new AssertionError('This is wrong')
     }
 
-    def testLoggerExtensionMock = Mock(TestLoggerExtension)
     Theme theme
+    def testLoggerExtensionMock = Mock(TestLoggerExtension)
     def testDescriptorMock = Mock(TestDescriptor)
     def testResultMock = Mock(TestResult)
     def streamLines = "Hello${lineSeparator()}World"
@@ -70,6 +70,26 @@ class PlainThemeSpec extends Specification {
                    |  java.lang.AssertionError: This is wrong
                    |      at com.adarshr.gradle.testlogger.theme.PlainThemeSpec.getException(PlainThemeSpec.groovy:16)
                    |'''.stripMargin().replace('\n', lineSeparator())
+    }
+
+    def "after test uses displayName property if present"() {
+        given:
+            testDescriptorMock = GroovyMock(TestDescriptor)
+            testDescriptorMock.properties >> [displayName: 'display test name [escaped]']
+            testResultMock.resultType >> SUCCESS
+            testDescriptorMock.name >> 'test name [escaped]'
+        expect:
+            theme.testText(testDescriptorMock, testResultMock) == '  Test display test name \\[escaped\\] PASSED'
+    }
+
+    def "after test does not error when displayName property is missing"() {
+        given:
+            testDescriptorMock = GroovyMock(TestDescriptor)
+            testDescriptorMock.properties >> [:]
+            testResultMock.resultType >> SUCCESS
+            testDescriptorMock.name >> 'test name [escaped]'
+        expect:
+            theme.testText(testDescriptorMock, testResultMock) == '  Test test name \\[escaped\\] PASSED'
     }
 
     def "exception text when showExceptions is true"() {

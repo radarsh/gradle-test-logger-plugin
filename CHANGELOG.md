@@ -1,19 +1,42 @@
 # Change Log
 
-## [v1.2.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.2.0)
+## [v1.3.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.3.0)
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.2.0...v1.3.0)
 
+**Implemented enhancements:**
+
+- Document system property overrides [\#63](https://github.com/radarsh/gradle-test-logger-plugin/issues/63)
+- Allow overriding configuration by using system properties [\#40](https://github.com/radarsh/gradle-test-logger-plugin/issues/40)
+
+**Fixed bugs:**
+
+- Develop branch: No such property: displayName for class: org.gradle.api.internal.tasks.testing.DecoratingTestDescriptor [\#60](https://github.com/radarsh/gradle-test-logger-plugin/issues/60)
+
+**Closed issues:**
+
+- Upgrade to Gradle 4.7 [\#57](https://github.com/radarsh/gradle-test-logger-plugin/issues/57)
+
+**Merged pull requests:**
+
+- Document system property overrides [\#64](https://github.com/radarsh/gradle-test-logger-plugin/pull/64) ([radarsh](https://github.com/radarsh))
+- Fix Gradle backward compatibility issue [\#62](https://github.com/radarsh/gradle-test-logger-plugin/pull/62) ([radarsh](https://github.com/radarsh))
+- Upgrade to Gradle 4.7 [\#58](https://github.com/radarsh/gradle-test-logger-plugin/pull/58) ([radarsh](https://github.com/radarsh))
+- Allow overriding of config using system properties [\#56](https://github.com/radarsh/gradle-test-logger-plugin/pull/56) ([radarsh](https://github.com/radarsh))
+- Added support for nested JUnit5 tests. [\#55](https://github.com/radarsh/gradle-test-logger-plugin/pull/55) ([mithomas](https://github.com/mithomas))
+
+## [v1.2.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.2.0) (2018-03-31)
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.1.2...v1.2.0)
 
 **Implemented enhancements:**
 
-- Add option to display STDOUT [\#50](https://github.com/radarsh/gradle-test-logger-plugin/issues/50)
-- Upgrade to Gradle 4.5.1 [\#48](https://github.com/radarsh/gradle-test-logger-plugin/issues/48)
-- JUnit 5 Support [\#47](https://github.com/radarsh/gradle-test-logger-plugin/issues/47)
-- Upgrade to Gradle 4.4 [\#45](https://github.com/radarsh/gradle-test-logger-plugin/issues/45)
-
-**Fixed bugs:**
-
 - Slow test that failed doesn't show the execution time [\#51](https://github.com/radarsh/gradle-test-logger-plugin/issues/51)
+- Add option to display STDOUT [\#50](https://github.com/radarsh/gradle-test-logger-plugin/issues/50)
+- Are you planning to support jUnit 5? [\#47](https://github.com/radarsh/gradle-test-logger-plugin/issues/47)
+
+**Closed issues:**
+
+- Upgrade to Gradle 4.5.1 [\#48](https://github.com/radarsh/gradle-test-logger-plugin/issues/48)
+- Upgrade to Gradle 4.4 [\#45](https://github.com/radarsh/gradle-test-logger-plugin/issues/45)
 - Could not create an instance of type com.adarshr.gradle.testlogger.TestLoggerExtension\_Decorated. [\#44](https://github.com/radarsh/gradle-test-logger-plugin/issues/44)
 
 **Merged pull requests:**

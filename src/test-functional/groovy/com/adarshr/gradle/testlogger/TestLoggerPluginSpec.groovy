@@ -16,11 +16,12 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def lines = output.lines
         and:
             lines.size() == 28
-            lines[0] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.FirstSpec[/]')
-            lines[1] == render('')
-            lines[2] == render('[erase-ahead,bold]  Test [bold-off]this test should pass[green] PASSED[/]')
-            lines[3] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[red]')
-            lines[4..11].join('\n') == render(
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.FirstSpec[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]this test should pass[green] PASSED[/]')
+            lines[4] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[red]')
+            lines[5..12].join('\n') == render(
                 '''|
                    |  Condition not satisfied:
                    |  
@@ -29,13 +30,13 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                    |    false
                    |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:17)
                    |[/]'''.stripMargin())
-            lines[12] == render('[erase-ahead,bold]  Test [bold-off]this test should be skipped[yellow] SKIPPED[/]')
-            lines[13] == render('')
-            lines[14] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.SecondSpec[/]')
-            lines[15] == render('')
-            lines[16] == render('[erase-ahead,bold]  Test [bold-off]this test should pass[green] PASSED[/]')
-            lines[17] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[red]')
-            lines[18..25].join('\n') == render(
+            lines[13] == render('[erase-ahead,bold]  Test [bold-off]this test should be skipped[yellow] SKIPPED[/]')
+            lines[14] == render('')
+            lines[15] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.SecondSpec[/]')
+            lines[16] == render('')
+            lines[17] == render('[erase-ahead,bold]  Test [bold-off]this test should pass[green] PASSED[/]')
+            lines[18] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[red]')
+            lines[19..26].join('\n') == render(
                 '''|
                    |  Condition not satisfied:
                    |  
@@ -44,15 +45,15 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                    |    false
                    |      at com.adarshr.test.SecondSpec.this test should fail(SecondSpec.groovy:17)
                    |[/]'''.stripMargin())
-            lines[26] == render('[erase-ahead,bold]  Test [bold-off]this test should be skipped[yellow] SKIPPED[/]')
-            lines[27] == render('')
+            lines[27] == render('[erase-ahead,bold]  Test [bold-off]this test should be skipped[yellow] SKIPPED[/]')
         and:
             result.task(":test").outcome == FAILED
         and:
             def summary = output.summary
-            summary[0].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 6 tests in')
-            summary[0].endsWith render('(2 failed, 2 skipped)[/]')
-            summary[1] == render('')
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 6 tests in')
+            summary[1].endsWith render('(2 failed, 2 skipped)[/]')
+            summary[2] == render('')
     }
 
     def "run failing test with showExceptions false"() {
@@ -66,10 +67,10 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def lines = getLoggerOutput(result.output).lines
         and:
             lines.size() == 4
-            lines[0] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.FirstSpec[/]')
-            lines[1] == render('')
-            lines[2] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[/]')
-            lines[3] == render('')
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.FirstSpec[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[/]')
         and:
             result.task(":test").outcome == FAILED
     }
@@ -84,17 +85,17 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def lines = getLoggerOutput(result.output).lines
         and:
             lines.size() == 10
-            lines[0] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.FirstTest[/]')
-            lines[1] == render('')
-            lines[2] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldBeSkipped[yellow] SKIPPED[/]')
-            lines[3] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldFail[red] FAILED[red]')
-            lines[4..7].join('\n') == render(
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.FirstTest[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldBeSkipped[yellow] SKIPPED[/]')
+            lines[4] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldFail[red] FAILED[red]')
+            lines[5..8].join('\n') == render(
                 '''|
                    |  java.lang.AssertionError: expected:<1> but was:<2>
                    |      at com.adarshr.test.FirstTest.thisTestShouldFail(FirstTest.java:21)
                    |[/]'''.stripMargin())
-            lines[8] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldPass[green] PASSED[/]')
-            lines[9] == render('')
+            lines[9] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldPass[green] PASSED[/]')
         and:
             result.task(":test").outcome == FAILED
     }
@@ -109,17 +110,17 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def lines = getLoggerOutput(result.output).lines
         and:
             lines.size() == 10
-            lines[0] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.FirstTest[/]')
-            lines[1] == render('')
-            lines[2] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldBeSkipped[yellow] SKIPPED[/]')
-            lines[3] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldFail[red] FAILED[red]')
-            lines[4..7].join('\n') == render(
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.FirstTest[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldBeSkipped[yellow] SKIPPED[/]')
+            lines[4] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldFail[red] FAILED[red]')
+            lines[5..8].join('\n') == render(
                 '''|
                    |  java.lang.AssertionError: expected:<1> but was:<2>
                    |      at com.adarshr.test.FirstTest.thisTestShouldFail(FirstTest.java:21)
                    |[/]'''.stripMargin())
-            lines[8] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldPass[green] PASSED[/]')
-            lines[9] == render('')
+            lines[9] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldPass[green] PASSED[/]')
         and:
             result.task(":test").outcome == FAILED
     }
@@ -134,19 +135,69 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def lines = getLoggerOutput(result.output).lines
         and:
             lines.size() == 10
-            lines[0] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.FirstTest[/]')
-            lines[1] == render('')
-            lines[2] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldBeSkipped()[yellow] SKIPPED[/]')
-            lines[3] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[red]')
-            lines[4..7].join('\n') == render(
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.FirstTest[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldBeSkipped()[yellow] SKIPPED[/]')
+            lines[4] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[red]')
+            lines[5..8].join('\n') == render(
                 '''|
                    |  org.opentest4j.AssertionFailedError: expected: <1> but was: <2>
                    |      at com.adarshr.test.FirstTest.thisTestShouldFail(FirstTest.java:18)
                    |[/]'''.stripMargin())
-            lines[8] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldPass()[green] PASSED[/]')
-            lines[9] == render('')
+            lines[9] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldPass()[green] PASSED[/]')
         and:
             result.task(":test").outcome == FAILED
+    }
+
+    def "log junit5 jupiter engine nested tests"() {
+        when:
+            def result = run(
+                'sample-junit5-jupiter-nested-tests',
+                'clean test'
+            )
+        then:
+            def lines = getLoggerOutput(result.output).lines
+        and:
+            lines.size() == 14
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.NestedTest$NestedTestsetOne[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetOne()[green] PASSED[/]')
+            lines[4] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetOne()[green] PASSED[/]')
+            lines[5] == render('')
+            lines[6] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.NestedTest$NestedTestsetThree[/]')
+            lines[7] == render('')
+            lines[8] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetThree()[green] PASSED[/]')
+            lines[9] == render('')
+            lines[10] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.NestedTest$NestedTestsetTwo[/]')
+            lines[11] == render('')
+            lines[12] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetTwo()[green] PASSED[/]')
+            lines[13] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetTwo()[green] PASSED[/]')
+        and:
+            result.task(":test").outcome == SUCCESS
+    }
+
+    def "log junit5 jupiter engine deep-nested tests"() {
+        when:
+            def result = run(
+                'sample-junit5-jupiter-deep-nested-tests',
+                'clean test'
+            )
+        then:
+            def lines = getLoggerOutput(result.output).lines
+        and:
+            lines.size() == 8
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.DeepNestedTest$NestedTestsetLevelOne[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelOne()[green] PASSED[/]')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.DeepNestedTest$NestedTestsetLevelOne$NestedTestsetLevelTwo[/]')
+            lines[6] == render('')
+            lines[7] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelTwo()[green] PASSED[/]')
+        and:
+            result.task(":test").outcome == SUCCESS
     }
 
     def "do not print empty suites when filtering tests"() {
@@ -159,10 +210,10 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def lines = getLoggerOutput(result.output).lines
         and:
             lines.size() == 4
-            lines[0] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.SecondSpec[/]')
-            lines[1] == render('')
-            lines[2] == render('[erase-ahead,bold]  Test [bold-off]this test should pass[green] PASSED[/]')
-            lines[3] == render('')
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.SecondSpec[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]this test should pass[green] PASSED[/]')
         and:
             result.task(":test").outcome == SUCCESS
     }
@@ -183,10 +234,10 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def lines = getLoggerOutput(result.output).lines
         and:
             lines.size() == 4
-            lines[0] == render('com.adarshr.test.SingleSpec')
-            lines[1] == render('')
-            lines[2] == render('  Test this is a single test PASSED')
-            lines[3] == render('')
+            lines[0] == render('')
+            lines[1] == render('com.adarshr.test.SingleSpec')
+            lines[2] == render('')
+            lines[3] == render('  Test this is a single test PASSED')
         and:
             result.task(':anotherTask').outcome == SUCCESS
     }
@@ -202,11 +253,11 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def lines = getLoggerOutput(result.output).lines
         and:
             lines.size() == 4
-            lines[0] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.SlowSpec[/]')
-            lines[1] == render('')
-            lines[2].startsWith render('[erase-ahead,bold]  Test [bold-off]this is a slow test[green] PASSED[red]')
-            lines[2] ==~ /.*\(3\.?\d?s\)\u001B\[m$/
-            lines[3] == render('')
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.SlowSpec[/]')
+            lines[2] == render('')
+            lines[3].startsWith render('[erase-ahead,bold]  Test [bold-off]this is a slow test[green] PASSED[red]')
+            lines[3] ==~ /.*\(3\.?\d?s\)\u001B\[m$/
         and:
             result.task(":test").outcome == SUCCESS
     }
@@ -226,7 +277,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def output = getLoggerOutput(result.output)
         and:
             output.lines.size() == 4
-            !output.summary
+            output.summary == ['']
         and:
             result.task(":test").outcome == SUCCESS
     }
@@ -250,21 +301,21 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             lines[1] == render('  stdout setupSpec')
             lines[2] == render('  stderr setupSpec[/]')
             lines[3] == render('')
-            lines[4] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.SingleSpec[/]')
-            lines[5] == render('')
-            lines[6] == render('[erase-ahead,bold]  Test [bold-off]this is a single test[green] PASSED[/]')
-            lines[7] == render('[default]')
-            lines[8] == render('    stdout setup')
-            lines[9] == render('    stderr setup')
-            lines[10] == render('    stdout expect')
-            lines[11] == render('    stderr expect')
-            lines[12] == render('    stdout cleanup')
-            lines[13] == render('    stderr cleanup[/]')
-            lines[14] == render('')
-            lines[15] == render('[default]')
-            lines[16] == render('  stdout cleanupSpec')
-            lines[17] == render('  stderr cleanupSpec[/]')
-            lines[18] == render('')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold,bright-yellow]com.adarshr.test.SingleSpec[/]')
+            lines[6] == render('')
+            lines[7] == render('[erase-ahead,bold]  Test [bold-off]this is a single test[green] PASSED[/]')
+            lines[8] == render('[default]')
+            lines[9] == render('    stdout setup')
+            lines[10] == render('    stderr setup')
+            lines[11] == render('    stdout expect')
+            lines[12] == render('    stderr expect')
+            lines[13] == render('    stdout cleanup')
+            lines[14] == render('    stderr cleanup[/]')
+            lines[15] == render('')
+            lines[16] == render('[default]')
+            lines[17] == render('  stdout cleanupSpec')
+            lines[18] == render('  stderr cleanupSpec[/]')
             lines[19] == render('')
         and:
             result.task(":test").outcome == SUCCESS

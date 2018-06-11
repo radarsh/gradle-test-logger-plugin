@@ -22,16 +22,16 @@ class MochaTheme extends AbstractTheme {
 
         switch (result.resultType) {
             case SUCCESS:
-                line << "[green]${getSymbol(result.resultType)}[grey] ${escape(descriptor.name)}"
+                line << "[green]${getSymbol(result.resultType)}[grey] ${displayName(descriptor)}"
                 showDurationIfSlow(result, line)
                 break
             case FAILURE:
-                line << "[red]${getSymbol(result.resultType)} ${escape(descriptor.name)}"
+                line << "[red]${getSymbol(result.resultType)} ${displayName(descriptor)}"
                 showDurationIfSlow(result, line)
                 line << exceptionText(descriptor, result)
                 break
             case SKIPPED:
-                line << "[cyan]${getSymbol(result.resultType)} ${escape(descriptor.name)}"
+                line << "[cyan]${getSymbol(result.resultType)} ${displayName(descriptor)}"
                 break
         }
 

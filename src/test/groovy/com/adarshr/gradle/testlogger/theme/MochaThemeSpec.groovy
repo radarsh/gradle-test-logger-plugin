@@ -19,8 +19,8 @@ class MochaThemeSpec extends Specification {
 
     private static final def ORIGINAL_OS = System.getProperty('os.name')
 
-    def testLoggerExtensionMock = Mock(TestLoggerExtension)
     Theme theme
+    def testLoggerExtensionMock = Mock(TestLoggerExtension)
     def testDescriptorMock = Mock(TestDescriptor)
     def testResultMock = Mock(TestResult)
     def streamLines = "Hello${lineSeparator()}World"
@@ -82,6 +82,30 @@ class MochaThemeSpec extends Specification {
                    |      java.lang.AssertionError: This is wrong
                    |          at com.adarshr.gradle.testlogger.theme.MochaThemeSpec.getException(MochaThemeSpec.groovy:17)
                    |[/]'''.stripMargin().replace('\n', lineSeparator())
+    }
+
+    def "after test uses displayName property if present"() {
+        given:
+            System.setProperty('os.name', 'Linux')
+        and:
+            testDescriptorMock = GroovyMock(TestDescriptor)
+            testDescriptorMock.properties >> [displayName: 'display test name [escaped]']
+            testResultMock.resultType >> SUCCESS
+            testDescriptorMock.name >> 'test name [escaped]'
+        expect:
+            theme.testText(testDescriptorMock, testResultMock) == '    [erase-ahead][green]✔[grey] display test name \\[escaped\\][/]'
+    }
+
+    def "after test does not error when displayName property is missing"() {
+        given:
+            System.setProperty('os.name', 'Linux')
+        and:
+            testDescriptorMock = GroovyMock(TestDescriptor)
+            testDescriptorMock.properties >> [:]
+            testResultMock.resultType >> SUCCESS
+            testDescriptorMock.name >> 'test name [escaped]'
+        expect:
+            theme.testText(testDescriptorMock, testResultMock) == '    [erase-ahead][green]✔[grey] test name \\[escaped\\][/]'
     }
 
     def "exception text when showExceptions is true"() {
