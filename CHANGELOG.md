@@ -1,6 +1,18 @@
 # Change Log
 
-## [v1.3.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.3.0)
+## [v1.3.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.3.1)
+
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.3.0...v.1.3.1)
+
+**Closed issues:**
+
+- Bright yellow is not readable if console has bright background [\#59](https://github.com/radarsh/gradle-test-logger-plugin/issues/59)
+
+**Merged pull requests:**
+
+- Turn off bright yellow in standard theme [\#65](https://github.com/radarsh/gradle-test-logger-plugin/pull/65) ([radarsh](https://github.com/radarsh))
+
+## [v1.3.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.3.0) (2018-06-11)
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.2.0...v1.3.0)
 
 **Implemented enhancements:**
