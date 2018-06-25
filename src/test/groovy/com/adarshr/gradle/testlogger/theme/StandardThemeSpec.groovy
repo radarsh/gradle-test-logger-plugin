@@ -34,7 +34,7 @@ class StandardThemeSpec extends Specification {
         when:
             def actual = theme.suiteText(testDescriptorMock)
         then:
-            actual == "[erase-ahead,bold,bright-yellow]ClassName[/]${lineSeparator()}"
+            actual == "[erase-ahead,bold]ClassName[/]${lineSeparator()}"
     }
 
     @Unroll

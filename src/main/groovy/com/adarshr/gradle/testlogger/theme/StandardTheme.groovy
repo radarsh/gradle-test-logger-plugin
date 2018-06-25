@@ -12,7 +12,7 @@ class StandardTheme extends AbstractTheme {
 
     @Override
     String suiteText(TestDescriptor descriptor) {
-        "[erase-ahead,bold,bright-yellow]${escape(descriptor.className)}[/]${lineSeparator()}"
+        "[erase-ahead,bold]${escape(descriptor.className)}[/]${lineSeparator()}"
     }
 
     @Override
