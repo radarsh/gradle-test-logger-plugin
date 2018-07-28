@@ -10,7 +10,7 @@ import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 @InheritConstructors
 class PlainTheme extends AbstractTheme {
 
-    private static final Map RESULT_TYPE_MAPPING = [
+    protected static final Map RESULT_TYPE_MAPPING = [
         (SUCCESS): 'PASSED',
         (FAILURE): 'FAILED',
         (SKIPPED): 'SKIPPED'
@@ -23,7 +23,11 @@ class PlainTheme extends AbstractTheme {
 
     @Override
     String testText(TestDescriptor descriptor, TestResult result) {
-        def line = new StringBuilder("  Test ${displayName(descriptor)} ${RESULT_TYPE_MAPPING[result.resultType]}")
+        testText("  Test ${displayName(descriptor)} ${RESULT_TYPE_MAPPING[result.resultType]}", descriptor, result)
+    }
+
+    protected String testText(String start, TestDescriptor descriptor, TestResult result) {
+        def line = new StringBuilder(start)
 
         if (tooSlow(result)) {
             line << " (${duration(result)})"
@@ -80,7 +84,7 @@ class PlainTheme extends AbstractTheme {
         standardStreamText(lines, 4)
     }
 
-    private String standardStreamText(String lines, int indent) {
+    protected String standardStreamText(String lines, int indent) {
         if (!showStandardStreams || !lines) {
             return ''
         }

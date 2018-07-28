@@ -10,12 +10,15 @@ import static java.lang.System.lineSeparator
 @SuppressWarnings("GrMethodMayBeStatic")
 abstract class AbstractTheme implements Theme {
 
+    final ThemeType type
+
     protected final boolean showExceptions
     protected final long slowThreshold
     protected final boolean showSummary
     protected final boolean showStandardStreams
 
     AbstractTheme(TestLoggerExtension extension) {
+        this.type = extension.theme
         this.showExceptions = extension.showExceptions
         this.slowThreshold = extension.slowThreshold
         this.showSummary = extension.showSummary

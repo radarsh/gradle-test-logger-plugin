@@ -17,7 +17,11 @@ class StandardTheme extends AbstractTheme {
 
     @Override
     String testText(TestDescriptor descriptor, TestResult result) {
-        def line = new StringBuilder("[erase-ahead,bold]  Test [bold-off]${displayName(descriptor)}")
+        testText("[erase-ahead,bold]  Test [bold-off]${displayName(descriptor)}", descriptor, result)
+    }
+
+    protected String testText(String start, TestDescriptor descriptor, TestResult result) {
+        def line = new StringBuilder(start)
 
         switch (result.resultType) {
             case SUCCESS:
@@ -46,8 +50,8 @@ class StandardTheme extends AbstractTheme {
     }
 
     @Override
-    String exceptionText(TestDescriptor descriptor, TestResult result) {
-        def exceptionText = super.exceptionText(descriptor, result)
+    protected String exceptionText(TestDescriptor descriptor, TestResult result, int indent) {
+        def exceptionText = super.exceptionText(descriptor, result, indent)
 
         exceptionText ? "[red]${exceptionText}" : ''
     }
@@ -97,7 +101,7 @@ class StandardTheme extends AbstractTheme {
         standardStreamText(lines, 4)
     }
 
-    private String standardStreamText(String lines, int indent) {
+    protected String standardStreamText(String lines, int indent) {
         if (!showStandardStreams || !lines) {
             return ''
         }

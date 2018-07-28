@@ -6,7 +6,7 @@ import com.adarshr.gradle.testlogger.theme.ThemeFactory
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.*
 
-class TestEventLogger implements TestListener, TestOutputListener {
+class SequentialTestLogger implements TestLogger {
 
     private final Theme theme
     private final ConsoleLogger logger
@@ -14,7 +14,7 @@ class TestEventLogger implements TestListener, TestOutputListener {
     private final StringBuilder standardStreamCollector
     private final List<String> suites
 
-    TestEventLogger(Project project) {
+    SequentialTestLogger(Project project) {
         logger = new ConsoleLogger(project.logger)
         theme = ThemeFactory.getTheme(project.testlogger as TestLoggerExtension)
         standardStreamCollector = new StringBuilder()
