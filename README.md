@@ -71,6 +71,9 @@ The following themes are currently supported:
 2. `standard` - displays colours but no Unicode symbols
 3. `mocha` - similar to what [Mocha's](https://github.com/mochajs/mocha) [spec reporter](https://mochajs.org/#spec)
 prints, with colours and Unicode symbols
+4. `plain-parallel` - similar to the `plain` theme but supports parallel test execution
+5. `standard-parallel` - similar to the `standard` theme but supports parallel test execution
+6. `mocha-parallel` - similar to the `mocha` theme but supports parallel test execution
 
 ### Hide exceptions
 
@@ -139,3 +142,10 @@ system settings to see Unicode symbols when using the `mocha` theme.
 ### How to disable colours and Unicode symbols at runtime such as on Jenkins consoles?
 
 You can switch off ANSI control characters and Unicode symbols by adding `--console=plain` to your Gradle command line.
+
+### Does it support parallel test execution?
+
+Yes. You will need to switch to a suitable parallel theme though. This can be one of `plain-parallel`, `standard-parallel` or
+`mocha-parallel`. The parallel themes are specially designed to work with a setting of
+[`maxParallelForks`](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.Test.html#org.gradle.api.tasks.testing.Test:maxParallelForks)
+greater than 1. They achieve this by sacrificing the ability to group tests and thus some readability is lost.
