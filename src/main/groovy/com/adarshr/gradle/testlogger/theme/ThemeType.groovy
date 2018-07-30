@@ -18,7 +18,7 @@ enum ThemeType {
         this.parallel = parallel
     }
 
-    static ThemeType fromValue(String name) {
+    static ThemeType fromName(String name) {
         def themeType = values().find {
             it.name == name
         }
@@ -31,9 +31,7 @@ enum ThemeType {
     }
 
     static String getAllThemeNames() {
-        values().findAll {
-            it.parallel
-        }.collect {
+        values().collect {
             "'${it.name}'"
         }.join(', ')
     }
