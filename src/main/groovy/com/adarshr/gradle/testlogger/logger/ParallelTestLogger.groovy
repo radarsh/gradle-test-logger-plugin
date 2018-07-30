@@ -14,13 +14,14 @@ class ParallelTestLogger implements TestLogger {
     private final Theme theme
     private final ConsoleLogger logger
     private boolean logBeforeSuite
-    private final Map<String, StringBuilder> groupedStandardStreamCollector = [:]
+    private final OutputCollector outputCollector
     private final List<String> suites
 
     ParallelTestLogger(Project project) {
         logger = new ConsoleLogger(project.logger)
         theme = ThemeFactory.getTheme(project.testlogger as TestLoggerExtension)
         suites = new ArrayList<>(100)
+        outputCollector = new OutputCollector()
     }
 
     @Override
@@ -32,10 +33,7 @@ class ParallelTestLogger implements TestLogger {
 
     @Override
     void afterSuite(TestDescriptor suite, TestResult result) {
-        logger.log theme.suiteStandardStreamText(groupedStandardStreamCollector.computeIfAbsent(getSuiteKey(suite), {
-            new StringBuilder()
-        }).toString())
-        groupedStandardStreamCollector.remove(getSuiteKey(suite)).length = 0
+        logger.log theme.suiteStandardStreamText(outputCollector.removeSuiteOutput(suite))
 
         if (suite.className && result.testCount) {
             logBeforeSuite = false
@@ -60,32 +58,12 @@ class ParallelTestLogger implements TestLogger {
     @Override
     void afterTest(TestDescriptor descriptor, TestResult result) {
         logger.log theme.testText(descriptor, result)
-
-        def suiteStandardStreamText = groupedStandardStreamCollector.computeIfAbsent(getSuiteKey(descriptor), {
-            new StringBuilder()
-        }).toString()
-        def testStandardStreamText = groupedStandardStreamCollector.computeIfAbsent(getKey(descriptor), {
-            new StringBuilder()
-        }).toString()
-
-
-        logger.log theme.suiteStandardStreamText(suiteStandardStreamText)
-        logger.log theme.testStandardStreamText(testStandardStreamText)
-
-        groupedStandardStreamCollector.remove(getSuiteKey(descriptor)).length = 0
-        groupedStandardStreamCollector.remove(getKey(descriptor)).length = 0
+        logger.log theme.suiteStandardStreamText(outputCollector.removeSuiteOutput(descriptor))
+        logger.log theme.testStandardStreamText(outputCollector.removeTestOutput(descriptor))
     }
 
     @Override
     void onOutput(TestDescriptor descriptor, TestOutputEvent outputEvent) {
-        groupedStandardStreamCollector.computeIfAbsent(getKey(descriptor), { new StringBuilder() }) << outputEvent.message
-    }
-
-    private static String getKey(TestDescriptor descriptor) {
-        "${descriptor.className}:${descriptor.name}"
-    }
-
-    private static String getSuiteKey(TestDescriptor descriptor) {
-        "${descriptor.className}:${descriptor.className}"
+        outputCollector.collect(descriptor, outputEvent.message)
     }
 }
