@@ -6,25 +6,24 @@ import com.adarshr.gradle.testlogger.theme.ThemeFactory
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.*
 
-class TestEventLogger implements TestListener, TestOutputListener {
+class SequentialTestLogger implements TestLogger {
 
     private final Theme theme
     private final ConsoleLogger logger
     private boolean logBeforeSuite
-    private final StringBuilder standardStreamCollector
+    private final OutputCollector outputCollector
     private final List<String> suites
 
-    TestEventLogger(Project project) {
+    SequentialTestLogger(Project project) {
         logger = new ConsoleLogger(project.logger)
         theme = ThemeFactory.getTheme(project.testlogger as TestLoggerExtension)
-        standardStreamCollector = new StringBuilder()
         suites = new ArrayList<>(100)
+        outputCollector = new OutputCollector()
     }
 
     @Override
     void beforeSuite(TestDescriptor suite) {
-        logger.log theme.suiteStandardStreamText(standardStreamCollector.toString())
-        standardStreamCollector.length = 0
+        logger.log theme.suiteStandardStreamText(outputCollector.removeSuiteOutput(suite))
 
         if (suite.className && suite.parent.className) {
             logger.logNewLine()
@@ -34,8 +33,7 @@ class TestEventLogger implements TestListener, TestOutputListener {
 
     @Override
     void afterSuite(TestDescriptor suite, TestResult result) {
-        logger.log theme.suiteStandardStreamText(standardStreamCollector.toString())
-        standardStreamCollector.length = 0
+        logger.log theme.suiteStandardStreamText(outputCollector.removeSuiteOutput(suite))
 
         if (suite.className && result.testCount) {
             logBeforeSuite = false
@@ -60,13 +58,11 @@ class TestEventLogger implements TestListener, TestOutputListener {
     @Override
     void afterTest(TestDescriptor descriptor, TestResult result) {
         logger.log theme.testText(descriptor, result)
-        logger.log theme.testStandardStreamText(standardStreamCollector.toString())
-
-        standardStreamCollector.length = 0
+        logger.log theme.testStandardStreamText(outputCollector.removeTestOutput(descriptor))
     }
 
     @Override
     void onOutput(TestDescriptor testDescriptor, TestOutputEvent outputEvent) {
-        standardStreamCollector << outputEvent.message
+        outputCollector.collect(testDescriptor, outputEvent.message)
     }
 }

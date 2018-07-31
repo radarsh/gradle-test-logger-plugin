@@ -1,7 +1,6 @@
 package com.adarshr.gradle.testlogger
 
-import com.adarshr.gradle.testlogger.logger.TestEventLogger
-import org.gradle.api.GradleException
+import com.adarshr.gradle.testlogger.logger.TestLoggerWrapper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
@@ -14,22 +13,15 @@ class TestLoggerPlugin implements Plugin<Project> {
 
         project.afterEvaluate {
             project.tasks.withType(Test).each { test ->
-                assertSequentialTestExecution(test)
                 project.testlogger.applyOverrides()
 
                 test.testLogging.lifecycle.events = []
 
-                def testEventLogger = new TestEventLogger(project)
+                def testLogger = new TestLoggerWrapper(project, test.maxParallelForks)
 
-                test.addTestListener(testEventLogger)
-                test.addTestOutputListener(testEventLogger)
+                test.addTestListener(testLogger)
+                test.addTestOutputListener(testLogger)
             }
-        }
-    }
-
-    private static void assertSequentialTestExecution(Test test) {
-        if (test.maxParallelForks != 1) {
-            throw new GradleException('Parallel execution is not supported')
         }
     }
 

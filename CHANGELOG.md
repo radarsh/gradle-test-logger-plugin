@@ -1,8 +1,28 @@
 # Change Log
 
-## [v1.3.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.3.1)
+## [v1.4.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.4.0) (2018-07-31)
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.3.1...v1.4.0)
 
-[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.3.0...v.1.3.1)
+**Implemented enhancements:**
+
+- Add support for parallel test execution [\#8](https://github.com/radarsh/gradle-test-logger-plugin/issues/8)
+
+**Closed issues:**
+
+- Introduce a high level abstraction for collecting standard stream output [\#72](https://github.com/radarsh/gradle-test-logger-plugin/issues/72)
+- Fix CircleCI build instability [\#68](https://github.com/radarsh/gradle-test-logger-plugin/issues/68)
+- Upgrade to Gradle 4.9 [\#67](https://github.com/radarsh/gradle-test-logger-plugin/issues/67)
+
+**Merged pull requests:**
+
+- Refactor standard stream collectors into OutputCollector abstraction [\#73](https://github.com/radarsh/gradle-test-logger-plugin/pull/73) ([radarsh](https://github.com/radarsh))
+- Add test for ThemeType [\#71](https://github.com/radarsh/gradle-test-logger-plugin/pull/71) ([radarsh](https://github.com/radarsh))
+- Upgrade to Gradle 4.9 [\#70](https://github.com/radarsh/gradle-test-logger-plugin/pull/70) ([radarsh](https://github.com/radarsh))
+- Limit max memory available to Gradle for CircleCI builds [\#69](https://github.com/radarsh/gradle-test-logger-plugin/pull/69) ([radarsh](https://github.com/radarsh))
+- Add support for parallel test execution [\#66](https://github.com/radarsh/gradle-test-logger-plugin/pull/66) ([radarsh](https://github.com/radarsh))
+
+## [v1.3.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.3.1) (2018-06-25)
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.3.0...v1.3.1)
 
 **Closed issues:**
 
@@ -138,7 +158,6 @@
 - Add Configuration for AppVeyor [\#9](https://github.com/radarsh/gradle-test-logger-plugin/pull/9) ([baynezy](https://github.com/baynezy))
 
 ## [v1.0.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.0.0) (2017-09-29)
-
 **Implemented enhancements:**
 
 - Publish plugin [\#5](https://github.com/radarsh/gradle-test-logger-plugin/issues/5)

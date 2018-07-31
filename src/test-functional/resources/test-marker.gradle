@@ -13,6 +13,12 @@ tasks.withType(Test) {
         }
     }
 
+    afterTest { suite, result ->
+        if (suite.className.startsWith('com.adarshr')) {
+            logger.lifecycle "__TEST=${suite.className}:${suite.name}__"
+        }
+    }
+
     afterSuite { suite, result ->
         if (!suite.parent) {
             logger.lifecycle '__SUMMARY__'

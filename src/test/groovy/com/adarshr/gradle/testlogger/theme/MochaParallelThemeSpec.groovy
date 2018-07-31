@@ -10,7 +10,7 @@ import spock.util.environment.OperatingSystem
 import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
-class MochaThemeSpec extends Specification {
+class MochaParallelThemeSpec extends Specification {
 
     // right at the top to minimise line number changes
     private static AssertionError getException() {
@@ -27,7 +27,7 @@ class MochaThemeSpec extends Specification {
 
     def setup() {
         testLoggerExtensionMock.slowThreshold >> 2000
-        theme = new MochaTheme(testLoggerExtensionMock)
+        theme = new MochaParallelTheme(testLoggerExtensionMock)
     }
 
     def cleanup() {
@@ -35,12 +35,8 @@ class MochaThemeSpec extends Specification {
     }
 
     def "before suite"() {
-        given:
-            testDescriptorMock.className >> 'ClassName'
-        when:
-            def actual = theme.suiteText(testDescriptorMock)
-        then:
-            actual == "  [erase-ahead,default]ClassName[/]${lineSeparator()}"
+        expect:
+            !theme.suiteText(testDescriptorMock)
     }
 
     @Unroll
@@ -48,6 +44,7 @@ class MochaThemeSpec extends Specification {
         given:
             System.setProperty('os.name', os)
             testResultMock.resultType >> resultType
+            testDescriptorMock.className >> 'ClassName'
             testDescriptorMock.name >> 'test name [escaped]'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -55,19 +52,19 @@ class MochaThemeSpec extends Specification {
             actual == expected
         where:
             os            | resultType | expected
-            'Windows 8.1' | SUCCESS    | '    [erase-ahead][green]√[grey] test name \\[escaped\\][/]'
-            'Windows 8.1' | FAILURE    | '    [erase-ahead][red]X test name \\[escaped\\][/]'
-            'Windows 8.1' | SKIPPED    | '    [erase-ahead][cyan]- test name \\[escaped\\][/]'
-            'Linux'       | SUCCESS    | '    [erase-ahead][green]✔[grey] test name \\[escaped\\][/]'
-            'Linux'       | FAILURE    | '    [erase-ahead][red]✘ test name \\[escaped\\][/]'
-            'Linux'       | SKIPPED    | '    [erase-ahead][cyan]- test name \\[escaped\\][/]'
+            'Windows 8.1' | SUCCESS    | '  [erase-ahead,default]ClassName [green]√[grey] test name \\[escaped\\][/]'
+            'Windows 8.1' | FAILURE    | '  [erase-ahead,default]ClassName [red]X test name \\[escaped\\][/]'
+            'Windows 8.1' | SKIPPED    | '  [erase-ahead,default]ClassName [cyan]- test name \\[escaped\\][/]'
+            'Linux'       | SUCCESS    | '  [erase-ahead,default]ClassName [green]✔[grey] test name \\[escaped\\][/]'
+            'Linux'       | FAILURE    | '  [erase-ahead,default]ClassName [red]✘ test name \\[escaped\\][/]'
+            'Linux'       | SKIPPED    | '  [erase-ahead,default]ClassName [cyan]- test name \\[escaped\\][/]'
     }
 
     def "after test with result type failure and showExceptions true"() {
         given:
             System.setProperty('os.name', 'Linux')
             testLoggerExtensionMock.showExceptions >> true
-            theme = new MochaTheme(testLoggerExtensionMock)
+            theme = new MochaParallelTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
@@ -77,11 +74,11 @@ class MochaThemeSpec extends Specification {
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
             actual ==
-                '''|    [erase-ahead][red]✘ floppy test[red]
-                   |
-                   |      java.lang.AssertionError: This is wrong
-                   |          at com.adarshr.gradle.testlogger.theme.MochaThemeSpec.getException(MochaThemeSpec.groovy:17)
-                   |[/]'''.stripMargin().replace('\n', lineSeparator())
+            '''|  [erase-ahead,default]com.adarshr.gradle.testlogger.theme.MochaParallelThemeSpec [red]✘ floppy test[red]
+               |
+               |    java.lang.AssertionError: This is wrong
+               |        at com.adarshr.gradle.testlogger.theme.MochaParallelThemeSpec.getException(MochaParallelThemeSpec.groovy:17)
+               |[/]'''.stripMargin().replace('\n', lineSeparator())
     }
 
     def "after test uses displayName property if present"() {
@@ -91,9 +88,10 @@ class MochaThemeSpec extends Specification {
             testDescriptorMock = GroovyMock(TestDescriptor)
             testDescriptorMock.properties >> [displayName: 'display test name [escaped]']
             testResultMock.resultType >> SUCCESS
+            testDescriptorMock.className >> 'ClassName'
             testDescriptorMock.name >> 'test name [escaped]'
         expect:
-            theme.testText(testDescriptorMock, testResultMock) == '    [erase-ahead][green]✔[grey] display test name \\[escaped\\][/]'
+            theme.testText(testDescriptorMock, testResultMock) == '  [erase-ahead,default]ClassName [green]✔[grey] display test name \\[escaped\\][/]'
     }
 
     def "after test does not error when displayName property is missing"() {
@@ -103,15 +101,16 @@ class MochaThemeSpec extends Specification {
             testDescriptorMock = GroovyMock(TestDescriptor)
             testDescriptorMock.properties >> [:]
             testResultMock.resultType >> SUCCESS
+            testDescriptorMock.className >> 'ClassName'
             testDescriptorMock.name >> 'test name [escaped]'
         expect:
-            theme.testText(testDescriptorMock, testResultMock) == '    [erase-ahead][green]✔[grey] test name \\[escaped\\][/]'
+            theme.testText(testDescriptorMock, testResultMock) == '  [erase-ahead,default]ClassName [green]✔[grey] test name \\[escaped\\][/]'
     }
 
     def "exception text when showExceptions is true"() {
         given:
             testLoggerExtensionMock.showExceptions >> true
-            theme = new MochaTheme(testLoggerExtensionMock)
+            theme = new MochaParallelTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
@@ -119,11 +118,11 @@ class MochaThemeSpec extends Specification {
             testDescriptorMock.className >> this.class.name
         expect:
             theme.exceptionText(testDescriptorMock, testResultMock) ==
-                '''|[red]
-                   |
-                   |      java.lang.AssertionError: This is wrong
-                   |          at com.adarshr.gradle.testlogger.theme.MochaThemeSpec.getException(MochaThemeSpec.groovy:17)
-                   |'''.stripMargin().replace('\n', lineSeparator())
+            '''|[red]
+               |
+               |    java.lang.AssertionError: This is wrong
+               |        at com.adarshr.gradle.testlogger.theme.MochaParallelThemeSpec.getException(MochaParallelThemeSpec.groovy:17)
+               |'''.stripMargin().replace('\n', lineSeparator())
     }
 
     def "exception text when showExceptions is false"() {
@@ -141,6 +140,7 @@ class MochaThemeSpec extends Specification {
             testResultMock.resultType >> resultType
             testResultMock.startTime >> 1000000
             testResultMock.endTime >> 1000000 + 10000
+            testDescriptorMock.className >> 'ClassName'
             testDescriptorMock.name >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -148,8 +148,8 @@ class MochaThemeSpec extends Specification {
             actual == text
         where:
             resultType | text
-            SUCCESS    | "    [erase-ahead][green]${passedSymbol}[grey] test name[red] (10s)[/]"
-            FAILURE    | "    [erase-ahead][red]${failedSymbol} test name[red] (10s)[/]"
+            SUCCESS    | "  [erase-ahead,default]ClassName [green]${passedSymbol}[grey] test name[red] (10s)[/]"
+            FAILURE    | "  [erase-ahead,default]ClassName [red]${failedSymbol} test name[red] (10s)[/]"
     }
 
     @Unroll
@@ -158,6 +158,7 @@ class MochaThemeSpec extends Specification {
             testResultMock.resultType >> resultType
             testResultMock.startTime >> 1000000
             testResultMock.endTime >> 1000000 + 1500 // slow threshold is 2s
+            testDescriptorMock.className >> 'ClassName'
             testDescriptorMock.name >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -165,8 +166,8 @@ class MochaThemeSpec extends Specification {
             actual == text
         where:
             resultType | text
-            SUCCESS    | "    [erase-ahead][green]${passedSymbol}[grey] test name[yellow] (1.5s)[/]"
-            FAILURE    | "    [erase-ahead][red]${failedSymbol} test name[yellow] (1.5s)[/]"
+            SUCCESS    | "  [erase-ahead,default]ClassName [green]${passedSymbol}[grey] test name[yellow] (1.5s)[/]"
+            FAILURE    | "  [erase-ahead,default]ClassName [red]${failedSymbol} test name[yellow] (1.5s)[/]"
     }
 
     @Unroll
@@ -181,7 +182,7 @@ class MochaThemeSpec extends Specification {
             testResultMock.endTime >> 1000000 + 10000
             testResultMock.resultType >> (failure ? FAILURE : SUCCESS) // what Gradle would do
         and:
-            theme = new MochaTheme(testLoggerExtensionMock)
+            theme = new MochaParallelTheme(testLoggerExtensionMock)
         when:
             def actual = theme.summaryText(testDescriptorMock, testResultMock)
         then:
@@ -215,20 +216,19 @@ class MochaThemeSpec extends Specification {
     def "standard stream text"() {
         given:
             testLoggerExtensionMock.showStandardStreams >> true
-            theme = new MochaTheme(testLoggerExtensionMock)
+            theme = new MochaParallelTheme(testLoggerExtensionMock)
         expect:
             theme.testStandardStreamText(streamLines) ==
-                '''|[grey]
-                   |        Hello
-                   |        World[/]
-                   |'''.stripMargin().replace('\n', lineSeparator())
-
+            '''|[grey]
+               |    Hello
+               |    World[/]
+               |'''.stripMargin().replace('\n', lineSeparator())
     }
 
     def "standard stream text when showStandardStreams is false"() {
         given:
             testLoggerExtensionMock.showStandardStreams >> false
-            theme = new MochaTheme(testLoggerExtensionMock)
+            theme = new MochaParallelTheme(testLoggerExtensionMock)
         expect:
             !theme.testStandardStreamText(streamLines)
 
@@ -237,19 +237,20 @@ class MochaThemeSpec extends Specification {
     def "suite stream text"() {
         given:
             testLoggerExtensionMock.showStandardStreams >> true
-            theme = new MochaTheme(testLoggerExtensionMock)
+            theme = new MochaParallelTheme(testLoggerExtensionMock)
         expect:
             theme.suiteStandardStreamText(streamLines) ==
-                '''|[grey]
-                   |    Hello
-                   |    World[/]
-                   |'''.stripMargin().replace('\n', lineSeparator())
+            '''|[grey]
+               |    Hello
+               |    World[/]
+               |'''.stripMargin().replace('\n', lineSeparator())
+
     }
 
     def "suite stream text when showStandardStreams is false"() {
         given:
             testLoggerExtensionMock.showStandardStreams >> false
-            theme = new MochaTheme(testLoggerExtensionMock)
+            theme = new MochaParallelTheme(testLoggerExtensionMock)
         expect:
             !theme.suiteStandardStreamText(streamLines)
 

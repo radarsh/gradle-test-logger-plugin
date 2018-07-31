@@ -15,7 +15,7 @@ abstract class AbstractFunctionalSpec extends Specification {
 
     private static final String TEST_ROOT = 'src/test-functional/resources'
 
-    private static final String GRADLE_VERSION = '4.7'
+    private static final String GRADLE_VERSION = '4.9'
 
     @Rule
     TemporaryFolder temporaryFolder
@@ -24,19 +24,42 @@ abstract class AbstractFunctionalSpec extends Specification {
     private static final def END_MARKER = '__END__'
     private static final def SUMMARY_MARKER = '__SUMMARY__'
     private static final def SUITE_MARKER = '__SUITE='
-    private static final def SUITE_MARKER_REGEX = $/$SUITE_MARKER(.*)__/$
+    private static final def TEST_MARKER = '__TEST='
+    private static final def SUITE_MARKER_REGEX = $/${SUITE_MARKER}(.*)__/$
+    private static final def TEST_MARKER_REGEX = $/${TEST_MARKER}(.*)__/$
 
     private AnsiTextRenderer ansi = new AnsiTextRenderer()
 
     protected TestLoggerOutput getLoggerOutput(String text) {
         def allLines = text.readLines()
-        def lines = allLines.subList(allLines.indexOf(START_MARKER) + 1, allLines.indexOf(SUMMARY_MARKER))
+        def lines = allLines
+            .subList(allLines.indexOf(START_MARKER) + 1, allLines.indexOf(SUMMARY_MARKER))
+            .findAll { !it.startsWith(TEST_MARKER) }
         def summary = allLines.subList(allLines.indexOf(SUMMARY_MARKER) + 1, allLines.indexOf(END_MARKER))
         def map = new LinkedHashMap<String, List<String>>()
 
         lines.each { line ->
             if (line.startsWith(SUITE_MARKER)) {
                 map << [(line.replaceFirst(SUITE_MARKER_REGEX, '$1')): []]
+            } else {
+                map.values().last() << line
+            }
+        }
+
+        new TestLoggerOutput(lines: map.sort().values().flatten(), summary: summary)
+    }
+
+    protected TestLoggerOutput getParallelLoggerOutput(String text) {
+        def allLines = text.readLines()
+        def lines = allLines
+            .subList(allLines.indexOf(START_MARKER) + 1, allLines.indexOf(SUMMARY_MARKER))
+            .findAll { !it.startsWith(SUITE_MARKER) }
+        def summary = allLines.subList(allLines.indexOf(SUMMARY_MARKER) + 1, allLines.indexOf(END_MARKER))
+        def map = new LinkedHashMap<String, List<String>>()
+
+        lines.each { line ->
+            if (line.startsWith(TEST_MARKER)) {
+                map << [(line.replaceFirst(TEST_MARKER_REGEX, '$1')): []]
             } else {
                 map.values().last() << line
             }

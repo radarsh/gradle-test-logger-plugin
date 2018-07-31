@@ -2,7 +2,7 @@
 [![CircleCI branch](https://img.shields.io/circleci/project/github/radarsh/gradle-test-logger-plugin/develop.svg?label=circleci+build)](https://circleci.com/gh/radarsh/gradle-test-logger-plugin/tree/develop)
 [![AppVeyor branch](https://img.shields.io/appveyor/ci/radarsh/gradle-test-logger-plugin/develop.svg?label=appveyor+build)](https://ci.appveyor.com/project/radarsh/gradle-test-logger-plugin/branch/develop)
 [![Coveralls branch](https://img.shields.io/coveralls/radarsh/gradle-test-logger-plugin/develop.svg)](https://coveralls.io/github/radarsh/gradle-test-logger-plugin?branch=develop)
-[![Gradle plugin](https://img.shields.io/github/tag/radarsh/gradle-test-logger-plugin.svg?label=gradle+plugin)](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
+[![Gradle plugin portal](https://img.shields.io/github/tag/radarsh/gradle-test-logger-plugin.svg?label=gradle+plugin+portal)](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
 [![License](https://img.shields.io/github/license/radarsh/gradle-test-logger-plugin.svg)](https://github.com/radarsh/gradle-test-logger-plugin/blob/develop/LICENSE)
 
 A Gradle plugin for printing beautiful logs on the console while running tests.
@@ -21,7 +21,7 @@ A Gradle plugin for printing beautiful logs on the console while running tests.
 
 ```groovy
 plugins {
-    id 'com.adarshr.test-logger' version '1.3.1'
+    id 'com.adarshr.test-logger' version '1.4.0'
 }
 ```
 
@@ -35,7 +35,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.adarshr:gradle-test-logger-plugin:1.3.1'
+        classpath 'com.adarshr:gradle-test-logger-plugin:1.4.0'
     }
 }
 
@@ -71,6 +71,9 @@ The following themes are currently supported:
 2. `standard` - displays colours but no Unicode symbols
 3. `mocha` - similar to what [Mocha's](https://github.com/mochajs/mocha) [spec reporter](https://mochajs.org/#spec)
 prints, with colours and Unicode symbols
+4. `plain-parallel` - similar to the `plain` theme but supports parallel test execution
+5. `standard-parallel` - similar to the `standard` theme but supports parallel test execution
+6. `mocha-parallel` - similar to the `mocha` theme but supports parallel test execution
 
 ### Hide exceptions
 
@@ -139,3 +142,10 @@ system settings to see Unicode symbols when using the `mocha` theme.
 ### How to disable colours and Unicode symbols at runtime such as on Jenkins consoles?
 
 You can switch off ANSI control characters and Unicode symbols by adding `--console=plain` to your Gradle command line.
+
+### Does it support parallel test execution?
+
+Yes. You will need to switch to a suitable parallel theme though. This can be one of `plain-parallel`, `standard-parallel` or
+`mocha-parallel`. The parallel themes are specially designed to work with a setting of
+[`maxParallelForks`](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.Test.html#org.gradle.api.tasks.testing.Test:maxParallelForks)
+greater than 1. They achieve this by sacrificing the ability to group tests and thus some readability is lost.

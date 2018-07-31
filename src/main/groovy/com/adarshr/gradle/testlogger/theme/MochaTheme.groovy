@@ -18,7 +18,11 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     String testText(TestDescriptor descriptor, TestResult result) {
-        def line = new StringBuilder('    [erase-ahead]')
+        testText('    [erase-ahead]', descriptor, result)
+    }
+
+    protected String testText(String start, TestDescriptor descriptor, TestResult result) {
+        def line = new StringBuilder(start)
 
         switch (result.resultType) {
             case SUCCESS:
@@ -60,25 +64,36 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     String exceptionText(TestDescriptor descriptor, TestResult result) {
-        def exceptionText = super.exceptionText(descriptor, result, 6)
+        exceptionText(descriptor, result, 6)
+    }
+
+    @Override
+    protected String exceptionText(TestDescriptor descriptor, TestResult result, int indent) {
+        def exceptionText = super.exceptionText(descriptor, result, indent)
 
         exceptionText ? "[red]${exceptionText}" : ''
     }
 
     @Override
     String summaryText(TestDescriptor descriptor, TestResult result) {
+        return summaryText(descriptor, result, 2)
+    }
+
+    protected String summaryText(TestDescriptor descriptor, TestResult result, int indent) {
         if (!showSummary) {
             return ''
         }
 
+        def indentation = ' ' * indent
         def line = new StringBuilder()
-        line << "  [erase-ahead,green]${result.successfulTestCount} passing [grey](${duration(result)})"
+
+        line << "${indentation}[erase-ahead,green]${result.successfulTestCount} passing [grey](${duration(result)})"
 
         if (result.skippedTestCount) {
-            line << "${lineSeparator()}  [erase-ahead,cyan]${result.skippedTestCount} pending"
+            line << "${lineSeparator()}${indentation}[erase-ahead,cyan]${result.skippedTestCount} pending"
         }
         if (result.failedTestCount) {
-            line << "${lineSeparator()}  [erase-ahead,red]${result.failedTestCount} failing"
+            line << "${lineSeparator()}${indentation}[erase-ahead,red]${result.failedTestCount} failing"
         }
 
         line << "[/]${lineSeparator()}"
@@ -94,7 +109,7 @@ class MochaTheme extends AbstractTheme {
         standardStreamText(lines, 8)
     }
 
-    private String standardStreamText(String lines, int indent) {
+    protected String standardStreamText(String lines, int indent) {
         if (!showStandardStreams || !lines) {
             return ''
         }

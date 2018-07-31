@@ -5,6 +5,8 @@ import org.gradle.api.tasks.testing.TestResult
 
 interface Theme {
 
+    ThemeType getType()
+
     String suiteText(TestDescriptor descriptor)
 
     String testText(TestDescriptor descriptor, TestResult result)

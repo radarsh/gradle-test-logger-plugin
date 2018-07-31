@@ -15,9 +15,12 @@ class ThemeFactorySpec extends Specification {
         expect:
             ThemeFactory.getTheme(extensionMock).class == theme
         where:
-            themeType          | theme
-            ThemeType.PLAIN    | PlainTheme
-            ThemeType.STANDARD | StandardTheme
-            ThemeType.MOCHA    | MochaTheme
+            themeType                   | theme
+            ThemeType.PLAIN             | PlainTheme
+            ThemeType.PLAIN_PARALLEL    | PlainParallelTheme
+            ThemeType.STANDARD          | StandardTheme
+            ThemeType.STANDARD_PARALLEL | StandardParallelTheme
+            ThemeType.MOCHA             | MochaTheme
+            ThemeType.MOCHA_PARALLEL    | MochaParallelTheme
     }
 }

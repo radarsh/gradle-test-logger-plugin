@@ -32,7 +32,7 @@ class TestLoggerExtension {
             return
         }
 
-        this.theme = ThemeType.valueOf(theme.toUpperCase())
+        this.theme = ThemeType.fromName(theme)
     }
 
     void setTheme(ThemeType theme) {
@@ -53,9 +53,9 @@ class TestLoggerExtension {
 
     private void override(String name, Class type) {
         if (overrides.containsKey(name)) {
-            String value = Enum.isAssignableFrom(type) ? overrides[name].toUpperCase() : overrides[name]
+            String method = Enum.isAssignableFrom(type) ? 'fromName' : 'valueOf'
 
-            setProperty(name, type.invokeMethod('valueOf', value))
+            setProperty(name, type.invokeMethod(method, overrides[name]))
         }
     }
 }
