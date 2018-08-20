@@ -7,7 +7,7 @@ interface Theme {
 
     ThemeType getType()
 
-    String suiteText(TestDescriptor descriptor)
+    String suiteText(TestDescriptor descriptor, TestResult result)
 
     String testText(TestDescriptor descriptor, TestResult result)
 
@@ -15,7 +15,7 @@ interface Theme {
 
     String summaryText(TestDescriptor descriptor, TestResult result)
 
-    String suiteStandardStreamText(String lines)
+    String suiteStandardStreamText(String lines, TestResult result)
 
-    String testStandardStreamText(String lines)
+    String testStandardStreamText(String lines, TestResult result)
 }

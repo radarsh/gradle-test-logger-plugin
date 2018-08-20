@@ -1,11 +1,11 @@
 package com.adarshr.test
 
-import spock.lang.Ignore
+
 import spock.lang.Specification
 import spock.lang.Stepwise
 
 @Stepwise
-class FirstSpec extends Specification {
+class ThirdSpec extends Specification {
 
     def setupSpec() {
         println "${getClass().simpleName} - stdout setupSpec"
@@ -34,18 +34,17 @@ class FirstSpec extends Specification {
             1 == 1
     }
 
-    def "this test should fail"() {
+    def "this test should also pass"() {
         expect:
             println "${getClass().simpleName} - ${specificationContext.currentFeature.name} - stdout expect"
             System.err.println "${getClass().simpleName} - ${specificationContext.currentFeature.name} - stderr expect"
-            1 == 2
+            1 == 1
     }
 
-    @Ignore
-    def "this test should be skipped"() {
+    def "this test should pass too"() {
         expect:
             println "${getClass().simpleName} - ${specificationContext.currentFeature.name} - stdout expect"
             System.err.println "${getClass().simpleName} - ${specificationContext.currentFeature.name} - stderr expect"
-            1 == 2
+            1 == 1
     }
 }

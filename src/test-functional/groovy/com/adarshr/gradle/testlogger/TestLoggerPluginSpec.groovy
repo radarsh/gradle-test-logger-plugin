@@ -9,7 +9,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-spock-tests',
-                'clean test'
+                'clean test --tests *FirstSpec --tests *SecondSpec'
             )
         then:
             def output = getLoggerOutput(result.output)
@@ -28,7 +28,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                    |  1 == 2
                    |    |
                    |    false
-                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:17)
+                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:41)
                    |[/]'''.stripMargin())
             lines[13] == render('[erase-ahead,bold]  Test [bold-off]this test should be skipped[yellow] SKIPPED[/]')
             lines[14] == render('')
@@ -43,7 +43,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                    |  1 == 2
                    |    |
                    |    false
-                   |      at com.adarshr.test.SecondSpec.this test should fail(SecondSpec.groovy:17)
+                   |      at com.adarshr.test.SecondSpec.this test should fail(SecondSpec.groovy:41)
                    |[/]'''.stripMargin())
             lines[27] == render('[erase-ahead,bold]  Test [bold-off]this test should be skipped[yellow] SKIPPED[/]')
         and:
@@ -319,5 +319,197 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             lines[19] == render('')
         and:
             result.task(":test").outcome == SUCCESS
+    }
+
+    def "hide passed tests"() {
+        when:
+            def result = run(
+                'sample-spock-tests',
+                '''
+                    testlogger { 
+                        showPassed false
+                        showExceptions false
+                    }
+                ''',
+                'clean test --tests *FirstSpec --tests *SecondSpec'
+            )
+        then:
+            def output = getLoggerOutput(result.output)
+            def lines = output.lines
+            def summary = output.summary
+        and:
+            lines.size() == 10
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[/]')
+            lines[4] == render('[erase-ahead,bold]  Test [bold-off]this test should be skipped[yellow] SKIPPED[/]')
+            lines[5] == render('')
+            lines[6] == render('[erase-ahead,bold]com.adarshr.test.SecondSpec[/]')
+            lines[7] == render('')
+            lines[8] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[/]')
+            lines[9] == render('[erase-ahead,bold]  Test [bold-off]this test should be skipped[yellow] SKIPPED[/]')
+        and:
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 6 tests in')
+            summary[1].endsWith render('(2 failed, 2 skipped)[/]')
+            summary[2] == render('')
+        and:
+            result.task(":test").outcome == FAILED
+    }
+
+    def "hide passed and skipped tests"() {
+        when:
+            def result = run(
+                'sample-spock-tests',
+                '''
+                    testlogger { 
+                        showPassed false
+                        showSkipped false
+                        showExceptions false
+                    }
+                ''',
+                'clean test --tests *FirstSpec --tests *SecondSpec'
+            )
+        then:
+            def output = getLoggerOutput(result.output)
+            def lines = output.lines
+            def summary = output.summary
+        and:
+            lines.size() == 8
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[/]')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]com.adarshr.test.SecondSpec[/]')
+            lines[6] == render('')
+            lines[7] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[/]')
+        and:
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 6 tests in')
+            summary[1].endsWith render('(2 failed, 2 skipped)[/]')
+            summary[2] == render('')
+        and:
+            result.task(":test").outcome == FAILED
+    }
+
+    def "hide passed, skipped and failed tests"() {
+        when:
+            def result = run(
+                'sample-spock-tests',
+                '''
+                    testlogger { 
+                        showPassed false
+                        showSkipped false
+                        showFailed false
+                        showExceptions false
+                    }
+                ''',
+                'clean test --tests *FirstSpec --tests *SecondSpec'
+            )
+        then:
+            def output = getLoggerOutput(result.output)
+            def lines = output.lines
+            def summary = output.summary
+        and:
+            lines.size() == 0
+        and:
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 6 tests in')
+            summary[1].endsWith render('(2 failed, 2 skipped)[/]')
+            summary[2] == render('')
+        and:
+            result.task(":test").outcome == FAILED
+    }
+
+    def "hiding tests also hides its corresponding standard stream output"() {
+        when:
+            def result = run(
+                'sample-spock-tests',
+                '''
+                    testlogger { 
+                        showPassed false
+                        showSkipped false
+                        showExceptions false
+                        showStandardStreams true
+                    }
+                ''',
+                'clean test --tests *FirstSpec'
+            )
+        then:
+            def output = getLoggerOutput(result.output)
+            def lines = output.lines
+            def summary = output.summary
+        and:
+            lines.size() == 20
+            lines[0] == render('[default]')
+            lines[1] == render('  FirstSpec - stdout setupSpec')
+            lines[2] == render('  FirstSpec - stderr setupSpec[/]')
+            lines[3] == render('')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[/]')
+            lines[6] == render('')
+            lines[7] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[/]')
+            lines[8] == render('[default]')
+            lines[9] == render('    FirstSpec - this test should fail - stdout setup')
+            lines[10] == render('    FirstSpec - this test should fail - stderr setup')
+            lines[11] == render('    FirstSpec - this test should fail - stdout expect')
+            lines[12] == render('    FirstSpec - this test should fail - stderr expect')
+            lines[13] == render('    FirstSpec - this test should fail - stdout cleanup')
+            lines[14] == render('    FirstSpec - this test should fail - stderr cleanup[/]')
+            lines[15] == render('')
+            lines[16] == render('[default]')
+            lines[17] == render('  FirstSpec - stdout cleanupSpec')
+            lines[18] == render('  FirstSpec - stderr cleanupSpec[/]')
+            lines[19] == render('')
+        and:
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 3 tests in')
+            summary[1].endsWith render('(1 failed, 1 skipped)[/]')
+            summary[2] == render('')
+        and:
+            result.task(":test").outcome == FAILED
+    }
+
+    def "hiding passed tests hides all output from suite if all tests in the suite pass"() {
+        when:
+            def result = run(
+                'sample-spock-tests',
+                '''
+                    testlogger {
+                        showPassed false
+                        showSkipped true
+                        showFailed false
+                        showStandardStreams true
+                    }
+                ''',
+                'clean test --tests *FirstSpec --tests *ThirdSpec'
+            )
+        then:
+            def output = getLoggerOutput(result.output)
+            def lines = output.lines
+            def summary = output.summary
+        and:
+            lines.size() == 12
+            lines[0] == render('[default]')
+            lines[1] == render('  FirstSpec - stdout setupSpec')
+            lines[2] == render('  FirstSpec - stderr setupSpec[/]')
+            lines[3] == render('')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[/]')
+            lines[6] == render('')
+            lines[7] == render('[erase-ahead,bold]  Test [bold-off]this test should be skipped[yellow] SKIPPED[/]')
+            lines[8] == render('[default]')
+            lines[9] == render('  FirstSpec - stdout cleanupSpec')
+            lines[10] == render('  FirstSpec - stderr cleanupSpec[/]')
+            lines[11] == render('')
+        and:
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 6 tests in')
+            summary[1].endsWith render('(1 failed, 1 skipped)[/]')
+            summary[2] == render('')
+        and:
+            result.task(":test").outcome == FAILED
     }
 }
