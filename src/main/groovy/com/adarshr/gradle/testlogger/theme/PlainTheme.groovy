@@ -17,12 +17,12 @@ class PlainTheme extends AbstractTheme {
     ]
 
     @Override
-    String suiteText(TestDescriptor descriptor) {
+    protected String suiteTextInternal(TestDescriptor descriptor) {
         "${escape(descriptor.className)}${lineSeparator()}"
     }
 
     @Override
-    String testText(TestDescriptor descriptor, TestResult result) {
+    protected String testTextInternal(TestDescriptor descriptor, TestResult result) {
         testText("  Test ${displayName(descriptor)} ${RESULT_TYPE_MAPPING[result.resultType]}", descriptor, result)
     }
 
@@ -75,12 +75,12 @@ class PlainTheme extends AbstractTheme {
     }
 
     @Override
-    String suiteStandardStreamText(String lines) {
+    protected String suiteStandardStreamTextInternal(String lines) {
         standardStreamText(lines, 2)
     }
 
     @Override
-    String testStandardStreamText(String lines) {
+    protected String testStandardStreamTextInternal(String lines) {
         standardStreamText(lines, 4)
     }
 

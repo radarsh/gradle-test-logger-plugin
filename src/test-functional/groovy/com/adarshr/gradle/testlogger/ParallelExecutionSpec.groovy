@@ -1,6 +1,6 @@
 package com.adarshr.gradle.testlogger
 
-
+import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class ParallelExecutionSpec extends AbstractFunctionalSpec {
@@ -85,5 +85,199 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
             lines[16] == render('')
         and:
             result.task(":test").outcome == SUCCESS
+    }
+
+    def "hide passed tests"() {
+        when:
+            def result = run(
+                'sample-spock-tests',
+                '''
+                    test {
+                        maxParallelForks = gradle.startParameter.maxWorkerCount
+                    }
+                    testlogger {
+                        theme 'standard-parallel'
+                        showPassed false
+                        showExceptions false
+                    }
+                ''',
+                'clean test --tests *FirstSpec --tests *SecondSpec'
+            )
+        then:
+            def output = getParallelLoggerOutput(result.output)
+            def lines = output.lines
+            def summary = output.summary
+        and:
+            lines.size() == 4
+            lines[0] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[bold-off] this test should be skipped[yellow] SKIPPED[/]')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[bold-off] this test should fail[red] FAILED[/]')
+            lines[2] == render('[erase-ahead,bold]com.adarshr.test.SecondSpec[bold-off] this test should be skipped[yellow] SKIPPED[/]')
+            lines[3] == render('[erase-ahead,bold]com.adarshr.test.SecondSpec[bold-off] this test should fail[red] FAILED[/]')
+        and:
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 6 tests in')
+            summary[1].endsWith render('(2 failed, 2 skipped)[/]')
+            summary[2] == render('')
+        and:
+            result.task(":test").outcome == FAILED
+    }
+
+    def "hide passed and skipped tests"() {
+        when:
+            def result = run(
+                'sample-spock-tests',
+                '''
+                    test {
+                        maxParallelForks = gradle.startParameter.maxWorkerCount
+                    }
+                    testlogger {
+                        theme 'standard-parallel'
+                        showPassed false
+                        showSkipped false
+                        showExceptions false
+                    }
+                ''',
+                'clean test --tests *FirstSpec --tests *SecondSpec'
+            )
+        then:
+            def output = getParallelLoggerOutput(result.output)
+            def lines = output.lines
+            def summary = output.summary
+        and:
+            lines.size() == 2
+            lines[0] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[bold-off] this test should fail[red] FAILED[/]')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.SecondSpec[bold-off] this test should fail[red] FAILED[/]')
+        and:
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 6 tests in')
+            summary[1].endsWith render('(2 failed, 2 skipped)[/]')
+            summary[2] == render('')
+        and:
+            result.task(":test").outcome == FAILED
+    }
+
+    def "hide passed, skipped and failed tests"() {
+        when:
+            def result = run(
+                'sample-spock-tests',
+                '''
+                    test {
+                        maxParallelForks = gradle.startParameter.maxWorkerCount
+                    }
+                    testlogger {
+                        theme 'standard-parallel'
+                        showPassed false
+                        showSkipped false
+                        showFailed false
+                        showExceptions false
+                    }
+                ''',
+                'clean test --tests *FirstSpec --tests *SecondSpec'
+            )
+        then:
+            def output = getParallelLoggerOutput(result.output)
+            def lines = output.lines
+            def summary = output.summary
+        and:
+            lines.size() == 0
+        and:
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 6 tests in')
+            summary[1].endsWith render('(2 failed, 2 skipped)[/]')
+            summary[2] == render('')
+        and:
+            result.task(":test").outcome == FAILED
+    }
+
+    def "hiding tests also hides its corresponding standard stream output"() {
+        when:
+            def result = run(
+                'sample-spock-tests',
+                '''
+                    test {
+                        maxParallelForks = gradle.startParameter.maxWorkerCount
+                    }
+                    testlogger {
+                        theme 'standard-parallel'
+                        showPassed false
+                        showSkipped false
+                        showExceptions false
+                        showStandardStreams true
+                    }
+                ''',
+                'clean test --tests *FirstSpec'
+            )
+        then:
+            def output = getParallelLoggerOutput(result.output)
+            def lines = output.lines
+            def summary = output.summary
+        and:
+            lines.size() == 17
+            lines[0] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[bold-off] this test should fail[red] FAILED[/]')
+            lines[1] == render('[default]')
+            lines[2] == render('  FirstSpec - stdout setupSpec')
+            lines[3] == render('  FirstSpec - stderr setupSpec[/]')
+            lines[4] == render('')
+            lines[5] == render('[default]')
+            lines[6] == render('  FirstSpec - this test should fail - stdout setup')
+            lines[7] == render('  FirstSpec - this test should fail - stderr setup')
+            lines[8] == render('  FirstSpec - this test should fail - stdout expect')
+            lines[9] == render('  FirstSpec - this test should fail - stderr expect')
+            lines[10] == render('  FirstSpec - this test should fail - stdout cleanup')
+            lines[11] == render('  FirstSpec - this test should fail - stderr cleanup[/]')
+            lines[12] == render('')
+            lines[13] == render('[default]')
+            lines[14] == render('  FirstSpec - stdout cleanupSpec')
+            lines[15] == render('  FirstSpec - stderr cleanupSpec[/]')
+            lines[16] == render('')
+        and:
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 3 tests in')
+            summary[1].endsWith render('(1 failed, 1 skipped)[/]')
+            summary[2] == render('')
+        and:
+            result.task(":test").outcome == FAILED
+    }
+
+    def "hiding passed tests hides all output from suite if all tests in the suite pass"() {
+        when:
+            def result = run(
+                'sample-spock-tests',
+                '''
+                    test {
+                        maxParallelForks = gradle.startParameter.maxWorkerCount
+                    }
+                    testlogger {
+                        theme 'standard-parallel\'
+                        showPassed false
+                        showSkipped true
+                        showFailed false
+                        showStandardStreams true
+                    }
+                ''',
+                'clean test --tests *FirstSpec --tests *ThirdSpec'
+            )
+        then:
+            def output = getLoggerOutput(result.output)
+            def lines = output.lines
+            def summary = output.summary
+        and:
+            lines.size() == 9
+            lines[0] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[bold-off] this test should be skipped[yellow] SKIPPED[/]')
+            lines[1] == render('[default]')
+            lines[2] == render('  FirstSpec - stdout setupSpec')
+            lines[3] == render('  FirstSpec - stderr setupSpec[/]')
+            lines[4] == render('')
+            lines[5] == render('[default]')
+            lines[6] == render('  FirstSpec - stdout cleanupSpec')
+            lines[7] == render('  FirstSpec - stderr cleanupSpec[/]')
+            lines[8] == render('')
+        and:
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 6 tests in')
+            summary[1].endsWith render('(1 failed, 1 skipped)[/]')
+            summary[2] == render('')
+        and:
+            result.task(":test").outcome == FAILED
     }
 }

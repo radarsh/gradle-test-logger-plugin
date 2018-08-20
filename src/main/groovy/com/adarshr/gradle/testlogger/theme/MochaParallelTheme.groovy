@@ -8,12 +8,12 @@ import org.gradle.api.tasks.testing.TestResult
 class MochaParallelTheme extends MochaTheme {
 
     @Override
-    String suiteText(TestDescriptor descriptor) {
+    protected String suiteTextInternal(TestDescriptor descriptor) {
         ''
     }
 
     @Override
-    String testText(TestDescriptor descriptor, TestResult result) {
+    protected String testTextInternal(TestDescriptor descriptor, TestResult result) {
         super.testText("  [erase-ahead,default]${escape(descriptor.className)} ", descriptor, result)
     }
 
@@ -28,12 +28,12 @@ class MochaParallelTheme extends MochaTheme {
     }
 
     @Override
-    String suiteStandardStreamText(String lines) {
+    protected String suiteStandardStreamTextInternal(String lines) {
         super.standardStreamText(lines, 4)
     }
 
     @Override
-    String testStandardStreamText(String lines) {
+    protected String testStandardStreamTextInternal(String lines) {
         super.standardStreamText(lines, 4)
     }
 }

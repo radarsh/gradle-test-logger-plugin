@@ -12,12 +12,12 @@ import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 class MochaTheme extends AbstractTheme {
 
     @Override
-    String suiteText(TestDescriptor descriptor) {
+    protected String suiteTextInternal(TestDescriptor descriptor) {
         "  [erase-ahead,default]${escape(descriptor.className)}[/]${lineSeparator()}"
     }
 
     @Override
-    String testText(TestDescriptor descriptor, TestResult result) {
+    protected String testTextInternal(TestDescriptor descriptor, TestResult result) {
         testText('    [erase-ahead]', descriptor, result)
     }
 
@@ -100,12 +100,12 @@ class MochaTheme extends AbstractTheme {
     }
 
     @Override
-    String suiteStandardStreamText(String lines) {
+    protected String suiteStandardStreamTextInternal(String lines) {
         standardStreamText(lines, 4)
     }
 
     @Override
-    String testStandardStreamText(String lines) {
+    protected String testStandardStreamTextInternal(String lines) {
         standardStreamText(lines, 8)
     }
 

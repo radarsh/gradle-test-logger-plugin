@@ -56,6 +56,7 @@ The convention used for determining the name of the system property is `testlogg
 - [Define slow threshold](#define-slow-threshold)
 - [Hide summary](#hide-summary)
 - [Show standard streams](#show-standard-streams)
+- [Filter test results](#filter-test-results)
 
 ### Switch themes
 
@@ -128,6 +129,25 @@ testlogger {
     showStandardStreams true
 }
 ```
+
+### Filter test results
+
+Sometimes it is useful to hide test results of a certain type. For instance, if an application has hundreds of tests, the
+sheer volume of the output produced by passing tests could be enough to bury any valuable test failures. Similarly there
+might be a need to hide skipped tests or in rare instances even the failed ones.
+
+We can perform test result filtering by using the below settings.
+
+```groovy
+testlogger {
+    showPassed false
+    showSkipped false
+    showFailed true
+}
+```
+
+By default all the above three flags are turned on. If you have chosen to display standard streams by setting
+`showStandardStreams` flag to `true`, any output produced by filtered out tests will not be displayed.
 
 ## FAQ
 

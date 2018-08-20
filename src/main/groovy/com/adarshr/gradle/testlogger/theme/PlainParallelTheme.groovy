@@ -8,22 +8,22 @@ import org.gradle.api.tasks.testing.TestResult
 class PlainParallelTheme extends PlainTheme {
 
     @Override
-    String suiteText(TestDescriptor descriptor) {
+    protected String suiteTextInternal(TestDescriptor descriptor) {
         ''
     }
 
     @Override
-    String testText(TestDescriptor descriptor, TestResult result) {
+    protected String testTextInternal(TestDescriptor descriptor, TestResult result) {
         super.testText("${escape(descriptor.className)} ${displayName(descriptor)} ${RESULT_TYPE_MAPPING[result.resultType]}", descriptor, result)
     }
 
     @Override
-    String suiteStandardStreamText(String lines) {
+    protected String suiteStandardStreamTextInternal(String lines) {
         super.standardStreamText(lines, 2)
     }
 
     @Override
-    String testStandardStreamText(String lines) {
+    protected String testStandardStreamTextInternal(String lines) {
         super.standardStreamText(lines, 2)
     }
 }

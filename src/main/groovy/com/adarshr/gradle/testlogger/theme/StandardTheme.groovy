@@ -11,12 +11,12 @@ import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 class StandardTheme extends AbstractTheme {
 
     @Override
-    String suiteText(TestDescriptor descriptor) {
+    protected String suiteTextInternal(TestDescriptor descriptor) {
         "[erase-ahead,bold]${escape(descriptor.className)}[/]${lineSeparator()}"
     }
 
     @Override
-    String testText(TestDescriptor descriptor, TestResult result) {
+    protected String testTextInternal(TestDescriptor descriptor, TestResult result) {
         testText("[erase-ahead,bold]  Test [bold-off]${displayName(descriptor)}", descriptor, result)
     }
 
@@ -92,12 +92,12 @@ class StandardTheme extends AbstractTheme {
     }
 
     @Override
-    String suiteStandardStreamText(String lines) {
+    protected String suiteStandardStreamTextInternal(String lines) {
         standardStreamText(lines, 2)
     }
 
     @Override
-    String testStandardStreamText(String lines) {
+    protected String testStandardStreamTextInternal(String lines) {
         standardStreamText(lines, 4)
     }
 
