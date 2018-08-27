@@ -1,1 +1,3 @@
 rootProject.name = 'gradle-test-logger-plugin'
+
+enableFeaturePreview('STABLE_PUBLISHING')
