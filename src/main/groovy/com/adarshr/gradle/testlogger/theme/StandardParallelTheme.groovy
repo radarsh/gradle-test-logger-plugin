@@ -1,34 +1,34 @@
 package com.adarshr.gradle.testlogger.theme
 
+import com.adarshr.gradle.testlogger.TestDescriptorWrapper
+import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.InheritConstructors
-import org.gradle.api.tasks.testing.TestDescriptor
-import org.gradle.api.tasks.testing.TestResult
 
 @InheritConstructors
 class StandardParallelTheme extends StandardTheme {
 
     @Override
-    protected String suiteTextInternal(TestDescriptor descriptor) {
+    protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
         ''
     }
 
     @Override
-    protected String testTextInternal(TestDescriptor descriptor, TestResult result) {
-        super.testText("[erase-ahead,bold]${escape(descriptor.className)}[bold-off] ${displayName(descriptor)}", descriptor, result)
+    protected String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result) {
+        super.testTextInternal("[erase-ahead,bold]${descriptor.className}[bold-off] ${descriptor.displayName}", descriptor, result)
     }
 
     @Override
-    String exceptionText(TestDescriptor descriptor, TestResult result) {
+    String exceptionText(TestDescriptorWrapper descriptor, TestResultWrapper result) {
         super.exceptionText(descriptor, result, 2)
     }
 
     @Override
     protected String suiteStandardStreamTextInternal(String lines) {
-        super.standardStreamText(lines, 2)
+        super.standardStreamTextInternal(lines, 2)
     }
 
     @Override
     protected String testStandardStreamTextInternal(String lines) {
-        super.standardStreamText(lines, 2)
+        super.standardStreamTextInternal(lines, 2)
     }
 }

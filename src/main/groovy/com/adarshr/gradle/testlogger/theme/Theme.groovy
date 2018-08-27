@@ -1,21 +1,21 @@
 package com.adarshr.gradle.testlogger.theme
 
-import org.gradle.api.tasks.testing.TestDescriptor
-import org.gradle.api.tasks.testing.TestResult
+import com.adarshr.gradle.testlogger.TestDescriptorWrapper
+import com.adarshr.gradle.testlogger.TestResultWrapper
 
 interface Theme {
 
     ThemeType getType()
 
-    String suiteText(TestDescriptor descriptor, TestResult result)
+    String suiteText(TestDescriptorWrapper descriptor, TestResultWrapper result)
 
-    String testText(TestDescriptor descriptor, TestResult result)
+    String testText(TestDescriptorWrapper descriptor, TestResultWrapper result)
 
-    String exceptionText(TestDescriptor descriptor, TestResult result)
+    String exceptionText(TestDescriptorWrapper descriptor, TestResultWrapper result)
 
-    String summaryText(TestDescriptor descriptor, TestResult result)
+    String summaryText(TestDescriptorWrapper descriptor, TestResultWrapper result)
 
-    String suiteStandardStreamText(String lines, TestResult result)
+    String suiteStandardStreamText(String lines, TestResultWrapper result)
 
-    String testStandardStreamText(String lines, TestResult result)
+    String testStandardStreamText(String lines, TestResultWrapper result)
 }

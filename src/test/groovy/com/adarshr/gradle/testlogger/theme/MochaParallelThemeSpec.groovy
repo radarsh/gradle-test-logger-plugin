@@ -1,8 +1,6 @@
 package com.adarshr.gradle.testlogger.theme
 
 
-import org.gradle.api.tasks.testing.TestDescriptor
-import org.gradle.api.tasks.testing.TestResult
 import spock.lang.Unroll
 import spock.util.environment.OperatingSystem
 
@@ -38,22 +36,21 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
     def "after test with result type #resultType on #os"() {
         given:
             System.setProperty('os.name', os)
-            def testResultMock = Mock(TestResult)
-            setupResultTypeExpectation(testResultMock, resultType)
+            testResultMock.resultType >> resultType
             testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name [escaped]'
+            testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
             actual == expected
         where:
             os            | resultType | expected
-            'Windows 8.1' | SUCCESS    | '  [erase-ahead,default]ClassName [green]√[grey] test name \\[escaped\\][/]'
-            'Windows 8.1' | FAILURE    | '  [erase-ahead,default]ClassName [red]X test name \\[escaped\\][/]'
-            'Windows 8.1' | SKIPPED    | '  [erase-ahead,default]ClassName [cyan]- test name \\[escaped\\][/]'
-            'Linux'       | SUCCESS    | '  [erase-ahead,default]ClassName [green]✔[grey] test name \\[escaped\\][/]'
-            'Linux'       | FAILURE    | '  [erase-ahead,default]ClassName [red]✘ test name \\[escaped\\][/]'
-            'Linux'       | SKIPPED    | '  [erase-ahead,default]ClassName [cyan]- test name \\[escaped\\][/]'
+            'Windows 8.1' | SUCCESS    | '  [erase-ahead,default]ClassName [green]√[grey] test name[/]'
+            'Windows 8.1' | FAILURE    | '  [erase-ahead,default]ClassName [red]X test name[/]'
+            'Windows 8.1' | SKIPPED    | '  [erase-ahead,default]ClassName [cyan]- test name[/]'
+            'Linux'       | SUCCESS    | '  [erase-ahead,default]ClassName [green]✔[grey] test name[/]'
+            'Linux'       | FAILURE    | '  [erase-ahead,default]ClassName [red]✘ test name[/]'
+            'Linux'       | SKIPPED    | '  [erase-ahead,default]ClassName [cyan]- test name[/]'
     }
 
     def "after test with result type failure and showExceptions true"() {
@@ -62,10 +59,9 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showExceptions >> true
             theme = new MochaParallelTheme(testLoggerExtensionMock)
         and:
-            def testResultMock = Mock(TestResult)
-            setupResultTypeExpectation(testResultMock, FAILURE)
+            testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
-            testDescriptorMock.name >> 'floppy test'
+            testDescriptorMock.displayName >> 'floppy test'
             testDescriptorMock.className >> this.class.name
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -78,30 +74,6 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
                    |[/]""".stripMargin().replace('\n', lineSeparator())
     }
 
-    def "after test uses displayName property if present"() {
-        given:
-            System.setProperty('os.name', 'Linux')
-        and:
-            testDescriptorMock = GroovyMock(TestDescriptor)
-            testDescriptorMock.properties >> [displayName: 'display test name [escaped]']
-            testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name [escaped]'
-        expect:
-            theme.testText(testDescriptorMock, testResultMock) == '  [erase-ahead,default]ClassName [green]✔[grey] display test name \\[escaped\\][/]'
-    }
-
-    def "after test does not error when displayName property is missing"() {
-        given:
-            System.setProperty('os.name', 'Linux')
-        and:
-            testDescriptorMock = GroovyMock(TestDescriptor)
-            testDescriptorMock.properties >> [:]
-            testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name [escaped]'
-        expect:
-            theme.testText(testDescriptorMock, testResultMock) == '  [erase-ahead,default]ClassName [green]✔[grey] test name \\[escaped\\][/]'
-    }
-
     def "exception text when showExceptions is true"() {
         given:
             testLoggerExtensionMock.showExceptions >> true
@@ -109,7 +81,7 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
         and:
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
-            testDescriptorMock.name >> 'floppy test'
+            testDescriptorMock.displayName >> 'floppy test'
             testDescriptorMock.className >> this.class.name
         expect:
             theme.exceptionText(testDescriptorMock, testResultMock) ==
@@ -123,9 +95,8 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
     def "exception text when showExceptions is false"() {
         given:
             testLoggerExtensionMock.showExceptions >> false
-            def testResultMock = Mock(TestResult)
-            setupResultTypeExpectation(testResultMock, FAILURE)
-            testDescriptorMock.name >> 'floppy test'
+            testResultMock.resultType >> FAILURE
+            testDescriptorMock.displayName >> 'floppy test'
         expect:
             !theme.exceptionText(testDescriptorMock, testResultMock)
     }
@@ -133,12 +104,11 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
     @Unroll
     def "show duration if slowThreshold is exceeded for resultType #resultType"() {
         given:
-            def testResultMock = Mock(TestResult)
-            setupResultTypeExpectation(testResultMock, resultType)
-            testResultMock.startTime >> 1000000
-            testResultMock.endTime >> 1000000 + 10000
+            testResultMock.resultType >> resultType
+            testResultMock.duration >> '10s'
+            testResultMock.tooSlow >> true
             testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name'
+            testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -152,12 +122,11 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
     @Unroll
     def "show duration if slowThreshold is approaching for resultType #resultType"() {
         given:
-            def testResultMock = Mock(TestResult)
-            setupResultTypeExpectation(testResultMock, resultType)
-            testResultMock.startTime >> 1000000
-            testResultMock.endTime >> 1000000 + 1500 // slow threshold is 2s
+            testResultMock.resultType >> resultType
+            testResultMock.duration >> '1.5s'
+            testResultMock.mediumSlow >> true
             testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name'
+            testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -172,13 +141,11 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
     def "summary text given #success success, #failure failed and #skipped skipped tests"() {
         given:
             testLoggerExtensionMock.showSummary >> true
-            def testResultMock = Mock(TestResult)
             testResultMock.successfulTestCount >> success
             testResultMock.failedTestCount >> failure
             testResultMock.skippedTestCount >> skipped
             testResultMock.testCount >> success + failure + skipped
-            testResultMock.startTime >> 1000000
-            testResultMock.endTime >> 1000000 + 10000
+            testResultMock.duration >> '10s'
             testResultMock.resultType >> (failure ? FAILURE : SUCCESS) // what Gradle would do
         and:
             theme = new MochaParallelTheme(testLoggerExtensionMock)

@@ -1,29 +1,29 @@
 package com.adarshr.gradle.testlogger.theme
 
+import com.adarshr.gradle.testlogger.TestDescriptorWrapper
+import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.InheritConstructors
-import org.gradle.api.tasks.testing.TestDescriptor
-import org.gradle.api.tasks.testing.TestResult
 
 @InheritConstructors
 class PlainParallelTheme extends PlainTheme {
 
     @Override
-    protected String suiteTextInternal(TestDescriptor descriptor) {
+    protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
         ''
     }
 
     @Override
-    protected String testTextInternal(TestDescriptor descriptor, TestResult result) {
-        super.testText("${escape(descriptor.className)} ${displayName(descriptor)} ${RESULT_TYPE_MAPPING[result.resultType]}", descriptor, result)
+    protected String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result) {
+        super.testTextInternal("${descriptor.className} ${descriptor.displayName} ${RESULT_TYPE_MAPPING[result.resultType]}", descriptor, result)
     }
 
     @Override
     protected String suiteStandardStreamTextInternal(String lines) {
-        super.standardStreamText(lines, 2)
+        super.standardStreamTextInternal(lines, 2)
     }
 
     @Override
     protected String testStandardStreamTextInternal(String lines) {
-        super.standardStreamText(lines, 2)
+        super.standardStreamTextInternal(lines, 2)
     }
 }

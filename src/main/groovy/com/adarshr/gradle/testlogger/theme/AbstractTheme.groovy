@@ -1,10 +1,10 @@
 package com.adarshr.gradle.testlogger.theme
 
+import com.adarshr.gradle.testlogger.TestDescriptorWrapper
 import com.adarshr.gradle.testlogger.TestLoggerExtension
-import com.adarshr.gradle.testlogger.util.TimeUtils
-import org.gradle.api.tasks.testing.TestDescriptor
-import org.gradle.api.tasks.testing.TestResult
+import com.adarshr.gradle.testlogger.TestResultWrapper
 
+import static com.adarshr.gradle.testlogger.util.RendererUtils.escape
 import static java.lang.System.lineSeparator
 
 @SuppressWarnings("GrMethodMayBeStatic")
@@ -32,52 +32,39 @@ abstract class AbstractTheme implements Theme {
     }
 
     @Override
-    final String suiteText(TestDescriptor descriptor, TestResult result) {
-        canLog(result) ? suiteTextInternal(descriptor) : ''
+    final String suiteText(TestDescriptorWrapper descriptor, TestResultWrapper result) {
+        result.loggable ? suiteTextInternal(descriptor) : ''
     }
 
-    protected abstract String suiteTextInternal(TestDescriptor descriptor)
+    protected abstract String suiteTextInternal(TestDescriptorWrapper descriptor)
 
     @Override
-    final String testText(TestDescriptor descriptor, TestResult result) {
-        canLog(result) ? testTextInternal(descriptor, result) : ''
+    final String testText(TestDescriptorWrapper descriptor, TestResultWrapper result) {
+        result.loggable ? testTextInternal(descriptor, result) : ''
     }
 
-    protected abstract String testTextInternal(TestDescriptor descriptor, TestResult result)
+    protected abstract String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result)
 
     @Override
-    String exceptionText(TestDescriptor descriptor, TestResult result) {
+    String exceptionText(TestDescriptorWrapper descriptor, TestResultWrapper result) {
         exceptionText(descriptor, result, 2)
     }
 
     @Override
-    final String suiteStandardStreamText(String lines, TestResult result) {
-        canLog(result) ? suiteStandardStreamTextInternal(lines) : ''
+    final String suiteStandardStreamText(String lines, TestResultWrapper result) {
+        result.loggable ? suiteStandardStreamTextInternal(lines) : ''
     }
 
     protected abstract suiteStandardStreamTextInternal(String lines)
 
     @Override
-    final String testStandardStreamText(String lines, TestResult result) {
-        canLog(result) ? testStandardStreamTextInternal(lines) : ''
+    final String testStandardStreamText(String lines, TestResultWrapper result) {
+        result.loggable ? testStandardStreamTextInternal(lines) : ''
     }
 
     protected abstract testStandardStreamTextInternal(String lines)
 
-    private boolean canLog(TestResult result) {
-        showPassed && result.successfulTestCount ||
-            showSkipped && result.skippedTestCount ||
-            showFailed && result.failedTestCount
-    }
-
-    protected String escape(String text) {
-        text
-            .replace('\u001B', '')
-            .replace('[', '\\[')
-            .replace(']', '\\]')
-    }
-
-    protected String exceptionText(TestDescriptor descriptor, TestResult result, int indent) {
+    protected String exceptionText(TestDescriptorWrapper descriptor, TestResultWrapper result, int indent) {
         def line = new StringBuilder()
 
         if (showExceptions) {
@@ -101,21 +88,5 @@ abstract class AbstractTheme implements Theme {
         }
 
         line
-    }
-
-    protected boolean tooSlow(TestResult result) {
-        (result.endTime - result.startTime) >= slowThreshold
-    }
-
-    protected boolean mediumSlow(TestResult result) {
-        (result.endTime - result.startTime) >= slowThreshold / 2
-    }
-
-    protected String duration(TestResult result) {
-        TimeUtils.humanDuration(result.endTime - result.startTime)
-    }
-
-    protected String displayName(TestDescriptor descriptor) {
-        escape(descriptor.properties.displayName ?: descriptor.name)
     }
 }

@@ -1,8 +1,8 @@
 package com.adarshr.gradle.testlogger.theme
 
+import com.adarshr.gradle.testlogger.TestDescriptorWrapper
+import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.InheritConstructors
-import org.gradle.api.tasks.testing.TestDescriptor
-import org.gradle.api.tasks.testing.TestResult
 
 import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
@@ -11,16 +11,16 @@ import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 class StandardTheme extends AbstractTheme {
 
     @Override
-    protected String suiteTextInternal(TestDescriptor descriptor) {
-        "[erase-ahead,bold]${escape(descriptor.className)}[/]${lineSeparator()}"
+    protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
+        "[erase-ahead,bold]${descriptor.className}[/]${lineSeparator()}"
     }
 
     @Override
-    protected String testTextInternal(TestDescriptor descriptor, TestResult result) {
-        testText("[erase-ahead,bold]  Test [bold-off]${displayName(descriptor)}", descriptor, result)
+    protected String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result) {
+        testTextInternal("[erase-ahead,bold]  Test [bold-off]${descriptor.displayName}", descriptor, result)
     }
 
-    protected String testText(String start, TestDescriptor descriptor, TestResult result) {
+    protected String testTextInternal(String start, TestDescriptorWrapper descriptor, TestResultWrapper result) {
         def line = new StringBuilder(start)
 
         switch (result.resultType) {
@@ -41,23 +41,23 @@ class StandardTheme extends AbstractTheme {
         line << '[/]'
     }
 
-    private void showDurationIfSlow(TestResult result, StringBuilder line) {
-        if (tooSlow(result)) {
-            line << "[red] (${duration(result)})"
-        } else if (mediumSlow(result)) {
-            line << "[yellow] (${duration(result)})"
+    private void showDurationIfSlow(TestResultWrapper result, StringBuilder line) {
+        if (result.tooSlow) {
+            line << "[red] (${result.duration})"
+        } else if (result.mediumSlow) {
+            line << "[yellow] (${result.duration})"
         }
     }
 
     @Override
-    protected String exceptionText(TestDescriptor descriptor, TestResult result, int indent) {
+    protected String exceptionText(TestDescriptorWrapper descriptor, TestResultWrapper result, int indent) {
         def exceptionText = super.exceptionText(descriptor, result, indent)
 
         exceptionText ? "[red]${exceptionText}" : ''
     }
 
     @Override
-    String summaryText(TestDescriptor descriptor, TestResult result) {
+    String summaryText(TestDescriptorWrapper descriptor, TestResultWrapper result) {
         if (!showSummary) {
             return ''
         }
@@ -66,7 +66,7 @@ class StandardTheme extends AbstractTheme {
         def line = new StringBuilder()
 
         line << "[erase-ahead,bold,${colour}]${result.resultType}: "
-        line << "[default]Executed ${result.testCount} tests in ${duration(result)}"
+        line << "[default]Executed ${result.testCount} tests in ${result.duration}"
 
         def breakdown = getBreakdown(result)
 
@@ -77,7 +77,7 @@ class StandardTheme extends AbstractTheme {
         line << "[/]${lineSeparator()}"
     }
 
-    private static List getBreakdown(TestResult result) {
+    private static List getBreakdown(TestResultWrapper result) {
         def breakdown = []
 
         if (result.failedTestCount) {
@@ -93,15 +93,15 @@ class StandardTheme extends AbstractTheme {
 
     @Override
     protected String suiteStandardStreamTextInternal(String lines) {
-        standardStreamText(lines, 2)
+        standardStreamTextInternal(lines, 2)
     }
 
     @Override
     protected String testStandardStreamTextInternal(String lines) {
-        standardStreamText(lines, 4)
+        standardStreamTextInternal(lines, 4)
     }
 
-    protected String standardStreamText(String lines, int indent) {
+    protected String standardStreamTextInternal(String lines, int indent) {
         if (!showStandardStreams || !lines) {
             return ''
         }

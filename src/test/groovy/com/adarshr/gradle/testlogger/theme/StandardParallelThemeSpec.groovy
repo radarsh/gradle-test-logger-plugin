@@ -1,8 +1,6 @@
 package com.adarshr.gradle.testlogger.theme
 
 
-import org.gradle.api.tasks.testing.TestDescriptor
-import org.gradle.api.tasks.testing.TestResult
 import spock.lang.Unroll
 
 import static java.lang.System.lineSeparator
@@ -31,19 +29,18 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
     @Unroll
     def "after test with result type #resultType"() {
         given:
-            def testResultMock = Mock(TestResult)
-            setupResultTypeExpectation(testResultMock, resultType)
+            testResultMock.resultType >> resultType
             testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name [escaped]'
+            testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
             actual == expected
         where:
             resultType | expected
-            SUCCESS    | '[erase-ahead,bold]ClassName[bold-off] test name \\[escaped\\][green] PASSED[/]'
-            FAILURE    | '[erase-ahead,bold]ClassName[bold-off] test name \\[escaped\\][red] FAILED[/]'
-            SKIPPED    | '[erase-ahead,bold]ClassName[bold-off] test name \\[escaped\\][yellow] SKIPPED[/]'
+            SUCCESS    | '[erase-ahead,bold]ClassName[bold-off] test name[green] PASSED[/]'
+            FAILURE    | '[erase-ahead,bold]ClassName[bold-off] test name[red] FAILED[/]'
+            SKIPPED    | '[erase-ahead,bold]ClassName[bold-off] test name[yellow] SKIPPED[/]'
     }
 
     def "after test with result type failure and showExceptions true"() {
@@ -51,10 +48,9 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showExceptions >> true
             theme = new StandardParallelTheme(testLoggerExtensionMock)
         and:
-            def testResultMock = Mock(TestResult)
-            setupResultTypeExpectation(testResultMock, FAILURE)
+            testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
-            testDescriptorMock.name >> 'floppy test'
+            testDescriptorMock.displayName >> 'floppy test'
             testDescriptorMock.className >> this.class.name
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -63,28 +59,10 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
                 """|[erase-ahead,bold]com.adarshr.gradle.testlogger.theme.StandardParallelThemeSpec[bold-off] floppy test[red] FAILED[red]
                    |
                    |  java.lang.AssertionError: This is wrong
-                   |      at com.adarshr.gradle.testlogger.theme.StandardParallelThemeSpec.getException(StandardParallelThemeSpec.groovy:${LINE_NUMBER})
+                   |      at com.adarshr.gradle.testlogger.theme.StandardParallelThemeSpec.getException(StandardParallelThemeSpec.groovy:${
+                    LINE_NUMBER
+                })
                    |[/]""".stripMargin().replace('\n', lineSeparator())
-    }
-
-    def "after test uses displayName property if present"() {
-        given:
-            testDescriptorMock = GroovyMock(TestDescriptor)
-            testDescriptorMock.properties >> [displayName: 'display test name [escaped]']
-            testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name [escaped]'
-        expect:
-            theme.testText(testDescriptorMock, testResultMock) == '[erase-ahead,bold]ClassName[bold-off] display test name \\[escaped\\][green] PASSED[/]'
-    }
-
-    def "after test does not error when displayName property is missing"() {
-        given:
-            testDescriptorMock = GroovyMock(TestDescriptor)
-            testDescriptorMock.properties >> [:]
-            testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name [escaped]'
-        expect:
-            theme.testText(testDescriptorMock, testResultMock) == '[erase-ahead,bold]ClassName[bold-off] test name \\[escaped\\][green] PASSED[/]'
     }
 
     def "exception text when showExceptions is true"() {
@@ -92,26 +70,26 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showExceptions >> true
             theme = new StandardParallelTheme(testLoggerExtensionMock)
         and:
-            def testResultMock = Mock(TestResult)
-            setupResultTypeExpectation(testResultMock, FAILURE)
+            testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
-            testDescriptorMock.name >> 'floppy test'
+            testDescriptorMock.displayName >> 'floppy test'
             testDescriptorMock.className >> this.class.name
         expect:
             theme.exceptionText(testDescriptorMock, testResultMock) ==
                 """|[red]
                    |
                    |  java.lang.AssertionError: This is wrong
-                   |      at com.adarshr.gradle.testlogger.theme.StandardParallelThemeSpec.getException(StandardParallelThemeSpec.groovy:${LINE_NUMBER})
+                   |      at com.adarshr.gradle.testlogger.theme.StandardParallelThemeSpec.getException(StandardParallelThemeSpec.groovy:${
+                    LINE_NUMBER
+                })
                    |""".stripMargin().replace('\n', lineSeparator())
     }
 
     def "exception text when showExceptions is false"() {
         given:
             testLoggerExtensionMock.showExceptions >> false
-            def testResultMock = Mock(TestResult)
-            setupResultTypeExpectation(testResultMock, FAILURE)
-            testDescriptorMock.name >> 'floppy test'
+            testResultMock.resultType >> FAILURE
+            testDescriptorMock.displayName >> 'floppy test'
         expect:
             !theme.exceptionText(testDescriptorMock, testResultMock)
     }
@@ -119,12 +97,11 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
     @Unroll
     def "show duration if slowThreshold is exceeded for resultType #resultType"() {
         given:
-            def testResultMock = Mock(TestResult)
-            setupResultTypeExpectation(testResultMock, resultType)
-            testResultMock.startTime >> 1000000
-            testResultMock.endTime >> 1000000 + 10000
+            testResultMock.resultType >> resultType
+            testResultMock.tooSlow >> true
+            testResultMock.duration >> '10s'
             testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name'
+            testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -138,12 +115,11 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
     @Unroll
     def "show duration if slowThreshold is approaching for resultType #resultType"() {
         given:
-            def testResultMock = Mock(TestResult)
-            setupResultTypeExpectation(testResultMock, resultType)
-            testResultMock.startTime >> 1000000
-            testResultMock.endTime >> 1000000 + 1500 // slow threshold is 2s
+            testResultMock.resultType >> resultType
+            testResultMock.duration >> '1.5s'
+            testResultMock.mediumSlow >> true
             testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name'
+            testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -158,13 +134,11 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
     def "summary text given #success success, #failure failed and #skipped skipped tests"() {
         given:
             testLoggerExtensionMock.showSummary >> true
-            def testResultMock = Mock(TestResult)
             testResultMock.successfulTestCount >> success
             testResultMock.failedTestCount >> failure
             testResultMock.skippedTestCount >> skipped
             testResultMock.testCount >> success + failure + skipped
-            testResultMock.startTime >> 1000000
-            testResultMock.endTime >> 1000000 + 10000
+            testResultMock.duration >> '10s'
             testResultMock.resultType >> (failure ? FAILURE : SUCCESS) // what Gradle would do
         and:
             theme = new StandardParallelTheme(testLoggerExtensionMock)
