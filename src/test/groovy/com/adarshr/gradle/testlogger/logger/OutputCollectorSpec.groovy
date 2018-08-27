@@ -1,17 +1,18 @@
 package com.adarshr.gradle.testlogger.logger
 
+
+import com.adarshr.gradle.testlogger.TestDescriptorWrapper
 import groovy.transform.Canonical
 import org.gradle.api.tasks.testing.TestDescriptor
 import spock.lang.Specification
-
 
 class OutputCollectorSpec extends Specification {
 
     def "output collector groups output by descriptor and removes them accordingly"() {
         given:
             def collector = new OutputCollector()
-            def suite = new Descriptor('ClassName', 'ClassName')
-            def test = new Descriptor('test', 'ClassName')
+            def suite = new TestDescriptorWrapper(new Descriptor('ClassName', 'ClassName'), null)
+            def test = new TestDescriptorWrapper(new Descriptor('test', 'ClassName'), null)
         when:
             collector.collect(suite, 'Suite line 1\n')
             collector.collect(suite, 'Suite line 2\n')

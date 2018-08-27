@@ -1,8 +1,8 @@
 package com.adarshr.gradle.testlogger.theme
 
+import com.adarshr.gradle.testlogger.TestDescriptorWrapper
+import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.InheritConstructors
-import org.gradle.api.tasks.testing.TestDescriptor
-import org.gradle.api.tasks.testing.TestResult
 import org.gradle.api.tasks.testing.TestResult.ResultType
 
 import static java.lang.System.lineSeparator
@@ -12,41 +12,41 @@ import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 class MochaTheme extends AbstractTheme {
 
     @Override
-    protected String suiteTextInternal(TestDescriptor descriptor) {
-        "  [erase-ahead,default]${escape(descriptor.className)}[/]${lineSeparator()}"
+    protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
+        "  [erase-ahead,default]${descriptor.className}[/]${lineSeparator()}"
     }
 
     @Override
-    protected String testTextInternal(TestDescriptor descriptor, TestResult result) {
-        testText('    [erase-ahead]', descriptor, result)
+    protected String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result) {
+        testTextInternal('    [erase-ahead]', descriptor, result)
     }
 
-    protected String testText(String start, TestDescriptor descriptor, TestResult result) {
+    protected String testTextInternal(String start, TestDescriptorWrapper descriptor, TestResultWrapper result) {
         def line = new StringBuilder(start)
 
         switch (result.resultType) {
             case SUCCESS:
-                line << "[green]${getSymbol(result.resultType)}[grey] ${displayName(descriptor)}"
+                line << "[green]${getSymbol(result.resultType)}[grey] ${descriptor.displayName}"
                 showDurationIfSlow(result, line)
                 break
             case FAILURE:
-                line << "[red]${getSymbol(result.resultType)} ${displayName(descriptor)}"
+                line << "[red]${getSymbol(result.resultType)} ${descriptor.displayName}"
                 showDurationIfSlow(result, line)
                 line << exceptionText(descriptor, result)
                 break
             case SKIPPED:
-                line << "[cyan]${getSymbol(result.resultType)} ${displayName(descriptor)}"
+                line << "[cyan]${getSymbol(result.resultType)} ${descriptor.displayName}"
                 break
         }
 
         line << '[/]'
     }
 
-    private void showDurationIfSlow(TestResult result, StringBuilder line) {
-        if (tooSlow(result)) {
-            line << "[red] (${duration(result)})"
-        } else if (mediumSlow(result)) {
-            line << "[yellow] (${duration(result)})"
+    private static void showDurationIfSlow(TestResultWrapper result, StringBuilder line) {
+        if (result.tooSlow) {
+            line << "[red] (${result.duration})"
+        } else if (result.mediumSlow) {
+            line << "[yellow] (${result.duration})"
         }
     }
 
@@ -63,23 +63,23 @@ class MochaTheme extends AbstractTheme {
     }
 
     @Override
-    String exceptionText(TestDescriptor descriptor, TestResult result) {
+    String exceptionText(TestDescriptorWrapper descriptor, TestResultWrapper result) {
         exceptionText(descriptor, result, 6)
     }
 
     @Override
-    protected String exceptionText(TestDescriptor descriptor, TestResult result, int indent) {
+    protected String exceptionText(TestDescriptorWrapper descriptor, TestResultWrapper result, int indent) {
         def exceptionText = super.exceptionText(descriptor, result, indent)
 
         exceptionText ? "[red]${exceptionText}" : ''
     }
 
     @Override
-    String summaryText(TestDescriptor descriptor, TestResult result) {
+    String summaryText(TestDescriptorWrapper descriptor, TestResultWrapper result) {
         return summaryText(descriptor, result, 2)
     }
 
-    protected String summaryText(TestDescriptor descriptor, TestResult result, int indent) {
+    protected String summaryText(TestDescriptorWrapper descriptor, TestResultWrapper result, int indent) {
         if (!showSummary) {
             return ''
         }
@@ -87,7 +87,7 @@ class MochaTheme extends AbstractTheme {
         def indentation = ' ' * indent
         def line = new StringBuilder()
 
-        line << "${indentation}[erase-ahead,green]${result.successfulTestCount} passing [grey](${duration(result)})"
+        line << "${indentation}[erase-ahead,green]${result.successfulTestCount} passing [grey](${result.duration})"
 
         if (result.skippedTestCount) {
             line << "${lineSeparator()}${indentation}[erase-ahead,cyan]${result.skippedTestCount} pending"
@@ -101,15 +101,15 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     protected String suiteStandardStreamTextInternal(String lines) {
-        standardStreamText(lines, 4)
+        standardStreamTextInternal(lines, 4)
     }
 
     @Override
     protected String testStandardStreamTextInternal(String lines) {
-        standardStreamText(lines, 8)
+        standardStreamTextInternal(lines, 8)
     }
 
-    protected String standardStreamText(String lines, int indent) {
+    protected String standardStreamTextInternal(String lines, int indent) {
         if (!showStandardStreams || !lines) {
             return ''
         }

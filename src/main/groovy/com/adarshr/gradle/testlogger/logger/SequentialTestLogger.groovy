@@ -1,8 +1,8 @@
 package com.adarshr.gradle.testlogger.logger
 
+import com.adarshr.gradle.testlogger.TestDescriptorWrapper
+import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.InheritConstructors
-import org.gradle.api.tasks.testing.TestDescriptor
-import org.gradle.api.tasks.testing.TestResult
 
 @InheritConstructors
 class SequentialTestLogger extends TestLoggerAdapter {
@@ -10,12 +10,12 @@ class SequentialTestLogger extends TestLoggerAdapter {
     private final Map<String, Boolean> suites = [:]
 
     @Override
-    void beforeSuite(TestDescriptor suite) {
+    void beforeSuite(TestDescriptorWrapper suite) {
         suites << [(suite.className): false]
     }
 
     @Override
-    void afterSuite(TestDescriptor suite, TestResult result) {
+    void afterSuite(TestDescriptorWrapper suite, TestResultWrapper result) {
         logger.log theme.suiteStandardStreamText(outputCollector.removeSuiteOutput(suite), result)
 
         if (!suite.parent) {
@@ -27,7 +27,7 @@ class SequentialTestLogger extends TestLoggerAdapter {
     }
 
     @Override
-    void afterTest(TestDescriptor descriptor, TestResult result) {
+    void afterTest(TestDescriptorWrapper descriptor, TestResultWrapper result) {
         if (!suites[descriptor.className]) {
             def suiteText = theme.suiteText(descriptor, result)
 

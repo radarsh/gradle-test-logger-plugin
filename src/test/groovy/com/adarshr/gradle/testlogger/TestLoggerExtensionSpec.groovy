@@ -36,7 +36,10 @@ class TestLoggerExtensionSpec extends Specification {
                 showExceptions: 'false',
                 slowThreshold: '4000',
                 showSummary: 'false',
-                showStandardStreams: 'true'
+                showStandardStreams: 'true',
+                showPassed: 'false',
+                showSkipped: 'false',
+                showFailed: 'false'
             ]
         when:
             def extension = new TestLoggerExtension(projectMock, overrides)
@@ -47,5 +50,8 @@ class TestLoggerExtensionSpec extends Specification {
             extension.slowThreshold == 4000
             !extension.showSummary
             extension.showStandardStreams
+            !extension.showPassed
+            !extension.showSkipped
+            !extension.showFailed
     }
 }

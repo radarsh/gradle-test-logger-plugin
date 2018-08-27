@@ -1,22 +1,21 @@
 package com.adarshr.gradle.testlogger.logger
 
-
+import com.adarshr.gradle.testlogger.TestDescriptorWrapper
+import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.InheritConstructors
-import org.gradle.api.tasks.testing.TestDescriptor
-import org.gradle.api.tasks.testing.TestResult
 
 @InheritConstructors
 class ParallelTestLogger extends TestLoggerAdapter {
 
     @Override
-    void beforeSuite(TestDescriptor suite) {
+    void beforeSuite(TestDescriptorWrapper suite) {
         if (!suite.parent) {
             logger.logNewLine()
         }
     }
 
     @Override
-    void afterSuite(TestDescriptor suite, TestResult result) {
+    void afterSuite(TestDescriptorWrapper suite, TestResultWrapper result) {
         logger.log theme.suiteStandardStreamText(outputCollector.removeSuiteOutput(suite), result)
 
         if (!suite.parent) {
@@ -26,7 +25,7 @@ class ParallelTestLogger extends TestLoggerAdapter {
     }
 
     @Override
-    void afterTest(TestDescriptor descriptor, TestResult result) {
+    void afterTest(TestDescriptorWrapper descriptor, TestResultWrapper result) {
         def testText = theme.testText(descriptor, result)
 
         if (testText) {
