@@ -17,9 +17,16 @@ class TestResultWrapper {
     }
 
     boolean isLoggable() {
-        testLoggerExtension.showPassed && successfulTestCount ||
-            testLoggerExtension.showSkipped && skippedTestCount ||
-            testLoggerExtension.showFailed && failedTestCount
+        testLoggerExtension.showPassed && testResult.successfulTestCount ||
+            testLoggerExtension.showSkipped && testResult.skippedTestCount ||
+            testLoggerExtension.showFailed && testResult.failedTestCount
+    }
+
+    boolean isStandardStreamLoggable() {
+        loggable && testLoggerExtension.showStandardStreams &&
+            (testLoggerExtension.showPassedStandardStreams && testResult.successfulTestCount ||
+                testLoggerExtension.showSkippedStandardStreams && testResult.skippedTestCount ||
+                testLoggerExtension.showFailedStandardStreams && testResult.failedTestCount)
     }
 
     boolean isTooSlow() {

@@ -56,6 +56,7 @@ The convention used for determining the name of the system property is `testlogg
 - [Define slow threshold](#define-slow-threshold)
 - [Hide summary](#hide-summary)
 - [Show standard streams](#show-standard-streams)
+- [Filter standard streams](#filter-standard-streams)
 - [Filter test results](#filter-test-results)
 
 ### Switch themes
@@ -129,6 +130,25 @@ testlogger {
     showStandardStreams true
 }
 ```
+
+### Filter standard streams
+
+If the display standard output and error streams is enabled, it can often produce too much output to overwhelm anyone.
+Fortunately, we can filter this output based on the type of the test result.
+
+```groovy
+testlogger {
+    showStandardStreams true
+    showPassedStandardStreams false
+    showSkippedStandardStreams false
+    showFailedStandardStreams true
+}
+```
+
+All the three filter flags are enabled by default. In other words, the standard stream output is not filtered if
+`showStandardStreams` is enabled but none of the filter flags are configured.
+
+If `showStandardStreams` is set to `false`, the filter flags don't have any effect.
 
 ### Filter test results
 

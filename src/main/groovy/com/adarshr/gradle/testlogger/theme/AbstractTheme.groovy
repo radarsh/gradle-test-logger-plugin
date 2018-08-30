@@ -59,7 +59,7 @@ abstract class AbstractTheme implements Theme {
 
     @Override
     final String testStandardStreamText(String lines, TestResultWrapper result) {
-        result.loggable ? testStandardStreamTextInternal(lines) : ''
+        result.standardStreamLoggable ? testStandardStreamTextInternal(lines) : ''
     }
 
     protected abstract testStandardStreamTextInternal(String lines)

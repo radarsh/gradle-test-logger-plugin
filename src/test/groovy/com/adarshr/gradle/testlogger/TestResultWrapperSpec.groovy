@@ -66,6 +66,50 @@ class TestResultWrapperSpec extends Specification {
     }
 
     @Unroll
+    def "standardStreamLoggable returns #expected if loggable is true and showStandardStreams is true"() {
+        given:
+            testLoggerExtensionMock.showPassed >> true
+            testLoggerExtensionMock.showSkipped >> true
+            testLoggerExtensionMock.showFailed >> true
+            testLoggerExtensionMock.showStandardStreams >> true
+            testLoggerExtensionMock.showPassedStandardStreams >> showPassedStdStr
+            testLoggerExtensionMock.showSkippedStandardStreams >> showSkippedStdStr
+            testLoggerExtensionMock.showFailedStandardStreams >> showFailedStdStr
+            testResultMock.successfulTestCount >> successfulCount
+            testResultMock.skippedTestCount >> skippedCount
+            testResultMock.failedTestCount >> failedCount
+        expect:
+            wrapper.standardStreamLoggable == expected
+        where:
+            showPassedStdStr | successfulCount | showSkippedStdStr | skippedCount | showFailedStdStr | failedCount | expected
+            true             | 1               | false             | 0            | false            | 0           | true
+            false            | 1               | false             | 0            | false            | 0           | false
+            false            | 0               | true              | 1            | false            | 0           | true
+            false            | 0               | false             | 1            | false            | 0           | false
+            false            | 0               | false             | 0            | true             | 1           | true
+            false            | 0               | false             | 0            | false            | 1           | false
+    }
+
+    @Unroll
+    def "standardStreamLoggable returns false if loggable is #loggable and showStandardStreams is #showStandardStreams"() {
+        given:
+            testLoggerExtensionMock.showPassed >> loggable
+            testLoggerExtensionMock.showSkipped >> loggable
+            testLoggerExtensionMock.showFailed >> loggable
+            testLoggerExtensionMock.showStandardStreams >> showStandardStreams
+            testResultMock.successfulTestCount >> 1
+            testResultMock.skippedTestCount >> 1
+            testResultMock.failedTestCount >> 1
+        expect:
+            !wrapper.standardStreamLoggable
+        where:
+            loggable | showStandardStreams
+            false    | true
+            true     | false
+            false    | false
+    }
+
+    @Unroll
     def "is too slow returns #result if slow threshold is #slowThreshold"() {
         given:
             testResultMock.endTime >> 20000
