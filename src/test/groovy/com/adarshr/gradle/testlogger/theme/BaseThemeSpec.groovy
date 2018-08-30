@@ -16,6 +16,7 @@ abstract class BaseThemeSpec extends Specification {
 
     def setup() {
         testResultMock.loggable >> true
+        testResultMock.standardStreamLoggable >> true
         testLoggerExtensionMock.slowThreshold >> 2000
     }
 }

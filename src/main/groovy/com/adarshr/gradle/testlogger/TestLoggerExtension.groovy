@@ -17,6 +17,9 @@ class TestLoggerExtension {
     long slowThreshold = 2000
     boolean showSummary = true
     boolean showStandardStreams = false
+    boolean showPassedStandardStreams = true
+    boolean showSkippedStandardStreams = true
+    boolean showFailedStandardStreams = true
     boolean showPassed = true
     boolean showSkipped = true
     boolean showFailed = true
@@ -52,6 +55,9 @@ class TestLoggerExtension {
         override('slowThreshold', Long)
         override('showSummary', Boolean)
         override('showStandardStreams', Boolean)
+        override('showPassedStandardStreams', Boolean)
+        override('showSkippedStandardStreams', Boolean)
+        override('showFailedStandardStreams', Boolean)
         override('showPassed', Boolean)
         override('showSkipped', Boolean)
         override('showFailed', Boolean)

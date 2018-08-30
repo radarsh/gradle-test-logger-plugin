@@ -27,6 +27,12 @@ class TestLoggerExtensionSpec extends Specification {
             extension.slowThreshold == 2000
             extension.showSummary
             !extension.showStandardStreams
+            extension.showPassedStandardStreams
+            extension.showSkippedStandardStreams
+            extension.showFailedStandardStreams
+            extension.showPassed
+            extension.showSkipped
+            extension.showFailed
     }
 
     def "test logger extension properties can be overridden"() {
@@ -37,6 +43,9 @@ class TestLoggerExtensionSpec extends Specification {
                 slowThreshold: '4000',
                 showSummary: 'false',
                 showStandardStreams: 'true',
+                showPassedStandardStreams: 'false',
+                showSkippedStandardStreams: 'false',
+                showFailedStandardStreams: 'false',
                 showPassed: 'false',
                 showSkipped: 'false',
                 showFailed: 'false'
@@ -50,6 +59,9 @@ class TestLoggerExtensionSpec extends Specification {
             extension.slowThreshold == 4000
             !extension.showSummary
             extension.showStandardStreams
+            !extension.showPassedStandardStreams
+            !extension.showSkippedStandardStreams
+            !extension.showFailedStandardStreams
             !extension.showPassed
             !extension.showSkipped
             !extension.showFailed

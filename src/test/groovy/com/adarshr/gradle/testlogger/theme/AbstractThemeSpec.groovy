@@ -53,7 +53,7 @@ class AbstractThemeSpec extends Specification {
     @Unroll
     def "test standard stream text returns '#expected' when loggable is #loggable"() {
         given:
-            testResultMock.loggable >> loggable
+            testResultMock.standardStreamLoggable >> loggable
         expect:
             theme.testStandardStreamText('lines', testResultMock) == expected
         where:

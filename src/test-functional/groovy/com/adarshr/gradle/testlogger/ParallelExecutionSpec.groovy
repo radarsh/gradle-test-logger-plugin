@@ -280,4 +280,115 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
         and:
             result.task(":test").outcome == FAILED
     }
+
+    def "hide standard stream output for passed tests"() {
+        when:
+            def result = run(
+                'sample-spock-tests',
+                '''
+                    test {
+                        maxParallelForks = gradle.startParameter.maxWorkerCount
+                    }
+                    testlogger {
+                        theme 'standard-parallel'
+                        showStandardStreams true
+                        showPassedStandardStreams false
+                    }
+                ''',
+                'clean test --tests *FirstSpec'
+            )
+        then:
+            def output = getLoggerOutput(result.output)
+            def lines = output.lines
+            def summary = output.summary
+        and:
+            lines.size() == 27
+            lines[0] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[bold-off] this test should pass[green] PASSED[/]')
+            lines[1] == render('[default]')
+            lines[2] == render('  FirstSpec - stdout setupSpec')
+            lines[3] == render('  FirstSpec - stderr setupSpec[/]')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[bold-off] this test should fail[red] FAILED[red]')
+            lines[6..13].join('\n') == render(
+                '''|
+                   |  Condition not satisfied:
+                   |  
+                   |  1 == 2
+                   |    |
+                   |    false
+                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:41)
+                   |[/]'''.stripMargin())
+            lines[14] == render('[default]')
+            lines[15] == render('  FirstSpec - this test should fail - stdout setup')
+            lines[16] == render('  FirstSpec - this test should fail - stderr setup')
+            lines[17] == render('  FirstSpec - this test should fail - stdout expect')
+            lines[18] == render('  FirstSpec - this test should fail - stderr expect')
+            lines[19] == render('  FirstSpec - this test should fail - stdout cleanup')
+            lines[20] == render('  FirstSpec - this test should fail - stderr cleanup[/]')
+            lines[21] == render('')
+            lines[22] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[bold-off] this test should be skipped[yellow] SKIPPED[/]')
+            lines[23] == render('[default]')
+            lines[24] == render('  FirstSpec - stdout cleanupSpec')
+            lines[25] == render('  FirstSpec - stderr cleanupSpec[/]')
+            lines[26] == render('')
+        and:
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 3 tests in')
+            summary[1].endsWith render('(1 failed, 1 skipped)[/]')
+            summary[2] == render('')
+        and:
+            result.task(":test").outcome == FAILED
+    }
+
+    def "hide standard stream output for passed and failed tests"() {
+        when:
+            def result = run(
+                'sample-spock-tests',
+                '''
+                    test {
+                        maxParallelForks = gradle.startParameter.maxWorkerCount
+                    }
+                    testlogger {
+                        theme 'standard-parallel'
+                        showStandardStreams true
+                        showPassedStandardStreams false
+                        showFailedStandardStreams false
+                    }
+                ''',
+                'clean test --tests *FirstSpec'
+            )
+        then:
+            def output = getLoggerOutput(result.output)
+            def lines = output.lines
+            def summary = output.summary
+        and:
+            lines.size() == 19
+            lines[0] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[bold-off] this test should pass[green] PASSED[/]')
+            lines[1] == render('[default]')
+            lines[2] == render('  FirstSpec - stdout setupSpec')
+            lines[3] == render('  FirstSpec - stderr setupSpec[/]')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[bold-off] this test should fail[red] FAILED[red]')
+            lines[6..13].join('\n') == render(
+                '''|
+                   |  Condition not satisfied:
+                   |  
+                   |  1 == 2
+                   |    |
+                   |    false
+                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:41)
+                   |[/]'''.stripMargin())
+            lines[14] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[bold-off] this test should be skipped[yellow] SKIPPED[/]')
+            lines[15] == render('[default]')
+            lines[16] == render('  FirstSpec - stdout cleanupSpec')
+            lines[17] == render('  FirstSpec - stderr cleanupSpec[/]')
+            lines[18] == render('')
+        and:
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 3 tests in')
+            summary[1].endsWith render('(1 failed, 1 skipped)[/]')
+            summary[2] == render('')
+        and:
+            result.task(":test").outcome == FAILED
+    }
 }
