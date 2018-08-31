@@ -200,6 +200,31 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(":test").outcome == SUCCESS
     }
 
+    def "log testng tests"() {
+        when:
+            def result = run(
+                'sample-testng-tests',
+                'clean test --tests *First*'
+            )
+        then:
+            def lines = getLoggerOutput(result.output).lines
+        and:
+            // No skipped tests due to https://github.com/gradle/gradle/issues/1403
+            lines.size() == 9
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.FirstTest[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldFail[red] FAILED[red]')
+            lines[4..7].join('\n') == render(
+                '''|
+                   |  java.lang.AssertionError: expected [2] but found [1]
+                   |      at com.adarshr.test.FirstTest.thisTestShouldFail(FirstTest.java:16)
+                   |[/]'''.stripMargin())
+            lines[8] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldPass[green] PASSED[/]')
+        and:
+            result.task(":test").outcome == FAILED
+    }
+
     def "do not print empty suites when filtering tests"() {
         when:
             def result = run(

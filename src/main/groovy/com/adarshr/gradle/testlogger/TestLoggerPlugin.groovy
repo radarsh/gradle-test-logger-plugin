@@ -17,7 +17,7 @@ class TestLoggerPlugin implements Plugin<Project> {
 
                 test.testLogging.lifecycle.events = []
 
-                def testLogger = new TestLoggerWrapper(project, test.maxParallelForks)
+                def testLogger = new TestLoggerWrapper(project, test)
 
                 test.addTestListener(testLogger)
                 test.addTestOutputListener(testLogger)

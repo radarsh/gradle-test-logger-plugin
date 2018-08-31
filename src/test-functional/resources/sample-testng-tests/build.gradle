@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+    id 'com.adarshr.test-logger'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'org.testng:testng:6.14.3'
+}
+
+test {
+    useTestNG {
+        preserveOrder = true
+    }
+}
