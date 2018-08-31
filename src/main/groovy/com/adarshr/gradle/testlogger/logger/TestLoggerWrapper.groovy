@@ -6,16 +6,18 @@ import com.adarshr.gradle.testlogger.theme.ThemeFactory
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import org.gradle.api.GradleException
 import org.gradle.api.Project
+import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.testing.testng.TestNGOptions
 
 class TestLoggerWrapper implements TestLogger {
 
     @Delegate
     private final TestLogger testLoggerDelegate
 
-    TestLoggerWrapper(Project project, int maxParallelForks) {
+    TestLoggerWrapper(Project project, Test test) {
         Theme theme = ThemeFactory.getTheme(project.testlogger as TestLoggerExtension)
 
-        ensureCorrectThemeType(maxParallelForks, theme)
+        ensureCorrectThemeType(test, theme)
 
         if (theme.type.parallel) {
             testLoggerDelegate = new ParallelTestLogger(project)
@@ -24,8 +26,10 @@ class TestLoggerWrapper implements TestLogger {
         }
     }
 
-    private static void ensureCorrectThemeType(int maxParallelForks, Theme theme) {
-        if (maxParallelForks > 1 && !theme.type.parallel) {
+    private static void ensureCorrectThemeType(Test test, Theme theme) {
+        boolean testNgParallelMode = test.options instanceof TestNGOptions && test.options.parallel
+
+        if ((test.maxParallelForks > 1 || testNgParallelMode) && !theme.type.parallel) {
             throw new GradleException("Parallel execution is not supported for theme type '${theme.type.name}'. " +
                 "Must be one of ${ThemeType.parallelThemeNames}")
         }
