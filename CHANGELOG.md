@@ -1,5 +1,32 @@
 # Change Log
 
+## [v1.5.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.5.0) (2018-09-09)
+
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.4.0...v1.5.0)
+
+**Implemented enhancements:**
+
+- Feature: suppress logging output for successful tests [\#61](https://github.com/radarsh/gradle-test-logger-plugin/issues/61)
+- Consider adding option to show failed only tests in output. [\#38](https://github.com/radarsh/gradle-test-logger-plugin/issues/38)
+
+**Closed issues:**
+
+- Upgrade to Gradle 4.10 [\#83](https://github.com/radarsh/gradle-test-logger-plugin/issues/83)
+- Encapsulate TestResult and TestDescriptor along with all their associated methods [\#78](https://github.com/radarsh/gradle-test-logger-plugin/issues/78)
+- Refresh screenshots [\#76](https://github.com/radarsh/gradle-test-logger-plugin/issues/76)
+- Fix Gradle deprecation warnings [\#75](https://github.com/radarsh/gradle-test-logger-plugin/issues/75)
+- Add TestNG based tests [\#74](https://github.com/radarsh/gradle-test-logger-plugin/issues/74)
+
+**Merged pull requests:**
+
+- Refresh screenshots [\#85](https://github.com/radarsh/gradle-test-logger-plugin/pull/85) ([radarsh](https://github.com/radarsh))
+- Upgrade to Gradle 4.10 [\#84](https://github.com/radarsh/gradle-test-logger-plugin/pull/84) ([radarsh](https://github.com/radarsh))
+- Add TestNG based tests [\#82](https://github.com/radarsh/gradle-test-logger-plugin/pull/82) ([radarsh](https://github.com/radarsh))
+- Filter standard streams [\#81](https://github.com/radarsh/gradle-test-logger-plugin/pull/81) ([radarsh](https://github.com/radarsh))
+- Resolve Gradle deprecation warnings [\#80](https://github.com/radarsh/gradle-test-logger-plugin/pull/80) ([radarsh](https://github.com/radarsh))
+- Encapsulate core classes [\#79](https://github.com/radarsh/gradle-test-logger-plugin/pull/79) ([radarsh](https://github.com/radarsh))
+- Filter test results by type [\#77](https://github.com/radarsh/gradle-test-logger-plugin/pull/77) ([radarsh](https://github.com/radarsh))
+
 ## [v1.4.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.4.0) (2018-07-31)
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.3.1...v1.4.0)
 
