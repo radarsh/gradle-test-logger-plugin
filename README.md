@@ -7,13 +7,17 @@
 
 A Gradle plugin for printing beautiful logs on the console while running tests.
 
-## Standard theme
+## Screenshots
 
-![Standard theme](docs/standard-theme.gif)
+### Standard theme
 
-## Mocha theme
+![Standard theme](docs/images/standard.gif)
 
-![Mocha theme](docs/mocha-theme.gif)
+### Mocha theme
+
+![Mocha theme](docs/images/mocha.gif)
+
+Scroll down for more themes and customisation options or visit the [screenshots page](docs/SCREENSHOTS.md) for more demos.
 
 ## Usage
 
