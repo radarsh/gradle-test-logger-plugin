@@ -1,35 +1,29 @@
 package com.adarshr.gradle.testlogger.theme
 
-import com.adarshr.gradle.testlogger.TestLoggerExtension
-import org.gradle.api.tasks.testing.TestDescriptor
-import org.gradle.api.tasks.testing.TestResult
-import spock.lang.Specification
+
 import spock.lang.Unroll
 
 import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
-class PlainParallelThemeSpec extends Specification {
+class PlainParallelThemeSpec extends BaseThemeSpec {
 
     // right at the top to minimise line number changes
     private static AssertionError getException() {
         new AssertionError('This is wrong')
     }
 
+    private static final int LINE_NUMBER = exception.stackTrace.find { it.className == owner.name }.lineNumber
+
     Theme theme
-    def testLoggerExtensionMock = Mock(TestLoggerExtension)
-    def testDescriptorMock = Mock(TestDescriptor)
-    def testResultMock = Mock(TestResult)
-    def streamLines = "Hello${lineSeparator()}World"
 
     def setup() {
-        testLoggerExtensionMock.slowThreshold >> 2000
         theme = new PlainParallelTheme(testLoggerExtensionMock)
     }
 
     def "before suite"() {
         expect:
-            !theme.suiteText(testDescriptorMock)
+            !theme.suiteText(testDescriptorMock, testResultMock)
     }
 
     @Unroll
@@ -37,16 +31,16 @@ class PlainParallelThemeSpec extends Specification {
         given:
             testResultMock.resultType >> resultType
             testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name [escaped]'
+            testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
             actual == expected
         where:
             resultType | expected
-            SUCCESS    | 'ClassName test name \\[escaped\\] PASSED'
-            FAILURE    | 'ClassName test name \\[escaped\\] FAILED'
-            SKIPPED    | 'ClassName test name \\[escaped\\] SKIPPED'
+            SUCCESS    | 'ClassName test name PASSED'
+            FAILURE    | 'ClassName test name FAILED'
+            SKIPPED    | 'ClassName test name SKIPPED'
     }
 
     def "after test with result type failure and showExceptions true"() {
@@ -56,39 +50,17 @@ class PlainParallelThemeSpec extends Specification {
         and:
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
-            testDescriptorMock.name >> 'floppy test'
+            testDescriptorMock.displayName >> 'floppy test'
             testDescriptorMock.className >> this.class.name
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
             actual ==
-            '''|com.adarshr.gradle.testlogger.theme.PlainParallelThemeSpec floppy test FAILED
-               |
-               |  java.lang.AssertionError: This is wrong
-               |      at com.adarshr.gradle.testlogger.theme.PlainParallelThemeSpec.getException(PlainParallelThemeSpec.groovy:16)
-               |'''.stripMargin().replace('\n', lineSeparator())
-    }
-
-    def "after test uses displayName property if present"() {
-        given:
-            testDescriptorMock = GroovyMock(TestDescriptor)
-            testDescriptorMock.properties >> [displayName: 'display test name [escaped]']
-            testResultMock.resultType >> SUCCESS
-            testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name [escaped]'
-        expect:
-            theme.testText(testDescriptorMock, testResultMock) == 'ClassName display test name \\[escaped\\] PASSED'
-    }
-
-    def "after test does not error when displayName property is missing"() {
-        given:
-            testDescriptorMock = GroovyMock(TestDescriptor)
-            testDescriptorMock.properties >> [:]
-            testResultMock.resultType >> SUCCESS
-            testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name [escaped]'
-        expect:
-            theme.testText(testDescriptorMock, testResultMock) == 'ClassName test name \\[escaped\\] PASSED'
+                """|com.adarshr.gradle.testlogger.theme.PlainParallelThemeSpec floppy test FAILED
+                   |
+                   |  java.lang.AssertionError: This is wrong
+                   |      at com.adarshr.gradle.testlogger.theme.PlainParallelThemeSpec.getException(PlainParallelThemeSpec.groovy:${LINE_NUMBER})
+                   |""".stripMargin().replace('\n', lineSeparator())
     }
 
     def "exception text when showExceptions is true"() {
@@ -98,33 +70,33 @@ class PlainParallelThemeSpec extends Specification {
         and:
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
-            testDescriptorMock.name >> 'floppy test'
+            testDescriptorMock.displayName >> 'floppy test'
             testDescriptorMock.className >> this.class.name
         expect:
             theme.exceptionText(testDescriptorMock, testResultMock) ==
-            '''|
-               |
-               |  java.lang.AssertionError: This is wrong
-               |      at com.adarshr.gradle.testlogger.theme.PlainParallelThemeSpec.getException(PlainParallelThemeSpec.groovy:16)
-               |'''.stripMargin().replace('\n', lineSeparator())
+                """|
+                   |
+                   |  java.lang.AssertionError: This is wrong
+                   |      at com.adarshr.gradle.testlogger.theme.PlainParallelThemeSpec.getException(PlainParallelThemeSpec.groovy:${LINE_NUMBER})
+                   |""".stripMargin().replace('\n', lineSeparator())
     }
 
     def "exception text when showExceptions is false"() {
         given:
             testLoggerExtensionMock.showExceptions >> false
             testResultMock.resultType >> FAILURE
-            testDescriptorMock.name >> 'floppy test'
+            testDescriptorMock.displayName >> 'floppy test'
         expect:
             !theme.exceptionText(testDescriptorMock, testResultMock)
     }
 
     def "show duration if slowThreshold is exceeded"() {
         given:
+            testResultMock.tooSlow >> true
+            testResultMock.duration >> '10s'
             testResultMock.resultType >> SUCCESS
-            testResultMock.startTime >> 1000000
-            testResultMock.endTime >> 1000000 + 10000
             testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name'
+            testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -139,8 +111,7 @@ class PlainParallelThemeSpec extends Specification {
             testResultMock.failedTestCount >> failure
             testResultMock.skippedTestCount >> skipped
             testResultMock.testCount >> success + failure + skipped
-            testResultMock.startTime >> 1000000
-            testResultMock.endTime >> 1000000 + 10000
+            testResultMock.duration >> '10s'
             testResultMock.resultType >> (failure ? FAILURE : SUCCESS) // what Gradle would do
         and:
             theme = new PlainParallelTheme(testLoggerExtensionMock)
@@ -165,43 +136,43 @@ class PlainParallelThemeSpec extends Specification {
         given:
             testLoggerExtensionMock.showStandardStreams >> true
             theme = new PlainParallelTheme(testLoggerExtensionMock)
+            testResultMock.resultType >> SUCCESS
         expect:
-            theme.testStandardStreamText(streamLines) ==
-            '''|
-               |  Hello
-               |  World
-               |'''.stripMargin().replace('\n', lineSeparator())
-
+            theme.testStandardStreamText(streamLines, testResultMock) ==
+                '''|
+                   |  Hello
+                   |  World
+                   |'''.stripMargin().replace('\n', lineSeparator())
     }
 
     def "standard stream text when showStandardStreams is false"() {
         given:
             testLoggerExtensionMock.showStandardStreams >> false
             theme = new PlainParallelTheme(testLoggerExtensionMock)
+            testResultMock.resultType >> SUCCESS
         expect:
-            !theme.testStandardStreamText(streamLines)
-
+            !theme.testStandardStreamText(streamLines, testResultMock)
     }
 
     def "suite stream text"() {
         given:
             testLoggerExtensionMock.showStandardStreams >> true
             theme = new PlainParallelTheme(testLoggerExtensionMock)
+            testResultMock.resultType >> SUCCESS
         expect:
-            theme.suiteStandardStreamText(streamLines) ==
-            '''|
-               |  Hello
-               |  World
-               |'''.stripMargin().replace('\n', lineSeparator())
-
+            theme.suiteStandardStreamText(streamLines, testResultMock) ==
+                '''|
+                   |  Hello
+                   |  World
+                   |'''.stripMargin().replace('\n', lineSeparator())
     }
 
     def "suite stream text when showStandardStreams is false"() {
         given:
             testLoggerExtensionMock.showStandardStreams >> false
             theme = new PlainParallelTheme(testLoggerExtensionMock)
+            testResultMock.resultType >> SUCCESS
         expect:
-            !theme.suiteStandardStreamText(streamLines)
-
+            !theme.suiteStandardStreamText(streamLines, testResultMock)
     }
 }

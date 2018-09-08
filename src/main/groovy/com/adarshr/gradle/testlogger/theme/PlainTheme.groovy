@@ -1,8 +1,8 @@
 package com.adarshr.gradle.testlogger.theme
 
+import com.adarshr.gradle.testlogger.TestDescriptorWrapper
+import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.InheritConstructors
-import org.gradle.api.tasks.testing.TestDescriptor
-import org.gradle.api.tasks.testing.TestResult
 
 import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
@@ -17,20 +17,20 @@ class PlainTheme extends AbstractTheme {
     ]
 
     @Override
-    String suiteText(TestDescriptor descriptor) {
-        "${escape(descriptor.className)}${lineSeparator()}"
+    protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
+        "${descriptor.className}${lineSeparator()}"
     }
 
     @Override
-    String testText(TestDescriptor descriptor, TestResult result) {
-        testText("  Test ${displayName(descriptor)} ${RESULT_TYPE_MAPPING[result.resultType]}", descriptor, result)
+    protected String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result) {
+        testTextInternal("  Test ${descriptor.displayName} ${RESULT_TYPE_MAPPING[result.resultType]}", descriptor, result)
     }
 
-    protected String testText(String start, TestDescriptor descriptor, TestResult result) {
+    protected String testTextInternal(String start, TestDescriptorWrapper descriptor, TestResultWrapper result) {
         def line = new StringBuilder(start)
 
-        if (tooSlow(result)) {
-            line << " (${duration(result)})"
+        if (result.tooSlow) {
+            line << " (${result.duration})"
         }
 
         if (result.resultType == FAILURE) {
@@ -41,7 +41,7 @@ class PlainTheme extends AbstractTheme {
     }
 
     @Override
-    String summaryText(TestDescriptor descriptor, TestResult result) {
+    String summaryText(TestDescriptorWrapper descriptor, TestResultWrapper result) {
         if (!showSummary) {
             return ''
         }
@@ -49,7 +49,7 @@ class PlainTheme extends AbstractTheme {
         def line = new StringBuilder()
 
         line << "${result.resultType}: "
-        line << "Executed ${result.testCount} tests in ${duration(result)}"
+        line << "Executed ${result.testCount} tests in ${result.duration}"
 
         def breakdown = getBreakdown(result)
 
@@ -60,7 +60,7 @@ class PlainTheme extends AbstractTheme {
         line << lineSeparator()
     }
 
-    private static List getBreakdown(TestResult result) {
+    private static List getBreakdown(TestResultWrapper result) {
         def breakdown = []
 
         if (result.failedTestCount) {
@@ -75,16 +75,16 @@ class PlainTheme extends AbstractTheme {
     }
 
     @Override
-    String suiteStandardStreamText(String lines) {
-        standardStreamText(lines, 2)
+    protected String suiteStandardStreamTextInternal(String lines) {
+        standardStreamTextInternal(lines, 2)
     }
 
     @Override
-    String testStandardStreamText(String lines) {
-        standardStreamText(lines, 4)
+    protected String testStandardStreamTextInternal(String lines) {
+        standardStreamTextInternal(lines, 4)
     }
 
-    protected String standardStreamText(String lines, int indent) {
+    protected String standardStreamTextInternal(String lines, int indent) {
         if (!showStandardStreams || !lines) {
             return ''
         }

@@ -1,3 +1,5 @@
+import static org.gradle.api.tasks.testing.TestResult.ResultType.*
+
 tasks.withType(Test) {
     boolean started = false
     def suites = []
@@ -14,7 +16,11 @@ tasks.withType(Test) {
     }
 
     afterTest { suite, result ->
-        if (suite.className.startsWith('com.adarshr')) {
+        if (suite.className.startsWith('com.adarshr') &&
+            result.resultType == SUCCESS && testlogger.showPassed ||
+            result.resultType == SKIPPED && testlogger.showSkipped ||
+            result.resultType == FAILURE && testlogger.showFailed) {
+
             logger.lifecycle "__TEST=${suite.className}:${suite.name}__"
         }
     }

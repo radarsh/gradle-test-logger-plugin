@@ -7,13 +7,17 @@
 
 A Gradle plugin for printing beautiful logs on the console while running tests.
 
-## Standard theme
+## Screenshots
 
-![Standard theme](docs/standard-theme.gif)
+### Standard theme
 
-## Mocha theme
+![Standard theme](docs/images/standard.gif)
 
-![Mocha theme](docs/mocha-theme.gif)
+### Mocha theme
+
+![Mocha theme](docs/images/mocha.gif)
+
+Scroll down for more themes and customisation options or visit the [screenshots page](docs/SCREENSHOTS.md) for more demos.
 
 ## Usage
 
@@ -21,7 +25,7 @@ A Gradle plugin for printing beautiful logs on the console while running tests.
 
 ```groovy
 plugins {
-    id 'com.adarshr.test-logger' version '1.4.0'
+    id 'com.adarshr.test-logger' version '1.5.0'
 }
 ```
 
@@ -35,7 +39,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.adarshr:gradle-test-logger-plugin:1.4.0'
+        classpath 'com.adarshr:gradle-test-logger-plugin:1.5.0'
     }
 }
 
@@ -56,6 +60,8 @@ The convention used for determining the name of the system property is `testlogg
 - [Define slow threshold](#define-slow-threshold)
 - [Hide summary](#hide-summary)
 - [Show standard streams](#show-standard-streams)
+- [Filter standard streams](#filter-standard-streams)
+- [Filter test results](#filter-test-results)
 
 ### Switch themes
 
@@ -128,6 +134,44 @@ testlogger {
     showStandardStreams true
 }
 ```
+
+### Filter standard streams
+
+If the display standard output and error streams is enabled, it can often produce too much output to overwhelm anyone.
+Fortunately, we can filter this output based on the type of the test result.
+
+```groovy
+testlogger {
+    showStandardStreams true
+    showPassedStandardStreams false
+    showSkippedStandardStreams false
+    showFailedStandardStreams true
+}
+```
+
+All the three filter flags are enabled by default. In other words, the standard stream output is not filtered if
+`showStandardStreams` is enabled but none of the filter flags are configured.
+
+If `showStandardStreams` is set to `false`, the filter flags don't have any effect.
+
+### Filter test results
+
+Sometimes it is useful to hide test results of a certain type. For instance, if an application has hundreds of tests, the
+sheer volume of the output produced by passing tests could be enough to bury any valuable test failures. Similarly there
+might be a need to hide skipped tests or in rare instances even the failed ones.
+
+We can perform test result filtering by using the below settings.
+
+```groovy
+testlogger {
+    showPassed false
+    showSkipped false
+    showFailed true
+}
+```
+
+By default all the above three flags are turned on. If you have chosen to display standard streams by setting
+`showStandardStreams` flag to `true`, any output produced by filtered out tests will not be displayed.
 
 ## FAQ
 
