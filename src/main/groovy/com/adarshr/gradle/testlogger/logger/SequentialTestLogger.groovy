@@ -2,9 +2,11 @@ package com.adarshr.gradle.testlogger.logger
 
 import com.adarshr.gradle.testlogger.TestDescriptorWrapper
 import com.adarshr.gradle.testlogger.TestResultWrapper
+import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 
 @InheritConstructors
+@CompileStatic
 class SequentialTestLogger extends TestLoggerAdapter {
 
     private final Map<String, Boolean> suites = [:]

@@ -14,15 +14,15 @@ class TestLoggerWrapper implements TestLogger {
     @Delegate
     private final TestLogger testLoggerDelegate
 
-    TestLoggerWrapper(Project project, Test test) {
-        Theme theme = ThemeFactory.getTheme(project.testlogger as TestLoggerExtension)
+    TestLoggerWrapper(Project project, Test test, TestLoggerExtension testLoggerExtension) {
+        Theme theme = ThemeFactory.getTheme(testLoggerExtension)
 
         ensureCorrectThemeType(test, theme)
 
         if (theme.type.parallel) {
-            testLoggerDelegate = new ParallelTestLogger(project)
+            testLoggerDelegate = new ParallelTestLogger(project, testLoggerExtension)
         } else {
-            testLoggerDelegate = new SequentialTestLogger(project)
+            testLoggerDelegate = new SequentialTestLogger(project, testLoggerExtension)
         }
     }
 

@@ -5,11 +5,13 @@ import com.adarshr.gradle.testlogger.TestLoggerExtension
 import com.adarshr.gradle.testlogger.TestResultWrapper
 import com.adarshr.gradle.testlogger.theme.Theme
 import com.adarshr.gradle.testlogger.theme.ThemeFactory
+import groovy.transform.CompileStatic
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestOutputEvent
 import org.gradle.api.tasks.testing.TestResult
 
+@CompileStatic
 class TestLoggerAdapter implements TestLogger {
 
     protected final Theme theme
@@ -17,11 +19,11 @@ class TestLoggerAdapter implements TestLogger {
     protected final OutputCollector outputCollector
     private final TestLoggerExtension testLoggerExtension
 
-    TestLoggerAdapter(Project project) {
-        logger = new ConsoleLogger(project.logger)
-        testLoggerExtension = project.testlogger as TestLoggerExtension
-        theme = ThemeFactory.getTheme(testLoggerExtension)
-        outputCollector = new OutputCollector()
+    TestLoggerAdapter(Project project, TestLoggerExtension testLoggerExtension) {
+        this.logger = new ConsoleLogger(project.logger)
+        this.testLoggerExtension = testLoggerExtension
+        this.theme = ThemeFactory.getTheme(testLoggerExtension)
+        this.outputCollector = new OutputCollector()
     }
 
     @Override

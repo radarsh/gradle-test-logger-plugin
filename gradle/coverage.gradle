@@ -1,5 +1,5 @@
 jacoco {
-    toolVersion '0.7.9'
+    toolVersion '0.8.2'
 }
 
 jacocoTestReport {

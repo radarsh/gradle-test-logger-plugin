@@ -11,9 +11,7 @@ import spock.lang.Specification
 class TestLoggerWrapperSpec extends Specification {
 
     def extensionMock = Mock(TestLoggerExtension)
-    def projectMock = GroovyMock(Project) {
-        getTestlogger() >> extensionMock
-    }
+    def projectMock = Mock(Project)
     def testMock = Mock(Test)
 
     def "wrapper delegates to sequential test logger if parallel theme is not applied"() {
@@ -21,7 +19,7 @@ class TestLoggerWrapperSpec extends Specification {
             extensionMock.theme >> ThemeType.STANDARD
             testMock.maxParallelForks >> 1
         when:
-            def wrapper = new TestLoggerWrapper(projectMock, testMock)
+            def wrapper = new TestLoggerWrapper(projectMock, testMock, extensionMock)
         then:
             wrapper.testLoggerDelegate instanceof SequentialTestLogger
     }
@@ -31,7 +29,7 @@ class TestLoggerWrapperSpec extends Specification {
             extensionMock.theme >> ThemeType.STANDARD_PARALLEL
             testMock.maxParallelForks >> 1
         when:
-            def wrapper = new TestLoggerWrapper(projectMock, testMock)
+            def wrapper = new TestLoggerWrapper(projectMock, testMock, extensionMock)
         then:
             wrapper.testLoggerDelegate instanceof ParallelTestLogger
     }
@@ -41,7 +39,7 @@ class TestLoggerWrapperSpec extends Specification {
             extensionMock.theme >> ThemeType.STANDARD
             testMock.maxParallelForks >> 2
         when:
-            new TestLoggerWrapper(projectMock, testMock)
+            new TestLoggerWrapper(projectMock, testMock, extensionMock)
         then:
             def exception = thrown(GradleException)
             exception.message == "Parallel execution is not supported for theme type 'standard'. " +
@@ -53,7 +51,7 @@ class TestLoggerWrapperSpec extends Specification {
             extensionMock.theme >> ThemeType.STANDARD
             testMock.options >> Mock(TestNGOptions) { getParallel() >> 'methods' }
         when:
-            new TestLoggerWrapper(projectMock, testMock)
+            new TestLoggerWrapper(projectMock, testMock, extensionMock)
         then:
             def exception = thrown(GradleException)
             exception.message == "Parallel execution is not supported for theme type 'standard'. " +
