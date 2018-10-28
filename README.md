@@ -48,20 +48,59 @@ apply plugin: 'com.adarshr.test-logger'
 
 ## Configuration
 
-All the below configuration settings can either be specified in `build.gradle` file or be set at runtime using system
-properties or both. For instance, we could have `theme` set to `mocha` in `build.gradle` file but it can be overridden
-to be `standard` at runtime by using `-Dtestlogger.theme=standard` on the command line. Since they're system properties
-we have a number of ways of specifying them including `JAVA_OPTS` and `gradle.properties`.
+The plugin registers an extension called `testlogger` at project level as well as for each task of type
+[`Test`](https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/testing/Test.html).
 
-The convention used for determining the name of the system property is `testlogger.<configuration setting>`.
+The following shows the complete default configuration applied when you configure nothing.
 
-- [Switch themes](#switch-themes)
-- [Hide exceptions](#hide-exceptions)
-- [Define slow threshold](#define-slow-threshold)
-- [Hide summary](#hide-summary)
-- [Show standard streams](#show-standard-streams)
-- [Filter standard streams](#filter-standard-streams)
-- [Filter test results](#filter-test-results)
+```groovy
+testlogger {
+    theme 'standard'
+    showExceptions true
+    slowThreshold 2000
+    showSummary true
+    showPassed true
+    showSkipped true
+    showFailed true
+    showStandardStreams false
+    showPassedStandardStreams true
+    showSkippedStandardStreams true
+    showFailedStandardStreams true
+}
+```
+
+### Project vs task level configuration
+
+Settings configured at the project level can be overridden by redefining them at task level. Settings
+not defined at task level will inherit project level values. Consider the below configuration.
+
+```groovy
+testlogger {
+    theme 'mocha' // project level
+    slowThreshold 5000
+}
+
+test {
+    testlogger {
+        theme 'standard-parallel' // task level
+    }
+}
+```
+
+In the above example, the effective theme will be `standard-parallel` and `slowThreshold` will be `5000` whereas rest of
+the settings will retain their default values.
+
+### Overriding settings at runtime
+
+All the above settings can either be specified in `build.gradle` or be set at runtime using system properties or both.
+For instance, we could have `theme` set to `mocha` in the build file but it can be overridden to be `standard` at runtime
+by using `-Dtestlogger.theme=standard` on the command line. Since they are system properties we have a number of ways of
+specifying them including `JAVA_OPTS` and `gradle.properties`.
+
+- The convention used for determining the name of the system property is `testlogger.<configuration setting>`.
+- System property overrides will be applied after combining task and project level settings.
+- Specifying a system property override will apply the same setting for all tasks, regardless of any configuration
+defined in the build file.
 
 ### Switch themes
 

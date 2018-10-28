@@ -1,5 +1,15 @@
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
+def testExtension
+def projectExtension
+def combinedExtension
+
+afterEvaluate {
+    testExtension = test.testlogger
+    projectExtension = project.testlogger
+    combinedExtension = testExtension.combine(projectExtension)
+}
+
 tasks.withType(Test) {
     boolean started = false
     def suites = []
@@ -17,9 +27,9 @@ tasks.withType(Test) {
 
     afterTest { suite, result ->
         if (suite.className.startsWith('com.adarshr') &&
-            result.resultType == SUCCESS && testlogger.showPassed ||
-            result.resultType == SKIPPED && testlogger.showSkipped ||
-            result.resultType == FAILURE && testlogger.showFailed) {
+            result.resultType == SUCCESS && combinedExtension.showPassed ||
+            result.resultType == SKIPPED && combinedExtension.showSkipped ||
+            result.resultType == FAILURE && combinedExtension.showFailed) {
 
             logger.lifecycle "__TEST=${suite.className}:${suite.name}__"
         }

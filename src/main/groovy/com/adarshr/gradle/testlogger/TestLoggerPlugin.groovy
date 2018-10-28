@@ -9,18 +9,34 @@ class TestLoggerPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        project.extensions.create('testlogger', TestLoggerExtension, project, overrides)
+        createExtensions(project)
 
         project.afterEvaluate {
             project.tasks.withType(Test).each { test ->
-                project.testlogger.applyOverrides()
+                def testExtension = test.extensions.testlogger as TestLoggerExtension
+                def projectExtension = test.project.extensions.testlogger as TestLoggerExtension
+                def combinedExtension = testExtension.combine(projectExtension)
+
+                combinedExtension.applyOverrides()
 
                 test.testLogging.lifecycle.events = []
 
-                def testLogger = new TestLoggerWrapper(project, test)
+                def testLogger = new TestLoggerWrapper(project, test, combinedExtension)
 
                 test.addTestListener(testLogger)
                 test.addTestOutputListener(testLogger)
+            }
+        }
+    }
+
+    private static void createExtensions(Project project) {
+        project.extensions.create('testlogger', TestLoggerExtension, project, overrides)
+        project.tasks.withType(Test).each { task ->
+            task.extensions.create('testlogger', TestLoggerExtension, project, overrides)
+        }
+        project.tasks.whenTaskAdded { task ->
+            if (task instanceof Test) {
+                task.extensions.create('testlogger', TestLoggerExtension, project, overrides)
             }
         }
     }

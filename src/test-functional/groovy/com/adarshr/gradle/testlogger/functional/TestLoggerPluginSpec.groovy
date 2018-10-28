@@ -1,4 +1,4 @@
-package com.adarshr.gradle.testlogger
+package com.adarshr.gradle.testlogger.functional
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -645,5 +645,51 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             summary[2] == render('')
         and:
             result.task(":test").outcome == FAILED
+    }
+
+    def "each test task can have its own testlogger extension"() {
+        given:
+            def buildFragment = '''
+                testlogger { 
+                    theme 'standard' 
+                }
+                test {
+                    testlogger {
+                        theme 'plain'
+                    }
+                }
+                task anotherTask(type: Test) {
+                    testlogger {
+                        theme 'plain-parallel'
+                    }
+                }
+            '''
+        when:
+            def result = run(
+                'single-spock-test',
+                buildFragment,
+                'clean test'
+            )
+            def lines = getLoggerOutput(result.output).lines
+        then:
+            lines.size() == 4
+            lines[0] == render('')
+            lines[1] == render('com.adarshr.test.SingleSpec')
+            lines[2] == render('')
+            lines[3] == render('  Test this is a single test PASSED')
+        and:
+            result.task(':test').outcome == SUCCESS
+        when:
+            result = run(
+                'single-spock-test',
+                buildFragment,
+                'clean anotherTask'
+            )
+            lines = getLoggerOutput(result.output).lines
+        then:
+            lines.size() == 1
+            lines[0] == render('com.adarshr.test.SingleSpec this is a single test PASSED')
+        and:
+            result.task(':anotherTask').outcome == SUCCESS
     }
 }
