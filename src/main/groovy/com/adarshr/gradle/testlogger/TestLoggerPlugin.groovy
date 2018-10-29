@@ -13,15 +13,11 @@ class TestLoggerPlugin implements Plugin<Project> {
 
         project.afterEvaluate {
             project.tasks.withType(Test).each { test ->
-                def testExtension = test.extensions.testlogger as TestLoggerExtension
-                def projectExtension = test.project.extensions.testlogger as TestLoggerExtension
-                def combinedExtension = testExtension.combine(projectExtension)
-
-                combinedExtension.applyOverrides()
+                def testLoggerExtension = buildTestLoggerExtension(test)
 
                 test.testLogging.lifecycle.events = []
 
-                def testLogger = new TestLoggerWrapper(project, test, combinedExtension)
+                def testLogger = new TestLoggerWrapper(project, test, testLoggerExtension)
 
                 test.addTestListener(testLogger)
                 test.addTestOutputListener(testLogger)
@@ -30,15 +26,26 @@ class TestLoggerPlugin implements Plugin<Project> {
     }
 
     private static void createExtensions(Project project) {
-        project.extensions.create('testlogger', TestLoggerExtension, project, overrides)
+        project.extensions.create('testlogger', TestLoggerExtension, project)
         project.tasks.withType(Test).each { task ->
-            task.extensions.create('testlogger', TestLoggerExtension, project, overrides)
+            task.extensions.create('testlogger', TestLoggerExtension, project)
         }
         project.tasks.whenTaskAdded { task ->
             if (task instanceof Test) {
-                task.extensions.create('testlogger', TestLoggerExtension, project, overrides)
+                task.extensions.create('testlogger', TestLoggerExtension, project)
             }
         }
+    }
+
+    private static TestLoggerExtension buildTestLoggerExtension(Test test) {
+        def testExtension = test.testlogger as TestLoggerExtension
+        def projectExtension = test.project.testlogger as TestLoggerExtension
+
+        testExtension
+            .undecorate()
+            .reactTo(test.testLogging)
+            .combine(projectExtension)
+            .applyOverrides(overrides)
     }
 
     private static Map<String, String> getOverrides() {

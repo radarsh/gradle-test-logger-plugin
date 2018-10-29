@@ -72,7 +72,6 @@ idea {
     }
 }
 
-
 test {
     testClassesDirs += sourceSets.functionalTest.output.classesDirs
     classpath += sourceSets.functionalTest.runtimeClasspath
