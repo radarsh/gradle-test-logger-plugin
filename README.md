@@ -242,6 +242,11 @@ However, as of this writing `testlogger.showStandardStreams` property has been m
 property as long as one doesn't configure a value for `testlogger.showStandardStreams`. If a value is configured for
 `testlogger.showStandardStreams` (even if it is `false`), the plugin ignores `testLogging.showStandardStreams` altogether.
 
+### Can this plugin co-exist with junit-platform-gradle-plugin?
 
+Due to certain unknown reasons, `junit-platform-gradle-plugin` is incompatible with `gradle-test-logger-plugin`. If you are still
+using `junit-platform-gradle-plugin`, it might be worth noting that this plugin was [deprecated in JUnit Platform 1.2 and removed
+from JUnit Platform 1.3](https://junit.org/junit5/docs/current/user-guide/#running-tests-build-gradle).
 
-
+The test logger plugin however, is fully compatible with the [Gradle native way](https://docs.gradle.org/current/userguide/java_testing.html#using_junit5) of
+using JUnit 5.
