@@ -48,8 +48,8 @@ apply plugin: 'com.adarshr.test-logger'
 
 ## Configuration
 
-The plugin registers an extension called `testlogger` at project level as well as for each task of type
-[`Test`](https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/testing/Test.html).
+The plugin registers an extension called `testlogger` (all lowercase and one word) at project level
+as well as for each task of type [`Test`](https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/testing/Test.html).
 
 The following shows the complete default configuration applied when you configure nothing.
 
