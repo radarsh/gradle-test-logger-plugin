@@ -232,3 +232,16 @@ Yes. You will need to switch to a suitable parallel theme though. This can be on
 `mocha-parallel`. The parallel themes are specially designed to work with a setting of
 [`maxParallelForks`](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.Test.html#org.gradle.api.tasks.testing.Test:maxParallelForks)
 greater than 1. They achieve this by sacrificing the ability to group tests and thus some readability is lost.
+
+### How are `testlogger` and `Test.testLogging` related?
+
+Until recently, they were unrelated. While this plugin's `testlogger` has many properties named identical to the ones in Gradle's
+`Test.testLogging`, to a large extent, they are kept isolated by design.
+
+However, as of this writing `testlogger.showStandardStreams` property has been made to react to `testLogging.showStandardStreams`
+property as long as one doesn't configure a value for `testlogger.showStandardStreams`. If a value is configured for
+`testlogger.showStandardStreams` (even if it is `false`), the plugin ignores `testLogging.showStandardStreams` altogether.
+
+
+
+

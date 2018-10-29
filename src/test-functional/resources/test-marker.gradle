@@ -7,7 +7,7 @@ def combinedExtension
 afterEvaluate {
     testExtension = test.testlogger
     projectExtension = project.testlogger
-    combinedExtension = testExtension.combine(projectExtension)
+    combinedExtension = testExtension.undecorate().combine(projectExtension)
 }
 
 tasks.withType(Test) {

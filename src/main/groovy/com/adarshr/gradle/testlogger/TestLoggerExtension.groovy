@@ -4,6 +4,7 @@ import com.adarshr.gradle.testlogger.theme.ThemeType
 import groovy.transform.CompileStatic
 import org.gradle.api.Project
 import org.gradle.api.logging.configuration.ConsoleOutput
+import org.gradle.api.tasks.testing.logging.TestLogging
 
 import static com.adarshr.gradle.testlogger.theme.ThemeType.PLAIN
 import static com.adarshr.gradle.testlogger.theme.ThemeType.STANDARD
@@ -26,13 +27,11 @@ class TestLoggerExtension {
     boolean showFailed = true
 
     private final ConsoleOutput consoleType
-    private final Map<String, String> overrides
     private Set<String> configuredProperties = []
 
-    TestLoggerExtension(Project project, Map<String, String> overrides) {
+    TestLoggerExtension(Project project) {
         this.consoleType = project.gradle.startParameter.consoleOutput
         this.theme = project.gradle.startParameter.consoleOutput == Plain ? PLAIN : this.theme
-        this.overrides = overrides
     }
 
     private TestLoggerExtension(TestLoggerExtension source) {
@@ -48,7 +47,6 @@ class TestLoggerExtension {
         this.showSkipped = source.showSkipped
         this.showFailed = source.showFailed
         this.consoleType = source.consoleType
-        this.overrides = source.overrides
         this.configuredProperties = source.configuredProperties
     }
 
@@ -120,40 +118,52 @@ class TestLoggerExtension {
         this.configuredProperties << 'showFailed'
     }
 
-    TestLoggerExtension combine(TestLoggerExtension another) {
-        def copyOfThis = new TestLoggerExtension(this)
+    TestLoggerExtension undecorate() {
+        new TestLoggerExtension(this)
+    }
 
-        copyOfThis.properties.findAll { Object property, Object value ->
-            !copyOfThis.configuredProperties.contains(property) && property != 'class'
-        }.each { Object property, Object value ->
-            copyOfThis.setProperty(property as String, another.properties[property])
+    TestLoggerExtension reactTo(TestLogging testLogging) {
+        if (!this.configuredProperties.contains('showStandardStreams')) {
+            this.showStandardStreams = testLogging.showStandardStreams
+            this.configuredProperties -= 'showStandardStreams'
         }
 
-        copyOfThis.configuredProperties.clear()
-
-        copyOfThis
+        this
     }
 
-    void applyOverrides() {
-        override('theme', ThemeType)
-        override('showExceptions', Boolean)
-        override('slowThreshold', Long)
-        override('showSummary', Boolean)
-        override('showStandardStreams', Boolean)
-        override('showPassedStandardStreams', Boolean)
-        override('showSkippedStandardStreams', Boolean)
-        override('showFailedStandardStreams', Boolean)
-        override('showPassed', Boolean)
-        override('showSkipped', Boolean)
-        override('showFailed', Boolean)
+    TestLoggerExtension combine(TestLoggerExtension another) {
+        this.properties.findAll { Object property, Object value ->
+            !this.configuredProperties.contains(property) && property != 'class'
+        }.each { Object property, Object value ->
+            this.setProperty(property as String, another.properties[property])
+        }
+
+        this.configuredProperties.clear()
+
+        this
     }
 
-    private void override(String name, Class type) {
+    TestLoggerExtension applyOverrides(Map<String, String> overrides) {
+        override(overrides, 'theme', ThemeType)
+        override(overrides, 'showExceptions', Boolean)
+        override(overrides, 'slowThreshold', Long)
+        override(overrides, 'showSummary', Boolean)
+        override(overrides, 'showStandardStreams', Boolean)
+        override(overrides, 'showPassedStandardStreams', Boolean)
+        override(overrides, 'showSkippedStandardStreams', Boolean)
+        override(overrides, 'showFailedStandardStreams', Boolean)
+        override(overrides, 'showPassed', Boolean)
+        override(overrides, 'showSkipped', Boolean)
+        override(overrides, 'showFailed', Boolean)
+
+        this
+    }
+
+    private void override(Map<String, String> overrides, String name, Class type) {
         if (overrides.containsKey(name)) {
             String method = Enum.isAssignableFrom(type) ? 'fromName' : 'valueOf'
 
             setProperty(name, type.invokeMethod(method, overrides[name]))
-            this.configuredProperties << name
         }
     }
 }
