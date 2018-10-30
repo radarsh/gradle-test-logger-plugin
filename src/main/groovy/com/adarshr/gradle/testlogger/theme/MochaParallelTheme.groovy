@@ -2,9 +2,11 @@ package com.adarshr.gradle.testlogger.theme
 
 import com.adarshr.gradle.testlogger.TestDescriptorWrapper
 import com.adarshr.gradle.testlogger.TestResultWrapper
+import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 
 @InheritConstructors
+@CompileStatic
 class MochaParallelTheme extends MochaTheme {
 
     @Override
