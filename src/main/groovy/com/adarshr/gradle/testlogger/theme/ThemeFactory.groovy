@@ -1,10 +1,12 @@
 package com.adarshr.gradle.testlogger.theme
 
 import com.adarshr.gradle.testlogger.TestLoggerExtension
+import groovy.transform.CompileStatic
 import org.gradle.api.GradleException
 
 import static com.adarshr.gradle.testlogger.theme.ThemeType.*
 
+@CompileStatic
 class ThemeFactory {
 
     static Theme getTheme(TestLoggerExtension extension) {

@@ -98,11 +98,12 @@ task functionalTest(type: Test) {
     }
 
     testlogger {
-        theme 'standard-parallel'
+        theme 'mocha-parallel'
     }
 
     include 'com/adarshr/gradle/testlogger/functional/**'
 }
 
-tasks.build.dependsOn 'functionalTest'
+tasks.check.dependsOn 'functionalTest'
 tasks.functionalTest.dependsOn 'pluginUnderTestMetadata', 'testClasses'
+tasks.functionalTest.mustRunAfter 'test'

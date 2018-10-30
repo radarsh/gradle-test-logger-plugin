@@ -1,10 +1,12 @@
 package com.adarshr.gradle.testlogger
 
 import com.adarshr.gradle.testlogger.logger.TestLoggerWrapper
+import groovy.transform.CompileStatic
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 
+@CompileStatic
 class TestLoggerPlugin implements Plugin<Project> {
 
     @Override
@@ -38,8 +40,8 @@ class TestLoggerPlugin implements Plugin<Project> {
     }
 
     private static TestLoggerExtension buildTestLoggerExtension(Test test) {
-        def testExtension = test.testlogger as TestLoggerExtension
-        def projectExtension = test.project.testlogger as TestLoggerExtension
+        def testExtension = test.extensions.findByName('testlogger') as TestLoggerExtension
+        def projectExtension = test.project.extensions.findByName('testlogger') as TestLoggerExtension
 
         testExtension
             .undecorate()
@@ -49,7 +51,7 @@ class TestLoggerPlugin implements Plugin<Project> {
     }
 
     private static Map<String, String> getOverrides() {
-        System.properties.findAll { key, value ->
+        (System.properties as Map<String, String>).findAll { key, value ->
             key.startsWith 'testlogger.'
         }.collectEntries { key, value ->
             [(key.replace('testlogger.', '')): value]

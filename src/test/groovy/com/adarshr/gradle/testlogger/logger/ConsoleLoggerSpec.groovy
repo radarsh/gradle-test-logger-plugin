@@ -1,6 +1,7 @@
 package com.adarshr.gradle.testlogger.logger
 
-import com.adarshr.gradle.testlogger.renderer.AnsiTextRenderer
+
+import com.adarshr.gradle.testlogger.renderer.TextRenderer
 import org.gradle.api.logging.Logger
 import spock.lang.Specification
 
@@ -9,18 +10,16 @@ import static org.gradle.api.logging.LogLevel.LIFECYCLE
 class ConsoleLoggerSpec extends Specification {
 
     def loggerMock = Mock(Logger)
-    def ansiTextRendererMock = Mock(AnsiTextRenderer)
+    def textRendererMock = Mock(TextRenderer)
     ConsoleLogger consoleLogger
 
     def setup() {
-        GroovySpy(AnsiTextRenderer, global: true)
-        new AnsiTextRenderer() >> ansiTextRendererMock
-        consoleLogger = new ConsoleLogger(loggerMock)
+        consoleLogger = new ConsoleLogger(loggerMock, textRendererMock)
     }
 
     def "log"() {
         given:
-            ansiTextRendererMock.render('text to be logged') >> 'rendered ansi text'
+            textRendererMock.render('text to be logged') >> 'rendered ansi text'
         when:
             consoleLogger.log('text to be logged')
         then:
@@ -32,7 +31,7 @@ class ConsoleLoggerSpec extends Specification {
             consoleLogger.log('')
         then:
             0 * loggerMock._
-            0 * ansiTextRendererMock._
+            0 * textRendererMock._
     }
 
     def "log new line"() {
