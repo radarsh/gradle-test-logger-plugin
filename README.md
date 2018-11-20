@@ -25,7 +25,7 @@ Scroll down for more themes and customisation options or visit the [screenshots 
 
 ```groovy
 plugins {
-    id 'com.adarshr.test-logger' version '1.5.0'
+    id 'com.adarshr.test-logger' version '1.6.0'
 }
 ```
 
@@ -39,7 +39,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.adarshr:gradle-test-logger-plugin:1.5.0'
+        classpath 'com.adarshr:gradle-test-logger-plugin:1.6.0'
     }
 }
 
@@ -48,20 +48,59 @@ apply plugin: 'com.adarshr.test-logger'
 
 ## Configuration
 
-All the below configuration settings can either be specified in `build.gradle` file or be set at runtime using system
-properties or both. For instance, we could have `theme` set to `mocha` in `build.gradle` file but it can be overridden
-to be `standard` at runtime by using `-Dtestlogger.theme=standard` on the command line. Since they're system properties
-we have a number of ways of specifying them including `JAVA_OPTS` and `gradle.properties`.
+The plugin registers an extension called `testlogger` (all lowercase and one word) at project level
+as well as for each task of type [`Test`](https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/testing/Test.html).
 
-The convention used for determining the name of the system property is `testlogger.<configuration setting>`.
+The following shows the complete default configuration applied when you configure nothing.
 
-- [Switch themes](#switch-themes)
-- [Hide exceptions](#hide-exceptions)
-- [Define slow threshold](#define-slow-threshold)
-- [Hide summary](#hide-summary)
-- [Show standard streams](#show-standard-streams)
-- [Filter standard streams](#filter-standard-streams)
-- [Filter test results](#filter-test-results)
+```groovy
+testlogger {
+    theme 'standard'
+    showExceptions true
+    slowThreshold 2000
+    showSummary true
+    showPassed true
+    showSkipped true
+    showFailed true
+    showStandardStreams false
+    showPassedStandardStreams true
+    showSkippedStandardStreams true
+    showFailedStandardStreams true
+}
+```
+
+### Project vs task level configuration
+
+Settings configured at the project level can be overridden by redefining them at task level. Settings
+not defined at task level will inherit project level values. Consider the below configuration.
+
+```groovy
+testlogger {
+    theme 'mocha' // project level
+    slowThreshold 5000
+}
+
+test {
+    testlogger {
+        theme 'standard-parallel' // task level
+    }
+}
+```
+
+In the above example, the effective theme will be `standard-parallel` and `slowThreshold` will be `5000` whereas rest of
+the settings will retain their default values.
+
+### Overriding settings at runtime
+
+All the above settings can either be specified in `build.gradle` or be set at runtime using system properties or both.
+For instance, we could have `theme` set to `mocha` in the build file but it can be overridden to be `standard` at runtime
+by using `-Dtestlogger.theme=standard` on the command line. Since they are system properties we have a number of ways of
+specifying them including `JAVA_OPTS` and `gradle.properties`.
+
+- The convention used for determining the name of the system property is `testlogger.<configuration setting>`.
+- System property overrides will be applied after combining task and project level settings.
+- Specifying a system property override will apply the same setting for all tasks, regardless of any configuration
+defined in the build file.
 
 ### Switch themes
 
@@ -193,3 +232,21 @@ Yes. You will need to switch to a suitable parallel theme though. This can be on
 `mocha-parallel`. The parallel themes are specially designed to work with a setting of
 [`maxParallelForks`](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.Test.html#org.gradle.api.tasks.testing.Test:maxParallelForks)
 greater than 1. They achieve this by sacrificing the ability to group tests and thus some readability is lost.
+
+### How are `testlogger` and `Test.testLogging` related?
+
+Until recently, they were unrelated. While this plugin's `testlogger` has many properties named identical to the ones in Gradle's
+`Test.testLogging`, to a large extent, they are kept isolated by design.
+
+However, as of this writing `testlogger.showStandardStreams` property has been made to react to `testLogging.showStandardStreams`
+property as long as one doesn't configure a value for `testlogger.showStandardStreams`. If a value is configured for
+`testlogger.showStandardStreams` (even if it is `false`), the plugin ignores `testLogging.showStandardStreams` altogether.
+
+### Can this plugin co-exist with junit-platform-gradle-plugin?
+
+Due to certain unknown reasons, `junit-platform-gradle-plugin` is incompatible with `gradle-test-logger-plugin`. If you are still
+using `junit-platform-gradle-plugin`, it might be worth noting that this plugin was [deprecated in JUnit Platform 1.2 and removed
+from JUnit Platform 1.3](https://junit.org/junit5/docs/current/user-guide/#running-tests-build-gradle).
+
+The test logger plugin however, is fully compatible with the [Gradle native way](https://docs.gradle.org/current/userguide/java_testing.html#using_junit5) of
+using JUnit 5.

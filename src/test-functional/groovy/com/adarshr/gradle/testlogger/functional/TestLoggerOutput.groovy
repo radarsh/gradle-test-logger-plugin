@@ -1,4 +1,4 @@
-package com.adarshr.gradle.testlogger
+package com.adarshr.gradle.testlogger.functional
 
 class TestLoggerOutput {
 

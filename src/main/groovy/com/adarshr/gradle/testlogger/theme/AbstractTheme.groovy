@@ -3,11 +3,13 @@ package com.adarshr.gradle.testlogger.theme
 import com.adarshr.gradle.testlogger.TestDescriptorWrapper
 import com.adarshr.gradle.testlogger.TestLoggerExtension
 import com.adarshr.gradle.testlogger.TestResultWrapper
+import groovy.transform.CompileStatic
 
 import static com.adarshr.gradle.testlogger.util.RendererUtils.escape
 import static java.lang.System.lineSeparator
 
 @SuppressWarnings("GrMethodMayBeStatic")
+@CompileStatic
 abstract class AbstractTheme implements Theme {
 
     final ThemeType type

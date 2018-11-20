@@ -2,6 +2,7 @@ package com.adarshr.gradle.testlogger.theme
 
 import com.adarshr.gradle.testlogger.TestDescriptorWrapper
 import com.adarshr.gradle.testlogger.TestResultWrapper
+import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 import org.gradle.api.tasks.testing.TestResult.ResultType
 
@@ -9,6 +10,7 @@ import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
 @InheritConstructors
+@CompileStatic
 class MochaTheme extends AbstractTheme {
 
     @Override

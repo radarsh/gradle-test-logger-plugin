@@ -1,7 +1,9 @@
 package com.adarshr.gradle.testlogger.theme
 
+import groovy.transform.CompileStatic
 import org.gradle.api.GradleException
 
+@CompileStatic
 enum ThemeType {
     PLAIN('plain', false),
     PLAIN_PARALLEL('plain-parallel', true),
@@ -31,8 +33,8 @@ enum ThemeType {
     }
 
     static String getAllThemeNames() {
-        values().collect {
-            "'${it.name}'"
+        values().collect { ThemeType themeType ->
+            "'${themeType.name}'"
         }.join(', ')
     }
 

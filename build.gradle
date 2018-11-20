@@ -31,14 +31,9 @@ sourceSets {
         groovy {
             srcDir 'src/test-functional/groovy'
             compileClasspath += sourceSets.main.output
+            runtimeClasspath += sourceSets.main.output
         }
     }
-}
-
-test {
-    testClassesDirs += sourceSets.functionalTest.output.classesDirs
-    classpath += sourceSets.functionalTest.runtimeClasspath
-    systemProperty 'file.encoding', 'UTF-8'
 }
 
 dependencies {
@@ -76,3 +71,39 @@ idea {
         testSourceDirs += file('src/test-functional/groovy')
     }
 }
+
+test {
+    testClassesDirs += sourceSets.functionalTest.output.classesDirs
+    classpath += sourceSets.functionalTest.runtimeClasspath
+    systemProperty 'file.encoding', 'UTF-8'
+    
+    testlogger {
+        theme 'mocha'
+    }
+
+    exclude 'com/adarshr/gradle/testlogger/functional/**'
+}
+
+task functionalTest(type: Test) {
+    maxParallelForks = 2
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath + sourceSets.functionalTest.runtimeClasspath
+    systemProperty 'file.encoding', 'UTF-8'
+    minHeapSize '128m'
+    maxHeapSize '512m'
+    
+    jacoco {
+        append = true
+        destinationFile = file("${buildDir}/jacoco/test.exec")
+    }
+
+    testlogger {
+        theme 'mocha-parallel'
+    }
+
+    include 'com/adarshr/gradle/testlogger/functional/**'
+}
+
+tasks.check.dependsOn 'functionalTest'
+tasks.functionalTest.dependsOn 'pluginUnderTestMetadata', 'testClasses'
+tasks.functionalTest.mustRunAfter 'test'

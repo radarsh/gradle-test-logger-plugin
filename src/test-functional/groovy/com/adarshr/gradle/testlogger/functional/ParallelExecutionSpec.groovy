@@ -1,4 +1,4 @@
-package com.adarshr.gradle.testlogger
+package com.adarshr.gradle.testlogger.functional
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS

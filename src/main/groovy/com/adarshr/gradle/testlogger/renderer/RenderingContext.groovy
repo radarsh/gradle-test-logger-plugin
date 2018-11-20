@@ -1,14 +1,16 @@
 package com.adarshr.gradle.testlogger.renderer
 
+import groovy.transform.CompileStatic
 import org.fusesource.jansi.Ansi
 
 import static org.fusesource.jansi.Ansi.Erase.*
 import static org.fusesource.jansi.Ansi.ansi
 
+@CompileStatic
 class RenderingContext implements Appendable {
 
     //@formatter:off
-    private static final def TAG_MAPPING = [
+    private static final Map<String, Closure<Ansi>> TAG_MAPPING = [
         'bold'              : { Ansi ansi -> ansi.bold() },
         'bold-off'          : { Ansi ansi -> ansi.boldOff() },
         'default'           : { Ansi ansi -> ansi.fgDefault() },
@@ -49,13 +51,13 @@ class RenderingContext implements Appendable {
 
     void endTag() {
         def tags = tag.toString().split(',')
-        tags.each {
-            if (TAG_MAPPING.containsKey(it)) {
-                def mapping = TAG_MAPPING[it]
+        tags.each { String tag ->
+            if (TAG_MAPPING.containsKey(tag)) {
+                def mapping = TAG_MAPPING[tag]
 
                 mapping.call(ansi)
             } else {
-                ansi.a("[${it}]")
+                ansi.a("[${tag}]")
             }
         }
 

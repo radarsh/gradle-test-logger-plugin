@@ -1,4 +1,4 @@
-package com.adarshr.gradle.testlogger
+package com.adarshr.gradle.testlogger.functional
 
 import com.adarshr.gradle.testlogger.renderer.AnsiTextRenderer
 import org.gradle.testkit.runner.BuildResult

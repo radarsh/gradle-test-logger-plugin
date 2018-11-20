@@ -1,7 +1,31 @@
 # Change Log
 
-## [v1.5.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.5.0) (2018-09-09)
+## [v1.6.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.6.0) (2018-11-20)
 
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.5.0...v1.6.0)
+
+**Implemented enhancements:**
+
+- Allow testlogger to be configured independently for each task [\#90](https://github.com/radarsh/gradle-test-logger-plugin/issues/90)
+
+**Closed issues:**
+
+- Test time reporting under the threshold [\#101](https://github.com/radarsh/gradle-test-logger-plugin/issues/101)
+- Doesn't render tickmarks for mocha theme on Windows [\#99](https://github.com/radarsh/gradle-test-logger-plugin/issues/99)
+- Add CompileStatic to more classes [\#97](https://github.com/radarsh/gradle-test-logger-plugin/issues/97)
+- Print list of tests before execution [\#91](https://github.com/radarsh/gradle-test-logger-plugin/issues/91)
+- JUnit5 Gradle Plugin interferes with this one [\#87](https://github.com/radarsh/gradle-test-logger-plugin/issues/87)
+- Use of testLogger.showStandardStreams can lead to confusion [\#86](https://github.com/radarsh/gradle-test-logger-plugin/issues/86)
+
+**Merged pull requests:**
+
+- Add @CompileStatic to all classes [\#98](https://github.com/radarsh/gradle-test-logger-plugin/pull/98) ([radarsh](https://github.com/radarsh))
+- Highlight lowercase extension name in documentation [\#96](https://github.com/radarsh/gradle-test-logger-plugin/pull/96) ([radarsh](https://github.com/radarsh))
+- Clarify documentation about junit-platform Gradle plugin [\#95](https://github.com/radarsh/gradle-test-logger-plugin/pull/95) ([radarsh](https://github.com/radarsh))
+- React to testLogging.showStandardStreams [\#94](https://github.com/radarsh/gradle-test-logger-plugin/pull/94) ([radarsh](https://github.com/radarsh))
+- Configure testlogger for each task [\#93](https://github.com/radarsh/gradle-test-logger-plugin/pull/93) ([radarsh](https://github.com/radarsh))
+
+## [v1.5.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.5.0) (2018-09-08)
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.4.0...v1.5.0)
 
 **Implemented enhancements:**
