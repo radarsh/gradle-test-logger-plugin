@@ -5,6 +5,7 @@ import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 
+import static com.adarshr.gradle.testlogger.util.RendererUtils.preserveAnsi
 import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
@@ -108,7 +109,7 @@ class StandardTheme extends AbstractTheme {
             return ''
         }
 
-        lines = lines.replace('[', '\\[')
+        lines = preserveAnsi(lines)
 
         def indentation = ' ' * indent
         def line = new StringBuilder("[default]${lineSeparator()}")
