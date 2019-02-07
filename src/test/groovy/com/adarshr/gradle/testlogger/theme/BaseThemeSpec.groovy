@@ -12,7 +12,7 @@ abstract class BaseThemeSpec extends Specification {
     protected def testLoggerExtensionMock = Mock(TestLoggerExtension)
     protected def testDescriptorMock = Mock(TestDescriptorWrapper)
     protected def testResultMock = Mock(TestResultWrapper)
-    protected def streamLines = "Hello${lineSeparator()}World"
+    protected def streamLines = "Hello${lineSeparator()}World [brackets] \u001B[0mANSI"
 
     def setup() {
         testResultMock.loggable >> true

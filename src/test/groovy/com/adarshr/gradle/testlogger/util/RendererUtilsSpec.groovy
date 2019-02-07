@@ -17,4 +17,16 @@ class RendererUtilsSpec extends Specification {
             '[escape]'   | '\\[escape\\]'
             '\u001Btext' | 'text'
     }
+
+    @Unroll
+    def "preserve ansi #text"() {
+        expect:
+            RendererUtils.preserveAnsi(text) == expected
+        where:
+            text              | expected
+            null              | null
+            ''                | ''
+            '[do not escape]' | '[do not escape]'
+            '\u001B[0mANSI'   | '\u001B\\[0mANSI'
+    }
 }
