@@ -188,7 +188,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             theme.testStandardStreamText(streamLines, testResultMock) ==
                 '''|[grey]
                    |        Hello
-                   |        World[/]
+                   |        World [brackets] \u001B\\[0mANSI[/]
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 
@@ -208,7 +208,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             theme.suiteStandardStreamText(streamLines, testResultMock) ==
                 '''|[grey]
                    |    Hello
-                   |    World[/]
+                   |    World [brackets] \u001B\\[0mANSI[/]
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 
