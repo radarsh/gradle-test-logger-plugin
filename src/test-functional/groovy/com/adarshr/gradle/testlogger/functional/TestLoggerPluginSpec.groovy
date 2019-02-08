@@ -137,7 +137,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         and:
             lines.size() == 10
             lines[0] == render('')
-            lines[1] == render('[erase-ahead,bold]com.adarshr.test.FirstTest[/]')
+            lines[1] == render('[erase-ahead,bold]FirstTest[/]')
             lines[2] == render('')
             lines[3] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldBeSkipped()[yellow] SKIPPED[/]')
             lines[4] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[red]')
@@ -162,16 +162,16 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         and:
             lines.size() == 14
             lines[0] == render('')
-            lines[1] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetThree[/]')
+            lines[1] == render('[erase-ahead,bold]NestedTestsetOne[/]')
             lines[2] == render('')
-            lines[3] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetThree()[green] PASSED[/]')
-            lines[4] == render('')
-            lines[5] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetTwo[/]')
-            lines[6] == render('')
-            lines[7] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetTwo()[green] PASSED[/]')
-            lines[8] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetTwo()[green] PASSED[/]')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetOne()[green] PASSED[/]')
+            lines[4] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetOne()[green] PASSED[/]')
+            lines[5] == render('')
+            lines[6] == render('[erase-ahead,bold]NestedTestsetThree[/]')
+            lines[7] == render('')
+            lines[8] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetThree()[green] PASSED[/]')
             lines[9] == render('')
-            lines[10] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetOne[/]')
+            lines[10] == render('[erase-ahead,bold]NestedTestsetTwo[/]')
             lines[11] == render('')
             lines[12] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetOne()[green] PASSED[/]')
             lines[13] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetOne()[green] PASSED[/]')
@@ -190,11 +190,11 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         and:
             lines.size() == 8
             lines[0] == render('')
-            lines[1] == render('[erase-ahead,bold]com.adarshr.test.DeepNestedTest$NestedTestsetLevelOne[/]')
+            lines[1] == render('[erase-ahead,bold]NestedTestsetLevelOne[/]')
             lines[2] == render('')
             lines[3] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelOne()[green] PASSED[/]')
             lines[4] == render('')
-            lines[5] == render('[erase-ahead,bold]com.adarshr.test.DeepNestedTest$NestedTestsetLevelOne$NestedTestsetLevelTwo[/]')
+            lines[5] == render('[erase-ahead,bold]Nested test set level two[/]')
             lines[6] == render('')
             lines[7] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelTwo()[green] PASSED[/]')
         and:

@@ -21,7 +21,7 @@ class PlainTheme extends AbstractTheme {
 
     @Override
     protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
-        "${descriptor.className}${lineSeparator()}"
+        "${descriptor.classDisplayName}${lineSeparator()}"
     }
 
     @Override

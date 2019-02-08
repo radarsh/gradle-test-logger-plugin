@@ -23,8 +23,13 @@ class TestDescriptorWrapper {
     }
 
     @CompileDynamic
+    String getClassDisplayName() {
+        escape(testDescriptor.properties.classDisplayName ?: testDescriptor.className)
+    }
+
+    @CompileDynamic
     String getDisplayName() {
-        escape(testDescriptor.properties.displayName ?: name)
+        escape(testDescriptor.properties.displayName ?: testDescriptor.name)
     }
 
     String getSuiteKey() {

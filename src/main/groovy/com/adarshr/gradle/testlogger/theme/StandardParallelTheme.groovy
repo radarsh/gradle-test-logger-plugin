@@ -16,7 +16,7 @@ class StandardParallelTheme extends StandardTheme {
 
     @Override
     protected String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result) {
-        super.testTextInternal("[erase-ahead,bold]${descriptor.className}[bold-off] ${descriptor.displayName}", descriptor, result)
+        super.testTextInternal("[erase-ahead,bold]${descriptor.classDisplayName}[bold-off] ${descriptor.displayName}", descriptor, result)
     }
 
     @Override

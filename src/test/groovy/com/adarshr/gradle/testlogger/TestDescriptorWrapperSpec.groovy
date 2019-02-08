@@ -17,6 +17,22 @@ class TestDescriptorWrapperSpec extends Specification {
             wrapper.className == 'ClassName \\[escaped\\]'
     }
 
+    def "classDisplayName delegates to classDisplayName property if present"() {
+        given:
+            testDescriptorMock.properties >> [classDisplayName: 'class display name [escaped]']
+            testDescriptorMock.className >> 'ClassName [escaped]'
+        expect:
+            wrapper.classDisplayName == 'class display name \\[escaped\\]'
+    }
+
+    def "classDisplayName falls back to className if classDisplayName property is missing"() {
+        given:
+            testDescriptorMock.properties >> [:]
+            testDescriptorMock.className >> 'ClassName [escaped]'
+        expect:
+            wrapper.classDisplayName == 'ClassName \\[escaped\\]'
+    }
+
     def "displayName delegates to displayName property if present"() {
         given:
             testDescriptorMock.properties >> [displayName: 'display name [escaped]']
