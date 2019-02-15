@@ -23,7 +23,7 @@ jobs:
                 key: v1-dependencies-{{ checksum "build.gradle" }}
             - run:
                 name: Run tests
-                command: GRADLE_OPTS="-Xms256m -Xmx2048m" ./gradlew build --no-daemon
+                command: GRADLE_OPTS="-Xms256m -Xmx2048m" ./gradlew build --no-daemon --scan
             - run:
                 name: Code coverage
                 command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew jacocoTestReport coveralls --no-daemon
