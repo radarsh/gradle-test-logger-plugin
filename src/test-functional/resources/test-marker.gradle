@@ -14,12 +14,12 @@ tasks.withType(Test) {
     boolean started = false
     def suites = []
 
-    beforeTest { suite ->
-        if (suite.className.startsWith('com.adarshr') && !started) {
+    beforeSuite { suite ->
+        if (suite.className?.startsWith('com.adarshr') && !started) {
             started = true
             logger.lifecycle '__START__'
         }
-        if (suite.className.startsWith('com.adarshr') && !suites.contains(suite.className)) {
+        if (suite.className?.startsWith('com.adarshr') && !suites.contains(suite.className)) {
             logger.lifecycle "__SUITE=${suite.className}__"
             suites << suite.className
         }

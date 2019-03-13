@@ -161,19 +161,19 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         and:
             lines.size() == 14
             lines[0] == render('')
-            lines[1] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetOne[/]')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetThree[/]')
             lines[2] == render('')
-            lines[3] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetOne()[green] PASSED[/]')
-            lines[4] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetOne()[green] PASSED[/]')
-            lines[5] == render('')
-            lines[6] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetThree[/]')
-            lines[7] == render('')
-            lines[8] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetThree()[green] PASSED[/]')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetThree()[green] PASSED[/]')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetTwo[/]')
+            lines[6] == render('')
+            lines[7] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetTwo()[green] PASSED[/]')
+            lines[8] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetTwo()[green] PASSED[/]')
             lines[9] == render('')
-            lines[10] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetTwo[/]')
+            lines[10] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetOne[/]')
             lines[11] == render('')
-            lines[12] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetTwo()[green] PASSED[/]')
-            lines[13] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetTwo()[green] PASSED[/]')
+            lines[12] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetOne()[green] PASSED[/]')
+            lines[13] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetOne()[green] PASSED[/]')
         and:
             result.task(":test").outcome == SUCCESS
     }
@@ -344,6 +344,66 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             lines[19] == render('')
         and:
             result.task(":test").outcome == SUCCESS
+    }
+
+    def "show standard streams from before System exit was called from setupSpec"() {
+        when:
+            def result = run(
+                'sample-spock-tests-system-exit',
+                '''
+                    testlogger { 
+                        showStandardStreams true
+                    }
+                ''',
+                'clean test --tests *SecondSpec'
+            )
+        then:
+            def lines = getLoggerOutput(result.output).lines
+        and:
+            lines.size() == 4
+            lines[0] == render('[default]')
+            lines[1] == render('  SecondSpec - stdout setupSpec')
+            lines[2] == render('  SecondSpec - stderr setupSpec[/]')
+            lines[3] == render('')
+        and:
+            result.task(":test").outcome == FAILED
+    }
+
+    def "show standard streams from before System exit was called from setup"() {
+        when:
+            def result = run(
+                'sample-spock-tests-system-exit',
+                '''
+                    testlogger { 
+                        showStandardStreams true
+                    }
+                ''',
+                'clean test --tests *FirstSpec'
+            )
+        then:
+            def output = getLoggerOutput(result.output)
+            def lines = output.lines
+            def summary = output.summary
+        and:
+            lines.size() == 12
+            lines[0] == render('[default]')
+            lines[1] == render('  FirstSpec - stdout setupSpec')
+            lines[2] == render('  FirstSpec - stderr setupSpec[/]')
+            lines[3] == render('')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[/]')
+            lines[6] == render('')
+            lines[7] == render('[erase-ahead,bold]  Test [bold-off]this test should pass[yellow] SKIPPED[/]')
+            lines[8] == render('[default]')
+            lines[9] == render('    FirstSpec - this test should pass - stdout setup')
+            lines[10] == render('    FirstSpec - this test should pass - stderr setup[/]')
+        and:
+            summary[0] == render('')
+            summary[1].startsWith render('[erase-ahead,bold,green]SUCCESS: [default]Executed 1 tests in')
+            summary[1].endsWith render('(1 skipped)[/]')
+            summary[2] == render('')
+        and:
+            result.task(":test").outcome == FAILED
     }
 
     def "hide passed tests"() {

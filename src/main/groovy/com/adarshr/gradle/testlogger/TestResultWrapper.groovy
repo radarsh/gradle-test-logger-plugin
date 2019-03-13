@@ -4,6 +4,8 @@ import com.adarshr.gradle.testlogger.util.TimeUtils
 import groovy.transform.CompileStatic
 import org.gradle.api.tasks.testing.TestResult
 
+import static org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
+
 @CompileStatic
 class TestResultWrapper {
 
@@ -18,7 +20,7 @@ class TestResultWrapper {
 
     boolean isLoggable() {
         testLoggerExtension.showPassed && testResult.successfulTestCount ||
-            testLoggerExtension.showSkipped && testResult.skippedTestCount ||
+            testLoggerExtension.showSkipped && (testResult.resultType == SKIPPED || testResult.skippedTestCount) ||
             testLoggerExtension.showFailed && testResult.failedTestCount
     }
 
