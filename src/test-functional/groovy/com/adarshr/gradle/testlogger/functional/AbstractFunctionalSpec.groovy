@@ -8,6 +8,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import static java.lang.System.lineSeparator
 import static org.apache.commons.io.FileUtils.copyDirectoryToDirectory
 
 @SuppressWarnings('GrMethodMayBeStatic')
@@ -28,10 +29,12 @@ abstract class AbstractFunctionalSpec extends Specification {
     private static final def SUITE_MARKER_REGEX = $/${SUITE_MARKER}(.*)__/$
     private static final def TEST_MARKER_REGEX = $/${TEST_MARKER}(.*)__/$
 
+    private static final def FILTER_PATTERN = $/(?ms)${lineSeparator()}Unexpected exception thrown.*> Task :test FAILED${lineSeparator()}/$
+
     private AnsiTextRenderer ansi = new AnsiTextRenderer()
 
     protected TestLoggerOutput getLoggerOutput(String text) {
-        def allLines = text.readLines()
+        def allLines = text.replaceAll(FILTER_PATTERN, '').readLines()
         def lines = allLines
             .subList(allLines.indexOf(START_MARKER) + 1, allLines.indexOf(SUMMARY_MARKER))
             .findAll { !it.startsWith(TEST_MARKER) }
