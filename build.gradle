@@ -5,7 +5,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.gradle.build-scan' version '1.16'
+    id 'com.gradle.build-scan' version '2.2.1'
     id 'groovy'
     id 'java-gradle-plugin'
     id 'maven-publish'
@@ -97,11 +97,6 @@ task functionalTest(type: Test) {
     systemProperty 'file.encoding', 'UTF-8'
     minHeapSize '128m'
     maxHeapSize '512m'
-
-    jacoco {
-        append = true
-        destinationFile = file("${buildDir}/jacoco/test.exec")
-    }
 
     testlogger {
         theme 'mocha-parallel'
