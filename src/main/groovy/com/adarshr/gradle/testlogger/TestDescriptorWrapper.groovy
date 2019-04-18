@@ -24,12 +24,21 @@ class TestDescriptorWrapper {
 
     @CompileDynamic
     String getClassDisplayName() {
-        escape(testDescriptor.properties.classDisplayName ?: testDescriptor.className)
+        def className = testDescriptor.className
+        def classDisplayName = testDescriptor.properties.classDisplayName as String
+        def useClassDisplayName = classDisplayName && classDisplayName != className && !className.endsWith(classDisplayName)
+
+        if (testLoggerExtension.showSimpleNames) {
+            className = className.substring(className.lastIndexOf('.') + 1)
+            className = className.substring(className.lastIndexOf('$') + 1)
+        }
+
+        escape(useClassDisplayName ? classDisplayName : className)
     }
 
     @CompileDynamic
     String getDisplayName() {
-        escape(testDescriptor.properties.displayName ?: testDescriptor.name)
+        escape(testDescriptor.properties.displayName ?: testDescriptor.name as String)
     }
 
     String getSuiteKey() {

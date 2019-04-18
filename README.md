@@ -59,6 +59,7 @@ testlogger {
     showExceptions true
     slowThreshold 2000
     showSummary true
+    showSimpleNames false
     showPassed true
     showSkipped true
     showFailed true
@@ -161,6 +162,17 @@ taken to execute all the tests is shown. Of course, you can disable this if you 
 ```groovy
 testlogger {
     showSummary false
+}
+```
+
+### Show simple names
+
+If you don't like seeing long, fully-qualified class names being used for displaying the test suite names, you can choose to
+show only [simple names](https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#getSimpleName--) by setting the below flag to true.
+
+```groovy
+testlogger {
+    showSimpleNames true
 }
 ```
 

@@ -137,7 +137,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         and:
             lines.size() == 10
             lines[0] == render('')
-            lines[1] == render('[erase-ahead,bold]FirstTest[/]')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.FirstTest[/]')
             lines[2] == render('')
             lines[3] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldBeSkipped()[yellow] SKIPPED[/]')
             lines[4] == render('[erase-ahead,bold]  Test [bold-off]this test should fail[red] FAILED[red]')
@@ -162,16 +162,16 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         and:
             lines.size() == 14
             lines[0] == render('')
-            lines[1] == render('[erase-ahead,bold]NestedTestsetOne[/]')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetThree[/]')
             lines[2] == render('')
-            lines[3] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetOne()[green] PASSED[/]')
-            lines[4] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetOne()[green] PASSED[/]')
-            lines[5] == render('')
-            lines[6] == render('[erase-ahead,bold]NestedTestsetThree[/]')
-            lines[7] == render('')
-            lines[8] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetThree()[green] PASSED[/]')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetThree()[green] PASSED[/]')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetTwo[/]')
+            lines[6] == render('')
+            lines[7] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetTwo()[green] PASSED[/]')
+            lines[8] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetTwo()[green] PASSED[/]')
             lines[9] == render('')
-            lines[10] == render('[erase-ahead,bold]NestedTestsetTwo[/]')
+            lines[10] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetOne[/]')
             lines[11] == render('')
             lines[12] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetOne()[green] PASSED[/]')
             lines[13] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetOne()[green] PASSED[/]')
@@ -183,6 +183,29 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-junit5-jupiter-deep-nested-tests',
+                'clean test'
+            )
+        then:
+            def lines = getLoggerOutput(result.output).lines
+        and:
+            lines.size() == 8
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.DeepNestedTest$NestedTestsetLevelOne[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelOne()[green] PASSED[/]')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]Nested test set level two[/]')
+            lines[6] == render('')
+            lines[7] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelTwo()[green] PASSED[/]')
+        and:
+            result.task(":test").outcome == SUCCESS
+    }
+
+    def "log junit5 jupiter engine deep-nested tests when showSimpleNames is true"() {
+        when:
+            def result = run(
+                'sample-junit5-jupiter-deep-nested-tests',
+                'testlogger { showSimpleNames true }',
                 'clean test'
             )
         then:
@@ -224,6 +247,29 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             lines[8] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldPass[green] PASSED[/]')
         and:
             result.task(":test").outcome == FAILED
+    }
+
+    def "log spock tests when showSimpleNames is true"() {
+        when:
+            def result = run(
+                'single-spock-test',
+                '''
+                    testlogger { 
+                        theme 'plain' 
+                        showSimpleNames true 
+                    }
+                ''',
+                'clean test'
+            )
+            def lines = getLoggerOutput(result.output).lines
+        then:
+            lines.size() == 4
+            lines[0] == render('')
+            lines[1] == render('SingleSpec')
+            lines[2] == render('')
+            lines[3] == render('  Test this is a single test PASSED')
+        and:
+            result.task(':test').outcome == SUCCESS
     }
 
     def "do not print empty suites when filtering tests"() {

@@ -25,6 +25,7 @@ class TestLoggerExtension {
     boolean showPassed = true
     boolean showSkipped = true
     boolean showFailed = true
+    boolean showSimpleNames = false
 
     private final ConsoleOutput consoleType
     private Set<String> configuredProperties = []
@@ -46,6 +47,7 @@ class TestLoggerExtension {
         this.showPassed = source.showPassed
         this.showSkipped = source.showSkipped
         this.showFailed = source.showFailed
+        this.showSimpleNames = source.showSimpleNames
         this.consoleType = source.consoleType
         this.configuredProperties = source.configuredProperties
     }
@@ -118,6 +120,11 @@ class TestLoggerExtension {
         this.configuredProperties << 'showFailed'
     }
 
+    void setShowSimpleNames(boolean showSimpleNames) {
+        this.showSimpleNames = showSimpleNames
+        this.configuredProperties << 'showSimpleNames'
+    }
+
     TestLoggerExtension undecorate() {
         new TestLoggerExtension(this)
     }
@@ -155,6 +162,7 @@ class TestLoggerExtension {
         override(overrides, 'showPassed', Boolean)
         override(overrides, 'showSkipped', Boolean)
         override(overrides, 'showFailed', Boolean)
+        override(overrides, 'showSimpleNames', Boolean)
 
         this
     }
