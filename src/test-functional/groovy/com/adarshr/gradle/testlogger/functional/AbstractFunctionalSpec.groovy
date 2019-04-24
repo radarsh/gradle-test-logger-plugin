@@ -29,12 +29,19 @@ abstract class AbstractFunctionalSpec extends Specification {
     private static final def SUITE_MARKER_REGEX = $/${SUITE_MARKER}(.*)__/$
     private static final def TEST_MARKER_REGEX = $/${TEST_MARKER}(.*)__/$
 
-    private static final def FILTER_PATTERN = $/(?ms)${lineSeparator()}Unexpected exception thrown.*> Task :test FAILED${lineSeparator()}/$
+    private static final List<Map<String, String>> FILTER_PATTERNS = [
+        [pattern: $/(?ms)${lineSeparator()}Unexpected exception thrown.*?${lineSeparator() * 2}/$, replacement: ''],
+        [pattern: $/(?ms)> Task .*?${lineSeparator()}/$, replacement: '']
+    ]
 
     private AnsiTextRenderer ansi = new AnsiTextRenderer()
 
     protected TestLoggerOutput getLoggerOutput(String text) {
-        def allLines = text.replaceAll(FILTER_PATTERN, '').readLines()
+        FILTER_PATTERNS.each { it ->
+            text = text.replaceAll(it.pattern, it.replacement)
+        }
+
+        def allLines = text.readLines()
         def lines = allLines
             .subList(allLines.indexOf(START_MARKER) + 1, allLines.indexOf(SUMMARY_MARKER))
             .findAll { !it.startsWith(TEST_MARKER) }

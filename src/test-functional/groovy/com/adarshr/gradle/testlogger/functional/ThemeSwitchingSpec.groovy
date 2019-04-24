@@ -1,5 +1,6 @@
 package com.adarshr.gradle.testlogger.functional
 
+
 import spock.util.environment.OperatingSystem
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
