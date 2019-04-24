@@ -16,7 +16,7 @@ class MochaParallelTheme extends MochaTheme {
 
     @Override
     protected String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result) {
-        super.testTextInternal("  [erase-ahead,default]${descriptor.className} ", descriptor, result)
+        super.testTextInternal("  [erase-ahead,default]${descriptor.classDisplayName} ", descriptor, result)
     }
 
     @Override

@@ -194,7 +194,30 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             lines[2] == render('')
             lines[3] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelOne()[green] PASSED[/]')
             lines[4] == render('')
-            lines[5] == render('[erase-ahead,bold]com.adarshr.test.DeepNestedTest$NestedTestsetLevelOne$NestedTestsetLevelTwo[/]')
+            lines[5] == render('[erase-ahead,bold]Nested test set level two[/]')
+            lines[6] == render('')
+            lines[7] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelTwo()[green] PASSED[/]')
+        and:
+            result.task(":test").outcome == SUCCESS
+    }
+
+    def "log junit5 jupiter engine deep-nested tests when showSimpleNames is true"() {
+        when:
+            def result = run(
+                'sample-junit5-jupiter-deep-nested-tests',
+                'testlogger { showSimpleNames true }',
+                'clean test'
+            )
+        then:
+            def lines = getLoggerOutput(result.output).lines
+        and:
+            lines.size() == 8
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold]NestedTestsetLevelOne[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelOne()[green] PASSED[/]')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]Nested test set level two[/]')
             lines[6] == render('')
             lines[7] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelTwo()[green] PASSED[/]')
         and:
@@ -224,6 +247,29 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             lines[8] == render('[erase-ahead,bold]  Test [bold-off]thisTestShouldPass[green] PASSED[/]')
         and:
             result.task(":test").outcome == FAILED
+    }
+
+    def "log spock tests when showSimpleNames is true"() {
+        when:
+            def result = run(
+                'single-spock-test',
+                '''
+                    testlogger { 
+                        theme 'plain' 
+                        showSimpleNames true 
+                    }
+                ''',
+                'clean test'
+            )
+            def lines = getLoggerOutput(result.output).lines
+        then:
+            lines.size() == 4
+            lines[0] == render('')
+            lines[1] == render('SingleSpec')
+            lines[2] == render('')
+            lines[3] == render('  Test this is a single test PASSED')
+        and:
+            result.task(':test').outcome == SUCCESS
     }
 
     def "do not print empty suites when filtering tests"() {

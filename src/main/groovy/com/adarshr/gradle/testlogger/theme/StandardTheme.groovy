@@ -15,7 +15,7 @@ class StandardTheme extends AbstractTheme {
 
     @Override
     protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
-        "[erase-ahead,bold]${descriptor.className}[/]${lineSeparator()}"
+        "[erase-ahead,bold]${descriptor.classDisplayName}[/]${lineSeparator()}"
     }
 
     @Override

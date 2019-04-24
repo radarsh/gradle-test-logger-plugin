@@ -16,7 +16,7 @@ class PlainParallelTheme extends PlainTheme {
 
     @Override
     protected String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result) {
-        super.testTextInternal("${descriptor.className} ${descriptor.displayName} ${RESULT_TYPE_MAPPING[result.resultType]}", descriptor, result)
+        super.testTextInternal("${descriptor.classDisplayName} ${descriptor.displayName} ${RESULT_TYPE_MAPPING[result.resultType]}", descriptor, result)
     }
 
     @Override

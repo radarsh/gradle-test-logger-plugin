@@ -23,7 +23,7 @@ class PlainThemeSpec extends BaseThemeSpec {
 
     def "suite text"() {
         given:
-            testDescriptorMock.className >> 'ClassName'
+            testDescriptorMock.classDisplayName >> 'ClassName'
         when:
             def actual = theme.suiteText(testDescriptorMock, testResultMock)
         then:

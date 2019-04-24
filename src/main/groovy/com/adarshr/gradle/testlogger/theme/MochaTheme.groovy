@@ -16,7 +16,7 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
-        "  [erase-ahead,default]${descriptor.className}[/]${lineSeparator()}"
+        "  [erase-ahead,default]${descriptor.classDisplayName}[/]${lineSeparator()}"
     }
 
     @Override

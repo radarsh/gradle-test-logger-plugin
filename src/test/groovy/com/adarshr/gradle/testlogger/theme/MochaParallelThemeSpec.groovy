@@ -37,7 +37,7 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
         given:
             System.setProperty('os.name', os)
             testResultMock.resultType >> resultType
-            testDescriptorMock.className >> 'ClassName'
+            testDescriptorMock.classDisplayName >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -63,6 +63,7 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
             testResultMock.exception >> exception
             testDescriptorMock.displayName >> 'floppy test'
             testDescriptorMock.className >> this.class.name
+            testDescriptorMock.classDisplayName >> this.class.name
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -107,7 +108,7 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> resultType
             testResultMock.duration >> '10s'
             testResultMock.tooSlow >> true
-            testDescriptorMock.className >> 'ClassName'
+            testDescriptorMock.classDisplayName >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -125,7 +126,7 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> resultType
             testResultMock.duration >> '1.5s'
             testResultMock.mediumSlow >> true
-            testDescriptorMock.className >> 'ClassName'
+            testDescriptorMock.classDisplayName >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
