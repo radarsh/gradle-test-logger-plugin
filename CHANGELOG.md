@@ -1,7 +1,29 @@
 # Change Log
 
-## [v1.6.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.6.0) (2018-11-20)
+## [v1.7.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.7.0) (2019-05-29)
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.6.0...v1.7.0)
 
+**Closed issues:**
+
+- Not enough details about exception thrown by the test. [\#118](https://github.com/radarsh/gradle-test-logger-plugin/issues/118)
+- NoSuchMethodError: org.fusesource.jansi.Ansi.fgGreen\(\)Lorg/fusesource/jansi/Ans [\#116](https://github.com/radarsh/gradle-test-logger-plugin/issues/116)
+- Mocha on dark terminals [\#115](https://github.com/radarsh/gradle-test-logger-plugin/issues/115)
+- Add support for @Nested and @DisplayName [\#106](https://github.com/radarsh/gradle-test-logger-plugin/issues/106)
+- Get rid of logs original test logs [\#105](https://github.com/radarsh/gradle-test-logger-plugin/issues/105)
+- Prints corrupted json [\#104](https://github.com/radarsh/gradle-test-logger-plugin/issues/104)
+- Bad encoding on standard and mocha themes when printing to Eclipse's console [\#92](https://github.com/radarsh/gradle-test-logger-plugin/issues/92)
+- Testsuite fatal error output not shown [\#89](https://github.com/radarsh/gradle-test-logger-plugin/issues/89)
+
+**Merged pull requests:**
+
+- Show full stacktraces [\#119](https://github.com/radarsh/gradle-test-logger-plugin/pull/119) ([radarsh](https://github.com/radarsh))
+- Improve Windows build stability [\#117](https://github.com/radarsh/gradle-test-logger-plugin/pull/117) ([radarsh](https://github.com/radarsh))
+- Show output from before System.exit\(5\) was called [\#113](https://github.com/radarsh/gradle-test-logger-plugin/pull/113) ([radarsh](https://github.com/radarsh))
+- Configure build-scan plugin [\#112](https://github.com/radarsh/gradle-test-logger-plugin/pull/112) ([aalmiray](https://github.com/aalmiray))
+- Use classDisplayName for friendlier suite names [\#109](https://github.com/radarsh/gradle-test-logger-plugin/pull/109) ([radarsh](https://github.com/radarsh))
+- Fix double escaping of brackets [\#108](https://github.com/radarsh/gradle-test-logger-plugin/pull/108) ([radarsh](https://github.com/radarsh))
+
+## [v1.6.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.6.0) (2018-11-20)
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.5.0...v1.6.0)
 
 **Implemented enhancements:**
