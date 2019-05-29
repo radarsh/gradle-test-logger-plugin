@@ -135,6 +135,40 @@ testlogger {
 }
 ```
 
+### Hide exception stack traces
+
+Sometimes it is useful to just see the exception message instead of the stack trace. This can be configured by
+setting `showStackTraces` to `false`.
+
+```groovy
+testlogger {
+    showStackTraces false
+}
+```
+
+### Hide exception causes
+
+The default behaviour of the plugin is to print all the causes of the exception. If it is too verbose to your taste, you 
+can turn it off by setting `showCauses` to `false`.
+
+```groovy
+testlogger {
+    showCauses false
+}
+```
+
+### Show full exception stack traces
+
+Just like Gradle itself, by default only the last frame that matches the test class's name in a stack trace is printed. For vast
+majority of cases, that is sufficient. Sometimes, it is useful to remove this filtering in order to see the entirety of the stack
+trace. This can be done by setting `showFullStackTraces` to `true`.
+
+```groovy
+testlogger {
+    showFullStackTraces true
+}
+```
+
 ### Define slow threshold
 
 Tests that are too slow will have their duration logged. However, "slow" is a relative terminology varying widely
