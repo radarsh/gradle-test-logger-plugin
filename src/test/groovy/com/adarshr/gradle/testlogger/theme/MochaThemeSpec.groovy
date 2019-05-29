@@ -60,6 +60,8 @@ class MochaThemeSpec extends BaseThemeSpec {
         given:
             System.setProperty('os.name', 'Linux')
             testLoggerExtensionMock.showExceptions >> true
+            testLoggerExtensionMock.showStackTraces >> true
+            testLoggerExtensionMock.showCauses >> true
             theme = new MochaTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
@@ -80,6 +82,8 @@ class MochaThemeSpec extends BaseThemeSpec {
     def "exception text when showExceptions is true"() {
         given:
             testLoggerExtensionMock.showExceptions >> true
+            testLoggerExtensionMock.showStackTraces >> true
+            testLoggerExtensionMock.showCauses >> true
             theme = new MochaTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE

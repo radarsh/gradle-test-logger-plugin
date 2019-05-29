@@ -82,6 +82,10 @@ test {
     testClassesDirs += sourceSets.functionalTest.output.classesDirs
     classpath += sourceSets.functionalTest.runtimeClasspath
     systemProperty 'file.encoding', 'UTF-8'
+
+//    testLogging {
+//        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+//    }
     
     testlogger {
         theme 'mocha'

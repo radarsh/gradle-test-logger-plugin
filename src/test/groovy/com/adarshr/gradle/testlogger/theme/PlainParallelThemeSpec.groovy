@@ -46,6 +46,8 @@ class PlainParallelThemeSpec extends BaseThemeSpec {
     def "after test with result type failure and showExceptions true"() {
         given:
             testLoggerExtensionMock.showExceptions >> true
+            testLoggerExtensionMock.showStackTraces >> true
+            testLoggerExtensionMock.showCauses >> true
             theme = new PlainParallelTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
@@ -67,6 +69,8 @@ class PlainParallelThemeSpec extends BaseThemeSpec {
     def "exception text when showExceptions is true"() {
         given:
             testLoggerExtensionMock.showExceptions >> true
+            testLoggerExtensionMock.showStackTraces >> true
+            testLoggerExtensionMock.showCauses >> true
             theme = new PlainParallelTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE

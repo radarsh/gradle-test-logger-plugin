@@ -57,6 +57,8 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
         given:
             System.setProperty('os.name', 'Linux')
             testLoggerExtensionMock.showExceptions >> true
+            testLoggerExtensionMock.showStackTraces >> true
+            testLoggerExtensionMock.showCauses >> true
             theme = new MochaParallelTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
@@ -78,6 +80,8 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
     def "exception text when showExceptions is true"() {
         given:
             testLoggerExtensionMock.showExceptions >> true
+            testLoggerExtensionMock.showStackTraces >> true
+            testLoggerExtensionMock.showCauses >> true
             theme = new MochaParallelTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
