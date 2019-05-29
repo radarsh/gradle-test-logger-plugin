@@ -9,6 +9,7 @@ import org.gradle.api.tasks.testing.logging.TestLogging
 import static com.adarshr.gradle.testlogger.theme.ThemeType.PLAIN
 import static com.adarshr.gradle.testlogger.theme.ThemeType.STANDARD
 import static org.gradle.api.logging.configuration.ConsoleOutput.Plain
+import static org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 
 @CompileStatic
 @SuppressWarnings("GroovyUnusedDeclaration")
@@ -16,6 +17,9 @@ class TestLoggerExtension {
 
     ThemeType theme = STANDARD
     boolean showExceptions = true
+    boolean showCauses = true
+    boolean showStackTraces = true
+    boolean showFullStackTraces = false
     long slowThreshold = 2000
     boolean showSummary = true
     boolean showStandardStreams = false
@@ -38,6 +42,9 @@ class TestLoggerExtension {
     private TestLoggerExtension(TestLoggerExtension source) {
         this.theme = source.theme
         this.showExceptions = source.showExceptions
+        this.showCauses = source.showCauses
+        this.showStackTraces = source.showStackTraces
+        this.showFullStackTraces = source.showFullStackTraces
         this.slowThreshold = source.slowThreshold
         this.showSummary = source.showSummary
         this.showStandardStreams = source.showStandardStreams
@@ -73,6 +80,21 @@ class TestLoggerExtension {
     void setShowExceptions(boolean showExceptions) {
         this.showExceptions = showExceptions
         this.configuredProperties << 'showExceptions'
+    }
+
+    void setShowCauses(boolean showCauses) {
+        this.showCauses = showCauses
+        this.configuredProperties << 'showCauses'
+    }
+
+    void setShowStackTraces(boolean showStackTraces) {
+        this.showStackTraces = showStackTraces
+        this.configuredProperties << 'showStackTraces'
+    }
+
+    void setShowFullStackTraces(boolean showFullStackTraces) {
+        this.showFullStackTraces = showFullStackTraces
+        this.configuredProperties << 'showFullStackTraces'
     }
 
     void setSlowThreshold(long slowThreshold) {
@@ -134,6 +156,22 @@ class TestLoggerExtension {
             this.showStandardStreams = testLogging.showStandardStreams
             this.configuredProperties -= 'showStandardStreams'
         }
+        if (!this.configuredProperties.contains('showExceptions')) {
+            this.showExceptions = testLogging.showExceptions
+            this.configuredProperties -= 'showExceptions'
+        }
+        if (!this.configuredProperties.contains('showCauses')) {
+            this.showCauses = testLogging.showCauses
+            this.configuredProperties -= 'showCauses'
+        }
+        if (!this.configuredProperties.contains('showStackTraces')) {
+            this.showStackTraces = testLogging.showStackTraces
+            this.configuredProperties -= 'showStackTraces'
+        }
+        if (!this.configuredProperties.contains('showFullStackTraces')) {
+            this.showFullStackTraces = testLogging.showStackTraces && testLogging.exceptionFormat == FULL
+            this.configuredProperties -= 'showFullStackTraces'
+        }
 
         this
     }
@@ -153,6 +191,9 @@ class TestLoggerExtension {
     TestLoggerExtension applyOverrides(Map<String, String> overrides) {
         override(overrides, 'theme', ThemeType)
         override(overrides, 'showExceptions', Boolean)
+        override(overrides, 'showCauses', Boolean)
+        override(overrides, 'showStackTraces', Boolean)
+        override(overrides, 'showFullStackTraces', Boolean)
         override(overrides, 'slowThreshold', Long)
         override(overrides, 'showSummary', Boolean)
         override(overrides, 'showStandardStreams', Boolean)

@@ -57,6 +57,9 @@ The following shows the complete default configuration applied when you configur
 testlogger {
     theme 'standard'
     showExceptions true
+    showStackTraces true
+    showFullStackTraces false
+    showCauses true
     slowThreshold 2000
     showSummary true
     showSimpleNames false
@@ -224,6 +227,35 @@ testlogger {
 By default all the above three flags are turned on. If you have chosen to display standard streams by setting
 `showStandardStreams` flag to `true`, any output produced by filtered out tests will not be displayed.
 
+### Relationship between `testlogger` and `Test.testLogging`
+
+Where possible, the plugin's `testlogger` extension tries to react to equivalent properties of Gradle's `Test.testLogging` 
+extension. However, if a value is explicitly configured under the `testlogger` extension, the plugin __does not__ react to the
+corresponding property of `Test.testLogging`. The below table demonstrates this in more detail.
+
+| Property                  | `Test.testLogging` value              | `testlogging` value    | Effective value |
+|---------------------------|---------------------------------------|------------------------|---------------- |
+| `showStandardStreams`     | `true`                                | not configured         | `true`          |
+| `showStandardStreams`     | `true`                                | `false`                | `false`         |
+| `showStandardStreams`     | `false`                               | `true`                 | `true`          |
+| `showExceptions`          | `true`                                | not configured         | `true`          |
+| `showExceptions`          | `true`                                | `false`                | `false`         |
+| `showExceptions`          | `false`                               | `true`                 | `true`          |
+| `showStackTraces`         | `true`                                | not configured         | `true`          |
+| `showStackTraces`         | `true`                                | `false`                | `false`         |
+| `showStackTraces`         | `false`                               | `true`                 | `true`          |
+| `showFullStackTraces`     | `testLogging.exceptionFormat = FULL`  | not configured         | `true`          |
+| `showFullStackTraces`     | `testLogging.exceptionFormat = SHORT` | not configured         | `false`         |
+| `showFullStackTraces`     | `testLogging.exceptionFormat = FULL`  | `false`                | `false`         |
+| `showFullStackTraces`     | `testLogging.exceptionFormat = SHORT` | `true`                 | `true`          |
+| `showCauses`              | `true`                                | not configured         | `true`          |
+| `showCauses`              | `true`                                | `false`                | `false`         |
+| `showCauses`              | `false`                               | `true`                 | `true`          |
+
+In other words, an explicitly configured `testlogger` property, despite it being `false`, takes precedence over any 
+value of `Test.testLogging`.
+
+
 ## FAQ
 
 ### Does it work on Windows?
@@ -244,15 +276,6 @@ Yes. You will need to switch to a suitable parallel theme though. This can be on
 `mocha-parallel`. The parallel themes are specially designed to work with a setting of
 [`maxParallelForks`](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.Test.html#org.gradle.api.tasks.testing.Test:maxParallelForks)
 greater than 1. They achieve this by sacrificing the ability to group tests and thus some readability is lost.
-
-### How are `testlogger` and `Test.testLogging` related?
-
-Until recently, they were unrelated. While this plugin's `testlogger` has many properties named identical to the ones in Gradle's
-`Test.testLogging`, to a large extent, they are kept isolated by design.
-
-However, as of this writing `testlogger.showStandardStreams` property has been made to react to `testLogging.showStandardStreams`
-property as long as one doesn't configure a value for `testlogger.showStandardStreams`. If a value is configured for
-`testlogger.showStandardStreams` (even if it is `false`), the plugin ignores `testLogging.showStandardStreams` altogether.
 
 ### Can this plugin co-exist with junit-platform-gradle-plugin?
 

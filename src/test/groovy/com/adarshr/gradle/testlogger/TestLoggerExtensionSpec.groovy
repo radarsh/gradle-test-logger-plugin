@@ -9,6 +9,9 @@ import org.gradle.api.tasks.testing.logging.TestLogging
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+import static org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
+
 class TestLoggerExtensionSpec extends Specification {
 
     def projectMock = Mock(Project) {
@@ -110,31 +113,56 @@ class TestLoggerExtensionSpec extends Specification {
     }
 
     @Unroll
-    def "test logger extension showStandardStreams reacts to testLogging.showStandardStreams"() {
+    def "test logger extension reacts to testLogging properties #testLoggingProperties"() {
         given:
-            def testLoggingMock = Mock(TestLogging) {
-                getShowStandardStreams() >> value
+            def testLoggingMock = Mock(TestLogging)
+            testLoggingProperties.each { property, value ->
+                testLoggingMock."${property}" >> value
             }
             def extension = new TestLoggerExtension(projectMock)
         when:
             def reacted = extension.reactTo(testLoggingMock)
         then:
-            reacted.showStandardStreams == value
+            extensionProperties.each { property, value ->
+                assert reacted."${property}" == value
+            }
         where:
-            value << [true, false]
+            testLoggingProperties                           | extensionProperties
+            [showStandardStreams: true]                     | [showStandardStreams: true]
+            [showStandardStreams: false]                    | [showStandardStreams: false]
+            [showExceptions: true]                          | [showExceptions: true]
+            [showExceptions: false]                         | [showExceptions: false]
+            [showCauses: true]                              | [showCauses: true]
+            [showCauses: false]                             | [showCauses: false]
+            [showStackTraces: true, exceptionFormat: SHORT] | [showStackTraces: true, showFullStackTraces: false]
+            [showStackTraces: false]                        | [showStackTraces: false, showFullStackTraces: false]
+            [showStackTraces: true, exceptionFormat: FULL]  | [showStackTraces: true, showFullStackTraces: true]
     }
 
-    def "test logger extension does not react to testLogging if showStandardStreams has been configured"() {
+    @Unroll
+    def "test logger extension does not react to testLogging if extension properties #extensionProperties have been configured"() {
         given:
-            def testLoggingMock = Mock(TestLogging) {
-                getShowStandardStreams() >> true
+            def testLoggingMock = Mock(TestLogging)
+            testLoggingProperties.each { property, value ->
+                testLoggingMock."${property}" >> value
             }
             def extension = new TestLoggerExtension(projectMock)
         and:
-            extension.showStandardStreams = false
+            extensionProperties.each { property, value ->
+                extension."${property}" = value
+            }
         when:
             def reacted = extension.reactTo(testLoggingMock)
         then:
-            !reacted.showStandardStreams
+            extensionProperties.each { property, value ->
+                assert reacted."${property}" == value
+            }
+        where:
+            testLoggingProperties                           | extensionProperties
+            [showStandardStreams: true]                     | [showStandardStreams: false]
+            [showExceptions: true]                          | [showExceptions: false]
+            [showCauses: true]                              | [showCauses: false]
+            [showStackTraces: true, exceptionFormat: SHORT] | [showStackTraces: false, showFullStackTraces: false]
+            [showStackTraces: true, exceptionFormat: FULL]  | [showStackTraces: false, showFullStackTraces: false]
     }
 }

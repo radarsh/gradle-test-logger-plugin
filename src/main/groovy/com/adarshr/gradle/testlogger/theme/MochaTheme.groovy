@@ -83,7 +83,7 @@ class MochaTheme extends AbstractTheme {
     }
 
     protected String summaryText(TestDescriptorWrapper descriptor, TestResultWrapper result, int indent) {
-        if (!showSummary) {
+        if (!extension.showSummary) {
             return ''
         }
 
@@ -113,7 +113,7 @@ class MochaTheme extends AbstractTheme {
     }
 
     protected String standardStreamTextInternal(String lines, int indent) {
-        if (!showStandardStreams || !lines) {
+        if (!extension.showStandardStreams || !lines) {
             return ''
         }
 

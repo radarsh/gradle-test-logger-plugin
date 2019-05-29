@@ -61,7 +61,7 @@ class StandardTheme extends AbstractTheme {
 
     @Override
     String summaryText(TestDescriptorWrapper descriptor, TestResultWrapper result) {
-        if (!showSummary) {
+        if (!extension.showSummary) {
             return ''
         }
 
@@ -105,7 +105,7 @@ class StandardTheme extends AbstractTheme {
     }
 
     protected String standardStreamTextInternal(String lines, int indent) {
-        if (!showStandardStreams || !lines) {
+        if (!extension.showStandardStreams || !lines) {
             return ''
         }
 
