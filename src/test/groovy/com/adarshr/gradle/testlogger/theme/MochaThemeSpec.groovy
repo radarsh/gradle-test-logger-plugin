@@ -29,7 +29,7 @@ class MochaThemeSpec extends BaseThemeSpec {
 
     def "suite text"() {
         given:
-            testDescriptorMock.className >> 'ClassName'
+            testDescriptorMock.classDisplayName >> 'ClassName'
         when:
             def actual = theme.suiteText(testDescriptorMock, testResultMock)
         then:
@@ -60,6 +60,8 @@ class MochaThemeSpec extends BaseThemeSpec {
         given:
             System.setProperty('os.name', 'Linux')
             testLoggerExtensionMock.showExceptions >> true
+            testLoggerExtensionMock.showStackTraces >> true
+            testLoggerExtensionMock.showCauses >> true
             theme = new MochaTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
@@ -80,6 +82,8 @@ class MochaThemeSpec extends BaseThemeSpec {
     def "exception text when showExceptions is true"() {
         given:
             testLoggerExtensionMock.showExceptions >> true
+            testLoggerExtensionMock.showStackTraces >> true
+            testLoggerExtensionMock.showCauses >> true
             theme = new MochaTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
@@ -188,7 +192,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             theme.testStandardStreamText(streamLines, testResultMock) ==
                 '''|[grey]
                    |        Hello
-                   |        World[/]
+                   |        World [brackets] \u001B\\[0mANSI[/]
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 
@@ -208,7 +212,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             theme.suiteStandardStreamText(streamLines, testResultMock) ==
                 '''|[grey]
                    |    Hello
-                   |    World[/]
+                   |    World [brackets] \u001B\\[0mANSI[/]
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 

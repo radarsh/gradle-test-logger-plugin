@@ -18,6 +18,8 @@ class TestResultWrapperSpec extends Specification {
             testLoggerExtensionMock.showPassed >> showPassed
             testLoggerExtensionMock.showSkipped >> showSkipped
             testLoggerExtensionMock.showFailed >> showFailed
+        and:
+            testResultMock.resultType >> resultType
             testResultMock.testCount >> totalCount
             testResultMock.successfulTestCount >> successfulCount
             testResultMock.skippedTestCount >> skippedCount
@@ -28,6 +30,7 @@ class TestResultWrapperSpec extends Specification {
             resultType | totalCount | successfulCount | skippedCount | failedCount | showPassed | showSkipped | showFailed
             SUCCESS    | 1          | 1               | 0            | 0           | true       | false       | false
             SKIPPED    | 1          | 0               | 1            | 0           | false      | true        | false
+            SKIPPED    | 0          | 0               | 0            | 0           | false      | true        | false
             FAILURE    | 1          | 0               | 0            | 1           | false      | false       | true
     }
 

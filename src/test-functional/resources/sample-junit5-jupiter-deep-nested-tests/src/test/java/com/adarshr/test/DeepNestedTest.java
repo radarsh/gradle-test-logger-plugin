@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.DisplayName;
 
 public class DeepNestedTest {
 
@@ -16,6 +17,7 @@ public class DeepNestedTest {
         }
 
         @Nested
+        @DisplayName("Nested test set level two")
         public class NestedTestsetLevelTwo {
 
             @Test

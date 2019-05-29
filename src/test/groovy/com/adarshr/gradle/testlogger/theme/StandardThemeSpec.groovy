@@ -23,7 +23,7 @@ class StandardThemeSpec extends BaseThemeSpec {
 
     def "suite text"() {
         given:
-            testDescriptorMock.className >> 'ClassName'
+            testDescriptorMock.classDisplayName >> 'ClassName'
         when:
             def actual = theme.suiteText(testDescriptorMock, testResultMock)
         then:
@@ -49,6 +49,8 @@ class StandardThemeSpec extends BaseThemeSpec {
     def "after test with result type failure and showExceptions true"() {
         given:
             testLoggerExtensionMock.showExceptions >> true
+            testLoggerExtensionMock.showStackTraces >> true
+            testLoggerExtensionMock.showCauses >> true
             theme = new StandardTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
@@ -69,6 +71,8 @@ class StandardThemeSpec extends BaseThemeSpec {
     def "exception text when showExceptions is true"() {
         given:
             testLoggerExtensionMock.showExceptions >> true
+            testLoggerExtensionMock.showStackTraces >> true
+            testLoggerExtensionMock.showCauses >> true
             theme = new StandardTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
@@ -164,7 +168,7 @@ class StandardThemeSpec extends BaseThemeSpec {
             theme.testStandardStreamText(streamLines, testResultMock) ==
                 '''|[default]
                    |    Hello
-                   |    World[/]
+                   |    World [brackets] \u001B\\[0mANSI[/]
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 
@@ -184,7 +188,7 @@ class StandardThemeSpec extends BaseThemeSpec {
             theme.suiteStandardStreamText(streamLines, testResultMock) ==
                 '''|[default]
                    |  Hello
-                   |  World[/]
+                   |  World [brackets] \u001B\\[0mANSI[/]
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 

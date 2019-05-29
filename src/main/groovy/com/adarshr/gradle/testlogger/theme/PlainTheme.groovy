@@ -5,6 +5,7 @@ import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 
+import static com.adarshr.gradle.testlogger.util.RendererUtils.preserveAnsi
 import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
@@ -20,7 +21,7 @@ class PlainTheme extends AbstractTheme {
 
     @Override
     protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
-        "${descriptor.className}${lineSeparator()}"
+        "${descriptor.classDisplayName}${lineSeparator()}"
     }
 
     @Override
@@ -44,7 +45,7 @@ class PlainTheme extends AbstractTheme {
 
     @Override
     String summaryText(TestDescriptorWrapper descriptor, TestResultWrapper result) {
-        if (!showSummary) {
+        if (!extension.showSummary) {
             return ''
         }
 
@@ -87,11 +88,11 @@ class PlainTheme extends AbstractTheme {
     }
 
     protected String standardStreamTextInternal(String lines, int indent) {
-        if (!showStandardStreams || !lines) {
+        if (!extension.showStandardStreams || !lines) {
             return ''
         }
 
-        lines = lines.replace('[', '\\[')
+        lines = preserveAnsi(lines)
 
         def indentation = ' ' * indent
         def line = new StringBuilder(lineSeparator())

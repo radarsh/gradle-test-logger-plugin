@@ -6,6 +6,7 @@ import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 import org.gradle.api.tasks.testing.TestResult.ResultType
 
+import static com.adarshr.gradle.testlogger.util.RendererUtils.preserveAnsi
 import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
@@ -15,7 +16,7 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
-        "  [erase-ahead,default]${descriptor.className}[/]${lineSeparator()}"
+        "  [erase-ahead,default]${descriptor.classDisplayName}[/]${lineSeparator()}"
     }
 
     @Override
@@ -82,7 +83,7 @@ class MochaTheme extends AbstractTheme {
     }
 
     protected String summaryText(TestDescriptorWrapper descriptor, TestResultWrapper result, int indent) {
-        if (!showSummary) {
+        if (!extension.showSummary) {
             return ''
         }
 
@@ -112,11 +113,11 @@ class MochaTheme extends AbstractTheme {
     }
 
     protected String standardStreamTextInternal(String lines, int indent) {
-        if (!showStandardStreams || !lines) {
+        if (!extension.showStandardStreams || !lines) {
             return ''
         }
 
-        lines = lines.replace('[', '\\[')
+        lines = preserveAnsi(lines)
 
         def indentation = ' ' * indent
         def line = new StringBuilder("[grey]${lineSeparator()}")

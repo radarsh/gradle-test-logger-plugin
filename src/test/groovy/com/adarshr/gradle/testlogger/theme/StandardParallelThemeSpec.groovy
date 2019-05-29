@@ -30,7 +30,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
     def "after test with result type #resultType"() {
         given:
             testResultMock.resultType >> resultType
-            testDescriptorMock.className >> 'ClassName'
+            testDescriptorMock.classDisplayName >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -46,12 +46,15 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
     def "after test with result type failure and showExceptions true"() {
         given:
             testLoggerExtensionMock.showExceptions >> true
+            testLoggerExtensionMock.showStackTraces >> true
+            testLoggerExtensionMock.showCauses >> true
             theme = new StandardParallelTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
             testDescriptorMock.displayName >> 'floppy test'
             testDescriptorMock.className >> this.class.name
+            testDescriptorMock.classDisplayName >> this.class.name
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -68,6 +71,8 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
     def "exception text when showExceptions is true"() {
         given:
             testLoggerExtensionMock.showExceptions >> true
+            testLoggerExtensionMock.showStackTraces >> true
+            testLoggerExtensionMock.showCauses >> true
             theme = new StandardParallelTheme(testLoggerExtensionMock)
         and:
             testResultMock.resultType >> FAILURE
@@ -100,7 +105,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> resultType
             testResultMock.tooSlow >> true
             testResultMock.duration >> '10s'
-            testDescriptorMock.className >> 'ClassName'
+            testDescriptorMock.classDisplayName >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -118,7 +123,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> resultType
             testResultMock.duration >> '1.5s'
             testResultMock.mediumSlow >> true
-            testDescriptorMock.className >> 'ClassName'
+            testDescriptorMock.classDisplayName >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -167,7 +172,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             theme.testStandardStreamText(streamLines, testResultMock) ==
                 '''|[default]
                    |  Hello
-                   |  World[/]
+                   |  World [brackets] \u001B\\[0mANSI[/]
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 
@@ -187,7 +192,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             theme.suiteStandardStreamText(streamLines, testResultMock) ==
                 '''|[default]
                    |  Hello
-                   |  World[/]
+                   |  World [brackets] \u001B\\[0mANSI[/]
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 

@@ -8,4 +8,8 @@ class RendererUtils {
     static String escape(String text) {
         text?.replace('\u001B', '')?.replace('[', '\\[')?.replace(']', '\\]')
     }
+
+    static String preserveAnsi(String text) {
+        text?.replace('\u001B[', '\u001B\\[')
+    }
 }
