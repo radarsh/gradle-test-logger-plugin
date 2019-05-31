@@ -267,7 +267,7 @@ Where possible, the plugin's `testlogger` extension tries to react to equivalent
 extension. However, if a value is explicitly configured under the `testlogger` extension, the plugin __does not__ react to the
 corresponding property of `Test.testLogging`. The below table demonstrates this in more detail.
 
-| Property                  | `Test.testLogging` value              | `testlogging` value    | Effective value |
+| Property                  | `Test.testLogging` value              | `testlogger` value     | Effective value |
 |---------------------------|---------------------------------------|------------------------|---------------- |
 | `showStandardStreams`     | `true`                                | not configured         | `true`          |
 | `showStandardStreams`     | `true`                                | `false`                | `false`         |
