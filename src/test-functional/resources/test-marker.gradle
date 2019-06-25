@@ -10,6 +10,8 @@ afterEvaluate {
     combinedExtension = testExtension.undecorate().combine(projectExtension)
 }
 
+def markerLevel = LogLevel.LIFECYCLE
+
 tasks.withType(Test) {
     boolean started = false
     def suites = []
@@ -17,10 +19,10 @@ tasks.withType(Test) {
     beforeSuite { suite ->
         if (suite.className?.startsWith('com.adarshr') && !started) {
             started = true
-            logger.lifecycle '__START__'
+            logger.log markerLevel, '__START__'
         }
         if (suite.className?.startsWith('com.adarshr') && !suites.contains(suite.className)) {
-            logger.lifecycle "__SUITE=${suite.className}__"
+            logger.log markerLevel, "__SUITE=${suite.className}__"
             suites << suite.className
         }
     }
@@ -31,13 +33,13 @@ tasks.withType(Test) {
             result.resultType == SKIPPED && combinedExtension.showSkipped ||
             result.resultType == FAILURE && combinedExtension.showFailed) {
 
-            logger.lifecycle "__TEST=${suite.className}:${suite.name}__"
+            logger.log markerLevel, "__TEST=${suite.className}:${suite.name}__"
         }
     }
 
     afterSuite { suite, result ->
         if (!suite.parent) {
-            logger.lifecycle '__SUMMARY__'
+            logger.log markerLevel, '__SUMMARY__'
         }
     }
 
@@ -45,7 +47,7 @@ tasks.withType(Test) {
     afterEvaluate {
         afterSuite { suite, result ->
             if (!suite.parent) {
-                logger.lifecycle '__END__'
+                logger.log markerLevel, '__END__'
             }
         }
     }

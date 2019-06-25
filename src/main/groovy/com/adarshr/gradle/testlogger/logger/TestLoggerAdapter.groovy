@@ -20,7 +20,7 @@ class TestLoggerAdapter implements TestLogger {
     private final TestLoggerExtension testLoggerExtension
 
     TestLoggerAdapter(Project project, TestLoggerExtension testLoggerExtension) {
-        this.logger = new ConsoleLogger(project.logger)
+        this.logger = new ConsoleLogger(project.logger, testLoggerExtension.logLevel)
         this.testLoggerExtension = testLoggerExtension
         this.theme = ThemeFactory.getTheme(testLoggerExtension)
         this.outputCollector = new OutputCollector()

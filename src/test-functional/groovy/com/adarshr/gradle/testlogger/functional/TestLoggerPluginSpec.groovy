@@ -754,6 +754,31 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(":test").outcome == FAILED
     }
 
+    def "run test with alternate log level higher than gradle log level"() {
+        when:
+            def result = run(
+                'single-spock-test',
+                '''
+                    testlogger {
+                        theme 'plain'
+                        logLevel 'quiet'
+                    }
+                    markerLevel = LogLevel.QUIET
+                ''',
+                'clean test --quiet'
+            )
+            def lines = getLoggerOutput(result.output).lines
+        then:
+            lines.size() == 4
+            lines[0] == render('')
+            lines[1] == render('com.adarshr.test.SingleSpec')
+            lines[2] == render('')
+            lines[3] == render('  Test this is a single test PASSED')
+        and:
+            result.task(':test').outcome == SUCCESS
+    }
+
+
     def "each test task can have its own testlogger extension"() {
         given:
             def buildFragment = '''

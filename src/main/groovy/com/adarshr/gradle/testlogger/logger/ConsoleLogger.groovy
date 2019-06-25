@@ -13,9 +13,9 @@ class ConsoleLogger {
     private final LogLevel level
     private final TextRenderer renderer
 
-    ConsoleLogger(Logger logger, TextRenderer renderer = new AnsiTextRenderer()) {
+    ConsoleLogger(Logger logger, LogLevel level, TextRenderer renderer = new AnsiTextRenderer()) {
         this.logger = logger
-        this.level = LogLevel.LIFECYCLE
+        this.level = level
         this.renderer = renderer
     }
 

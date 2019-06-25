@@ -1,10 +1,10 @@
 package com.adarshr.gradle.testlogger.logger
 
-
 import com.adarshr.gradle.testlogger.renderer.TextRenderer
 import org.gradle.api.logging.Logger
 import spock.lang.Specification
 
+import static org.gradle.api.logging.LogLevel.DEBUG
 import static org.gradle.api.logging.LogLevel.LIFECYCLE
 
 class ConsoleLoggerSpec extends Specification {
@@ -14,7 +14,7 @@ class ConsoleLoggerSpec extends Specification {
     ConsoleLogger consoleLogger
 
     def setup() {
-        consoleLogger = new ConsoleLogger(loggerMock, textRendererMock)
+        consoleLogger = new ConsoleLogger(loggerMock, LIFECYCLE, textRendererMock)
     }
 
     def "log"() {
@@ -39,5 +39,15 @@ class ConsoleLoggerSpec extends Specification {
             consoleLogger.logNewLine()
         then:
             1 * loggerMock.log(LIFECYCLE, '')
+    }
+
+    def "configurable log level"() {
+        given:
+            consoleLogger = new ConsoleLogger(loggerMock, DEBUG, textRendererMock)
+            textRendererMock.render('text to be logged') >> 'rendered ansi text'
+        when:
+        consoleLogger.log('text to be logged')
+        then:
+        1 * loggerMock.log(DEBUG, 'rendered ansi text')
     }
 }
