@@ -6,6 +6,8 @@ import groovy.transform.CompileStatic
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.logging.Logger
 
+import static com.adarshr.gradle.testlogger.util.RendererUtils.unescape
+
 @CompileStatic
 class ConsoleLogger {
 
@@ -21,7 +23,7 @@ class ConsoleLogger {
 
     void log(String text) {
         if (text) {
-            logger.log(level, renderer.render(text))
+            logger.log(level, unescape(renderer.render(text)))
         }
     }
 

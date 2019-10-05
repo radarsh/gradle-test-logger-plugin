@@ -6,10 +6,10 @@ import groovy.transform.CompileStatic
 class RendererUtils {
 
     static String escape(String text) {
-        text?.replace('\u001B', '')?.replace('[', '\\[')?.replace(']', '\\]')
+        text?.replace('[', '\\[')?.replace(']', '\\]')
     }
 
-    static String preserveAnsi(String text) {
-        text?.replace('\u001B[', '\u001B\\[')
+    static String unescape(String text) {
+        text?.replace('\\[', '[')?.replace('\\]', ']')
     }
 }
