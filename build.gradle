@@ -16,7 +16,7 @@ plugins {
 }
 
 buildScan {
-    termsOfServiceUrl   = 'https://gradle.com/terms-of-service'
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
     termsOfServiceAgree = 'yes'
 }
 
@@ -83,10 +83,6 @@ test {
     classpath += sourceSets.functionalTest.runtimeClasspath
     systemProperty 'file.encoding', 'UTF-8'
 
-//    testLogging {
-//        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-//    }
-    
     testlogger {
         theme 'mocha'
     }
@@ -101,7 +97,7 @@ task functionalTest(type: Test) {
     systemProperty 'file.encoding', 'UTF-8'
     minHeapSize '128m'
     maxHeapSize '512m'
-    
+
     jacoco {
         append = true
         destinationFile = file("${buildDir}/jacoco/test.exec")

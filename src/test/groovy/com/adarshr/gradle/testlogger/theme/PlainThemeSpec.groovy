@@ -146,7 +146,7 @@ class PlainThemeSpec extends BaseThemeSpec {
             theme.testStandardStreamText(streamLines, testResultMock) ==
                 '''|
                    |    Hello
-                   |    World [brackets] \u001B\\[0mANSI
+                   |    World \\[brackets\\] \u001B\\[0mANSI
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 
@@ -166,7 +166,7 @@ class PlainThemeSpec extends BaseThemeSpec {
             theme.suiteStandardStreamText(streamLines, testResultMock) ==
                 '''|
                    |  Hello
-                   |  World [brackets] \u001B\\[0mANSI
+                   |  World \\[brackets\\] \u001B\\[0mANSI
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 

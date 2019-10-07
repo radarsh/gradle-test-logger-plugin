@@ -172,7 +172,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             theme.testStandardStreamText(streamLines, testResultMock) ==
                 '''|[default]
                    |  Hello
-                   |  World [brackets] \u001B\\[0mANSI[/]
+                   |  World \\[brackets\\] \u001B\\[0mANSI[/]
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 
@@ -192,7 +192,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             theme.suiteStandardStreamText(streamLines, testResultMock) ==
                 '''|[default]
                    |  Hello
-                   |  World [brackets] \u001B\\[0mANSI[/]
+                   |  World \\[brackets\\] \u001B\\[0mANSI[/]
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 
