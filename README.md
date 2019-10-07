@@ -21,7 +21,7 @@ Scroll down for more themes and customisation options or visit the [screenshots 
 
 ## Usage
 
-### Modern Gradle
+### Using the plugins DSL
 
 ```groovy
 plugins {
@@ -29,7 +29,7 @@ plugins {
 }
 ```
 
-### Gradle < 2.1
+### Using legacy plugin application
 
 ```groovy
 buildscript {
