@@ -5,7 +5,7 @@ import com.adarshr.gradle.testlogger.TestLoggerExtension
 import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.CompileStatic
 
-import static com.adarshr.gradle.testlogger.util.RendererUtils.preserveAnsi
+import static com.adarshr.gradle.testlogger.util.RendererUtils.escape
 import static java.lang.System.lineSeparator
 
 @CompileStatic
@@ -107,7 +107,7 @@ abstract class AbstractTheme implements Theme {
                 .readLines()
                 .withIndex()
                 .collect { String message, index ->
-                    "${index != 0 || !cause ? indentation : ''}${preserveAnsi(message)}"
+                    "${index != 0 || !cause ? indentation : ''}${escape(message)}"
                 }.join(lineSeparator())
         }
 
@@ -115,7 +115,7 @@ abstract class AbstractTheme implements Theme {
             def trace = new StringBuilder(stackTrace
                 .subList(0, stackTrace.size() - commonFrames)
                 .collect {
-                    "${indentation}    at ${preserveAnsi(it.toString())}"
+                    "${indentation}    at ${escape(it.toString())}"
                 }.join(lineSeparator()))
 
             if (commonFrames) {
