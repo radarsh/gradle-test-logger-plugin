@@ -9,12 +9,14 @@ import org.gradle.api.tasks.testing.Test
 @CompileStatic
 class TestLoggerPlugin implements Plugin<Project> {
 
+    private static final String EXTENSION_NAME = 'testlogger'
+
     @Override
     void apply(Project project) {
         createExtensions(project)
 
         project.afterEvaluate {
-            project.tasks.withType(Test).each { test ->
+            project.tasks.withType(Test).configureEach { test ->
                 def testLoggerExtension = buildTestLoggerExtension(test)
 
                 test.testLogging.lifecycle.events = []
@@ -28,20 +30,15 @@ class TestLoggerPlugin implements Plugin<Project> {
     }
 
     private static void createExtensions(Project project) {
-        project.extensions.create('testlogger', TestLoggerExtension, project)
-        project.tasks.withType(Test).each { task ->
-            task.extensions.create('testlogger', TestLoggerExtension, project)
-        }
-        project.tasks.whenTaskAdded { task ->
-            if (task instanceof Test) {
-                task.extensions.create('testlogger', TestLoggerExtension, project)
-            }
+        project.extensions.create(EXTENSION_NAME, TestLoggerExtension, project)
+        project.tasks.withType(Test).configureEach { task ->
+            task.extensions.create(EXTENSION_NAME, TestLoggerExtension, project)
         }
     }
 
     private static TestLoggerExtension buildTestLoggerExtension(Test test) {
-        def testExtension = test.extensions.findByName('testlogger') as TestLoggerExtension
-        def projectExtension = test.project.extensions.findByName('testlogger') as TestLoggerExtension
+        def testExtension = test.extensions.findByName(EXTENSION_NAME) as TestLoggerExtension
+        def projectExtension = test.project.extensions.findByName(EXTENSION_NAME) as TestLoggerExtension
 
         testExtension
             .undecorate()
@@ -52,9 +49,9 @@ class TestLoggerPlugin implements Plugin<Project> {
 
     private static Map<String, String> getOverrides() {
         (System.properties as Map<String, String>).findAll { key, value ->
-            key.startsWith 'testlogger.'
+            key.startsWith "${EXTENSION_NAME}."
         }.collectEntries { key, value ->
-            [(key.replace('testlogger.', '')): value]
+            [(key.replace("${EXTENSION_NAME}.", '')): value]
         } as Map<String, String>
     }
 }
