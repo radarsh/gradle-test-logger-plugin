@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    testCompileOnly 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
     testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.5.2'
 }
 
