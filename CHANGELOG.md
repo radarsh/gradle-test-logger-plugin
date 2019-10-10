@@ -1,8 +1,25 @@
 # Change Log
 
-## [v1.7.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.7.1) (2019-10-07)
+## [2.0.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v2.0.0) (2019-10-10)
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.7.1...v2.0.0)
 
-[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.7.0...v.1.7.1)
+**Closed issues:**
+
+- Upgrade versions of everything [\#132](https://github.com/radarsh/gradle-test-logger-plugin/issues/132)
+- Upgrade to Gradle 5.6.2 [\#129](https://github.com/radarsh/gradle-test-logger-plugin/issues/129)
+- Upgrade to Gradle 5.2 [\#102](https://github.com/radarsh/gradle-test-logger-plugin/issues/102)
+
+**Merged pull requests:**
+
+- Update issue templates [\#135](https://github.com/radarsh/gradle-test-logger-plugin/pull/135) ([radarsh](https://github.com/radarsh))
+- Switch to modern Gradle dependency configurations [\#134](https://github.com/radarsh/gradle-test-logger-plugin/pull/134) ([radarsh](https://github.com/radarsh))
+- Upgrade all dependency versions [\#133](https://github.com/radarsh/gradle-test-logger-plugin/pull/133) ([radarsh](https://github.com/radarsh))
+- Remove references to Gradle 2.1 [\#131](https://github.com/radarsh/gradle-test-logger-plugin/pull/131) ([radarsh](https://github.com/radarsh))
+- Upgrade to Gradle 5.6.2 [\#130](https://github.com/radarsh/gradle-test-logger-plugin/pull/130) ([radarsh](https://github.com/radarsh))
+- Upgrade to Gradle 5.2 [\#107](https://github.com/radarsh/gradle-test-logger-plugin/pull/107) ([radarsh](https://github.com/radarsh))
+
+## [v1.7.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.7.1) (2019-10-07)
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.7.0...v1.7.1)
 
 **Closed issues:**
 
