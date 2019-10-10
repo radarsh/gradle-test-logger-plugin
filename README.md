@@ -21,15 +21,15 @@ Scroll down for more themes and customisation options or visit the [screenshots 
 
 ## Usage
 
-### Modern Gradle
+### Using the plugins DSL
 
 ```groovy
 plugins {
-    id 'com.adarshr.test-logger' version '1.7.1'
+    id 'com.adarshr.test-logger' version '2.0.0'
 }
 ```
 
-### Gradle < 2.1
+### Using legacy plugin application
 
 ```groovy
 buildscript {
@@ -39,12 +39,14 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.adarshr:gradle-test-logger-plugin:1.7.1'
+        classpath 'com.adarshr:gradle-test-logger-plugin:2.0.0'
     }
 }
 
 apply plugin: 'com.adarshr.test-logger'
 ```
+
+Note: Test logger 2.x is incompatible with Gradle 4.x; please use test logger 1.7.1. 
 
 ## Configuration
 
