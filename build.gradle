@@ -91,6 +91,7 @@ test {
 }
 
 task functionalTest(type: Test) {
+    inputs.dir "$projectDir/src/test-functional/resources"
     maxParallelForks = 2
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath + sourceSets.functionalTest.runtimeClasspath
