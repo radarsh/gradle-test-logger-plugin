@@ -5,19 +5,28 @@ import org.gradle.api.GradleException
 
 @CompileStatic
 enum ThemeType {
-    PLAIN('plain', false),
-    PLAIN_PARALLEL('plain-parallel', true),
-    STANDARD('standard', false),
-    STANDARD_PARALLEL('standard-parallel', true),
-    MOCHA('mocha', false),
-    MOCHA_PARALLEL('mocha-parallel', true)
+    //@formatter:off
+    //                  name                    parallel    themeClass              parallelFallback
+    PLAIN(              'plain',                false,      PlainTheme,             'plain-parallel'),
+    PLAIN_PARALLEL(     'plain-parallel',       true,       PlainParallelTheme,     null),
+    STANDARD(           'standard',             false,      StandardTheme,          'standard-parallel'),
+    STANDARD_PARALLEL(  'standard-parallel',    true,       StandardParallelTheme,  null),
+    MOCHA(              'mocha',                false,      MochaTheme,             'mocha-parallel'),
+    MOCHA_PARALLEL(     'mocha-parallel',       true,       MochaParallelTheme,     null)
+    //@formatter:on
 
     final String name
     final boolean parallel
+    final Class<? extends Theme> themeClass
+    final String parallelFallback
 
-    ThemeType(String name, boolean parallel) {
+    ThemeType(String name, boolean parallel, Class<? extends Theme> themeClass, String parallelFallback = null) {
         this.name = name
         this.parallel = parallel
+        this.themeClass = themeClass
+        this.parallelFallback = parallelFallback
+
+        assert parallel || parallelFallback: 'A non-parallel theme must have a parallel fallback'
     }
 
     static ThemeType fromName(String name) {

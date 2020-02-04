@@ -2,13 +2,9 @@ package com.adarshr.gradle.testlogger
 
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import groovy.transform.CompileStatic
-import org.gradle.api.Project
-import org.gradle.api.logging.configuration.ConsoleOutput
 import org.gradle.api.tasks.testing.logging.TestLogging
 
-import static com.adarshr.gradle.testlogger.theme.ThemeType.PLAIN
 import static com.adarshr.gradle.testlogger.theme.ThemeType.STANDARD
-import static org.gradle.api.logging.configuration.ConsoleOutput.Plain
 import static org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 
 @CompileStatic
@@ -31,12 +27,9 @@ class TestLoggerExtension {
     boolean showFailed = true
     boolean showSimpleNames = false
 
-    private final ConsoleOutput consoleType
     private Set<String> configuredProperties = []
 
-    TestLoggerExtension(Project project) {
-        this.consoleType = project.gradle.startParameter.consoleOutput
-        this.theme = project.gradle.startParameter.consoleOutput == Plain ? PLAIN : this.theme
+    TestLoggerExtension() {
     }
 
     private TestLoggerExtension(TestLoggerExtension source) {
@@ -55,24 +48,15 @@ class TestLoggerExtension {
         this.showSkipped = source.showSkipped
         this.showFailed = source.showFailed
         this.showSimpleNames = source.showSimpleNames
-        this.consoleType = source.consoleType
         this.configuredProperties = source.configuredProperties
     }
 
     void setTheme(String theme) {
-        if (consoleType == Plain) {
-            return
-        }
-
         this.theme = ThemeType.fromName(theme)
         this.configuredProperties << 'theme'
     }
 
     void setTheme(ThemeType theme) {
-        if (consoleType == Plain) {
-            return
-        }
-
         this.theme = theme
         this.configuredProperties << 'theme'
     }

@@ -1,6 +1,5 @@
 package com.adarshr.gradle.testlogger.theme
 
-
 import spock.lang.Unroll
 import spock.util.environment.OperatingSystem
 

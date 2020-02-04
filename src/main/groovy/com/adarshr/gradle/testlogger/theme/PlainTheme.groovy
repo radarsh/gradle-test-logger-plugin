@@ -5,13 +5,16 @@ import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 
+import static com.adarshr.gradle.testlogger.theme.ThemeType.PLAIN
 import static com.adarshr.gradle.testlogger.util.RendererUtils.escape
 import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
-@InheritConstructors
 @CompileStatic
+@InheritConstructors
 class PlainTheme extends AbstractTheme {
+
+    ThemeType type = PLAIN
 
     protected static final Map RESULT_TYPE_MAPPING = [
         (SUCCESS): 'PASSED',
