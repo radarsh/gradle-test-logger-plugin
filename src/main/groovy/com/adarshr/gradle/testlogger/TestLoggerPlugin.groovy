@@ -21,7 +21,7 @@ class TestLoggerPlugin implements Plugin<Project> {
 
                 test.testLogging.lifecycle.events = []
 
-                def testLogger = new TestLoggerWrapper(project, test, testLoggerExtension)
+                def testLogger = new TestLoggerWrapper(test, testLoggerExtension)
 
                 test.addTestListener(testLogger)
                 test.addTestOutputListener(testLogger)
@@ -30,9 +30,9 @@ class TestLoggerPlugin implements Plugin<Project> {
     }
 
     private static void createExtensions(Project project) {
-        project.extensions.create(EXTENSION_NAME, TestLoggerExtension, project)
+        project.extensions.create(EXTENSION_NAME, TestLoggerExtension)
         project.tasks.withType(Test).configureEach { task ->
-            task.extensions.create(EXTENSION_NAME, TestLoggerExtension, project)
+            task.extensions.create(EXTENSION_NAME, TestLoggerExtension)
         }
     }
 
