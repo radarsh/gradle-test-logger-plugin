@@ -5,19 +5,13 @@ buildscript {
 }
 
 plugins {
-    id 'com.gradle.build-scan' version '2.4.2'
     id 'groovy'
     id 'java-gradle-plugin'
     id 'maven-publish'
     id 'idea'
     id 'jacoco'
     id 'com.gradle.plugin-publish' version '0.10.1'
-    id 'com.github.kt3k.coveralls' version '2.8.4'
-}
-
-buildScan {
-    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-    termsOfServiceAgree = 'yes'
+    id 'com.github.kt3k.coveralls' version '2.9.0'
 }
 
 def thisPlugin =
