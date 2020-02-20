@@ -27,6 +27,7 @@ Scroll down for more themes and customisation options or visit the
 link:docs/SCREENSHOTS.md[screenshots page] for more demos.
 
 :toc:
+toc::[]
 
 === Usage
 
