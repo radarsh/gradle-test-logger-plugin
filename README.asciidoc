@@ -2,6 +2,8 @@
 :toc:
 :toc-placement!:
 
+toc::[]
+
 https://circleci.com/gh/radarsh/gradle-test-logger-plugin/tree/develop[image:https://img.shields.io/circleci/project/github/radarsh/gradle-test-logger-plugin/develop.svg?label=circleci+build[CircleCI
 branch]]
 https://ci.appveyor.com/project/radarsh/gradle-test-logger-plugin/branch/develop[image:https://img.shields.io/appveyor/ci/radarsh/gradle-test-logger-plugin/develop.svg?label=appveyor+build[AppVeyor
@@ -28,7 +30,7 @@ image:docs/images/mocha.gif[Mocha theme]
 Scroll down for more themes and customisation options or visit the
 link:docs/SCREENSHOTS.md[screenshots page] for more demos.
 
-toc::[]
+
 
 === Usage
 
