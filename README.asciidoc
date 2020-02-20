@@ -1,4 +1,6 @@
 == Gradle Test Logger Plugin
+:toc:
+:toc-placement!:
 
 https://circleci.com/gh/radarsh/gradle-test-logger-plugin/tree/develop[image:https://img.shields.io/circleci/project/github/radarsh/gradle-test-logger-plugin/develop.svg?label=circleci+build[CircleCI
 branch]]
@@ -26,8 +28,6 @@ image:docs/images/mocha.gif[Mocha theme]
 Scroll down for more themes and customisation options or visit the
 link:docs/SCREENSHOTS.md[screenshots page] for more demos.
 
-:toc:
-:toc-placement!:
 toc::[]
 
 === Usage
