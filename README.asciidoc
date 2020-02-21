@@ -1,8 +1,6 @@
-== Gradle Test Logger Plugin
+= Gradle Test Logger Plugin
 :toc:
 :toc-placement!:
-
-toc::[]
 
 https://circleci.com/gh/radarsh/gradle-test-logger-plugin/tree/develop[image:https://img.shields.io/circleci/project/github/radarsh/gradle-test-logger-plugin/develop.svg?label=circleci+build[CircleCI
 branch]]
@@ -17,13 +15,13 @@ https://github.com/radarsh/gradle-test-logger-plugin/blob/develop/LICENSE[image:
 A Gradle plugin for printing beautiful logs on the console while running
 tests.
 
-=== Screenshots
+== Screenshots
 
-==== Standard theme
+=== Standard theme
 
 image:docs/images/standard.gif[Standard theme]
 
-==== Mocha theme
+=== Mocha theme
 
 image:docs/images/mocha.gif[Mocha theme]
 
@@ -31,10 +29,12 @@ Scroll down for more themes and customisation options or visit the
 link:docs/SCREENSHOTS.md[screenshots page] for more demos.
 
 
+toc::[]
 
-=== Usage
 
-==== Using the plugins DSL
+== Usage
+
+=== Using the plugins DSL
 
 [source,groovy]
 ----
@@ -43,7 +43,7 @@ plugins {
 }
 ----
 
-==== Using legacy plugin application
+=== Using legacy plugin application
 
 [source,groovy]
 ----
@@ -64,7 +64,7 @@ apply plugin: 'com.adarshr.test-logger'
 Note: Test logger 2.x is incompatible with Gradle 4.x; please use test
 logger 1.7.1.
 
-=== Configuration
+== Configuration
 
 The plugin registers an extension called `testlogger` (all lowercase and
 one word) at project level as well as for each task of type
@@ -94,7 +94,7 @@ testlogger {
 }
 ----
 
-==== Project vs task level configuration
+=== Project vs task level configuration
 
 Settings configured at the project level can be overridden by redefining
 them at task level. Settings not defined at task level will inherit
@@ -118,7 +118,7 @@ In the above example, the effective theme will be `standard-parallel`
 and `slowThreshold` will be `5000` whereas rest of the settings will
 retain their default values.
 
-==== Overriding settings at runtime
+=== Overriding settings at runtime
 
 All the above settings can either be specified in `build.gradle` or be
 set at runtime using system properties or both. For instance, we could
@@ -134,7 +134,7 @@ project level settings.
 * Specifying a system property override will apply the same setting for
 all tasks, regardless of any configuration defined in the build file.
 
-==== Switch themes
+=== Switch themes
 
 [source,groovy]
 ----
@@ -158,7 +158,7 @@ parallel test execution
 . `mocha-parallel` - similar to the `mocha` theme but supports parallel
 test execution
 
-==== Hide exceptions
+=== Hide exceptions
 
 By default, the `showExceptions` flag is turned on. This shows why the
 tests failed including the location of the failure. Of course, you can
@@ -172,7 +172,7 @@ testlogger {
 }
 ----
 
-==== Hide exception stack traces
+=== Hide exception stack traces
 
 Sometimes it is useful to just see the exception message instead of the
 stack trace. This can be configured by setting `showStackTraces` to
@@ -185,7 +185,7 @@ testlogger {
 }
 ----
 
-==== Hide exception causes
+=== Hide exception causes
 
 The default behaviour of the plugin is to print all the causes of the
 exception. If it is too verbose to your taste, you can turn it off by
@@ -198,7 +198,7 @@ testlogger {
 }
 ----
 
-==== Show full exception stack traces
+=== Show full exception stack traces
 
 Just like Gradle itself, by default only the last frame that matches the
 test class’s name in a stack trace is printed. For vast majority of
@@ -213,7 +213,7 @@ testlogger {
 }
 ----
 
-==== Define slow threshold
+=== Define slow threshold
 
 Tests that are too slow will have their duration logged. However,
 ``slow'' is a relative terminology varying widely depending on the type
@@ -242,7 +242,7 @@ take longer than 2.5 seconds to run would have their durations logged
 using a warning style and those that take longer than 5 seconds to run
 using an error style.
 
-==== Hide summary
+=== Hide summary
 
 By default, a useful summary containing a breakdown of passing, failing
 and skipped tests along with the total time taken to execute all the
@@ -256,7 +256,7 @@ testlogger {
 }
 ----
 
-==== Show simple names
+=== Show simple names
 
 If you don’t like seeing long, fully-qualified class names being used
 for displaying the test suite names, you can choose to show only
@@ -270,7 +270,7 @@ testlogger {
 }
 ----
 
-==== Show standard streams
+=== Show standard streams
 
 The display of standard output and error streams alongside the test logs
 can be controlled using the below configuration.
@@ -282,7 +282,7 @@ testlogger {
 }
 ----
 
-==== Filter standard streams
+=== Filter standard streams
 
 If the display standard output and error streams is enabled, it can
 often produce too much output to overwhelm anyone. Fortunately, we can
@@ -305,7 +305,7 @@ enabled but none of the filter flags are configured.
 If `showStandardStreams` is set to `false`, the filter flags don’t have
 any effect.
 
-==== Filter test results
+=== Filter test results
 
 Sometimes it is useful to hide test results of a certain type. For
 instance, if an application has hundreds of tests, the sheer volume of
@@ -328,7 +328,7 @@ By default all the above three flags are turned on. If you have chosen
 to display standard streams by setting `showStandardStreams` flag to
 `true`, any output produced by filtered out tests will not be displayed.
 
-==== Relationship between `testlogger` and `Test.testLogging`
+=== Relationship between `testlogger` and `Test.testLogging`
 
 Where possible, the plugin’s `testlogger` extension tries to react to
 equivalent properties of Gradle’s `Test.testLogging` extension. However,
@@ -379,9 +379,9 @@ configured |`false`
 In other words, an explicitly configured `testlogger` property, despite
 it being `false`, takes precedence over any value of `Test.testLogging`.
 
-=== FAQ
+== FAQ
 
-==== Does it work on Windows?
+=== Does it work on Windows?
 
 Mostly. The `standard` and `plain` themes work out of the box but you
 might have to make a few modifications to your system settings to see
@@ -392,12 +392,12 @@ Unicode symbols when using the `mocha` theme.
 `-Dfile.encoding=UTF-8`
 . Change the terminal code page to 65001 by executing `chcp 65001`
 
-==== How to disable colours and Unicode symbols at runtime such as on Jenkins consoles?
+=== How to disable colours and Unicode symbols at runtime such as on Jenkins consoles?
 
 You can switch off ANSI control characters and Unicode symbols by adding
 `--console=plain` to your Gradle command line.
 
-==== Does it support parallel test execution?
+=== Does it support parallel test execution?
 
 Yes. You will need to switch to a suitable parallel theme though. This
 can be one of `plain-parallel`, `standard-parallel` or `mocha-parallel`.
@@ -406,7 +406,7 @@ https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.Test.html#org.g
 greater than 1. They achieve this by sacrificing the ability to group
 tests and thus some readability is lost.
 
-==== Can this plugin co-exist with junit-platform-gradle-plugin?
+=== Can this plugin co-exist with junit-platform-gradle-plugin?
 
 Due to certain unknown reasons, `junit-platform-gradle-plugin` is
 incompatible with `gradle-test-logger-plugin`. If you are still using
