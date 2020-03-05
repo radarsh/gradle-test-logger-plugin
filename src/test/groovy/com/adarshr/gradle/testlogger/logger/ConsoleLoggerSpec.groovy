@@ -46,8 +46,8 @@ class ConsoleLoggerSpec extends Specification {
             consoleLogger = new ConsoleLogger(loggerMock, DEBUG, textRendererMock)
             textRendererMock.render('text to be logged') >> 'rendered ansi text'
         when:
-        consoleLogger.log('text to be logged')
+            consoleLogger.log('text to be logged')
         then:
-        1 * loggerMock.log(DEBUG, 'rendered ansi text')
+            1 * loggerMock.log(DEBUG, 'rendered ansi text')
     }
 }
