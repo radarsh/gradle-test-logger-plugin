@@ -162,19 +162,19 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         and:
             lines.size() == 14
             lines[0] == render('')
-            lines[1] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetThree[/]')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetOne[/]')
             lines[2] == render('')
-            lines[3] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetThree()[green] PASSED[/]')
-            lines[4] == render('')
-            lines[5] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetTwo[/]')
-            lines[6] == render('')
-            lines[7] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetTwo()[green] PASSED[/]')
-            lines[8] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetTwo()[green] PASSED[/]')
+            lines[3] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetOne()[green] PASSED[/]')
+            lines[4] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetOne()[green] PASSED[/]')
+            lines[5] == render('')
+            lines[6] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetThree[/]')
+            lines[7] == render('')
+            lines[8] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetThree()[green] PASSED[/]')
             lines[9] == render('')
-            lines[10] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetOne[/]')
+            lines[10] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetTwo[/]')
             lines[11] == render('')
-            lines[12] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetOne()[green] PASSED[/]')
-            lines[13] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetOne()[green] PASSED[/]')
+            lines[12] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetTwo()[green] PASSED[/]')
+            lines[13] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetTwo()[green] PASSED[/]')
         and:
             result.task(":test").outcome == SUCCESS
     }

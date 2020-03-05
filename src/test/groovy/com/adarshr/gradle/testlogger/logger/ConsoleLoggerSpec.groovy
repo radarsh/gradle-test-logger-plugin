@@ -19,11 +19,12 @@ class ConsoleLoggerSpec extends Specification {
 
     def "log"() {
         given:
-            textRendererMock.render('text to be logged') >> 'rendered ansi text'
+            def text = '[red]text \\[escaped\\]to be logged[/]'
+            textRendererMock.render(text) >> 'text \\[escaped\\] to be logged'
         when:
-            consoleLogger.log('text to be logged')
+            consoleLogger.log(text)
         then:
-            1 * loggerMock.log(LIFECYCLE, 'rendered ansi text')
+            1 * loggerMock.log(LIFECYCLE, 'text [escaped] to be logged')
     }
 
     def "does not log empty strings"() {

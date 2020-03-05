@@ -1,8 +1,10 @@
 jacoco {
-    toolVersion '0.8.2'
+    toolVersion '0.8.5'
 }
 
 jacocoTestReport {
+    executionData "${project.buildDir}/jacoco/test.exec", "${project.buildDir}/jacoco/functionalTest.exec"
+
     reports {
         xml.enabled = true
         html.enabled = true

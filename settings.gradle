@@ -1,3 +1,12 @@
-rootProject.name = 'gradle-test-logger-plugin'
+plugins {
+    id 'com.gradle.enterprise' version '3.1.1'
+}
 
-enableFeaturePreview('STABLE_PUBLISHING')
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+        termsOfServiceAgree = 'yes'
+    }
+}
+
+rootProject.name = 'gradle-test-logger-plugin'

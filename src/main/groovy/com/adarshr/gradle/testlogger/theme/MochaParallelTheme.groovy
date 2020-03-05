@@ -5,9 +5,13 @@ import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 
-@InheritConstructors
+import static com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA_PARALLEL
+
 @CompileStatic
+@InheritConstructors
 class MochaParallelTheme extends MochaTheme {
+
+    ThemeType type = MOCHA_PARALLEL
 
     @Override
     protected String suiteTextInternal(TestDescriptorWrapper descriptor) {

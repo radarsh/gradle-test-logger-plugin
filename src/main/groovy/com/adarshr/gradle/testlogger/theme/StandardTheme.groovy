@@ -5,13 +5,16 @@ import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 
-import static com.adarshr.gradle.testlogger.util.RendererUtils.preserveAnsi
+import static com.adarshr.gradle.testlogger.theme.ThemeType.STANDARD
+import static com.adarshr.gradle.testlogger.util.RendererUtils.escape
 import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
-@InheritConstructors
 @CompileStatic
+@InheritConstructors
 class StandardTheme extends AbstractTheme {
+
+    ThemeType type = STANDARD
 
     @Override
     protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
@@ -109,7 +112,7 @@ class StandardTheme extends AbstractTheme {
             return ''
         }
 
-        lines = preserveAnsi(lines)
+        lines = escape(lines)
 
         def indentation = ' ' * indent
         def line = new StringBuilder("[default]${lineSeparator()}")

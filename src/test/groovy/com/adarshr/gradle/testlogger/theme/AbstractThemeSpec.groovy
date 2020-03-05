@@ -195,6 +195,8 @@ class AbstractThemeSpec extends BaseThemeSpec {
     @InheritConstructors
     static class TestTheme extends AbstractTheme {
 
+        ThemeType type = null
+
         @Override
         protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
             'suiteTextInternal'
