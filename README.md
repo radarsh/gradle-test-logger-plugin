@@ -72,6 +72,7 @@ testlogger {
     showPassedStandardStreams true
     showSkippedStandardStreams true
     showFailedStandardStreams true
+    logLevel 'lifecycle'
 }
 ```
 
@@ -262,6 +263,17 @@ testlogger {
 
 By default all the above three flags are turned on. If you have chosen to display standard streams by setting
 `showStandardStreams` flag to `true`, any output produced by filtered out tests will not be displayed.
+
+### Change log level
+
+By default, results are output at the standard `lifecycle` [Gradle log level](https://docs.gradle.org/current/userguide/logging.html#sec:choosing_a_log_level). This can be configured with `logLevel`. For example, the following will output
+the results even on runs with `--quiet`.
+
+```groovy
+testlogger {
+    logLevel 'quiet'
+}
+```
 
 ### Relationship between `testlogger` and `Test.testLogging`
 

@@ -2,6 +2,7 @@ package com.adarshr.gradle.testlogger
 
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import groovy.transform.CompileStatic
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.testing.logging.TestLogging
 
 import static com.adarshr.gradle.testlogger.theme.ThemeType.STANDARD
@@ -12,6 +13,7 @@ import static org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 class TestLoggerExtension {
 
     ThemeType theme = STANDARD
+    LogLevel logLevel = LogLevel.LIFECYCLE
     boolean showExceptions = true
     boolean showCauses = true
     boolean showStackTraces = true
@@ -34,6 +36,7 @@ class TestLoggerExtension {
 
     private TestLoggerExtension(TestLoggerExtension source) {
         this.theme = source.theme
+        this.logLevel = source.logLevel
         this.showExceptions = source.showExceptions
         this.showCauses = source.showCauses
         this.showStackTraces = source.showStackTraces
@@ -59,6 +62,16 @@ class TestLoggerExtension {
     void setTheme(ThemeType theme) {
         this.theme = theme
         this.configuredProperties << 'theme'
+    }
+
+    void setLogLevel(LogLevel logLevel) {
+        this.logLevel = logLevel
+        this.configuredProperties << "logLevel"
+    }
+
+    void setLogLevel(String levelName) {
+        this.logLevel = LogLevel.valueOf(levelName.toUpperCase())
+        this.configuredProperties << "logLevel"
     }
 
     void setShowExceptions(boolean showExceptions) {
