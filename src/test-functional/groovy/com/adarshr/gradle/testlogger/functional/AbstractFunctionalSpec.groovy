@@ -16,7 +16,7 @@ abstract class AbstractFunctionalSpec extends Specification {
 
     private static final String TEST_ROOT = 'src/test-functional/resources'
 
-    private static final String GRADLE_VERSION = '6.2'
+    private static final String GRADLE_VERSION = '6.4.1'
 
     @Rule
     TemporaryFolder temporaryFolder
