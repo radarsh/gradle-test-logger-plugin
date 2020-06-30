@@ -11,8 +11,8 @@ class OutputCollectorSpec extends Specification {
     def "output collector groups output by descriptor and removes them accordingly"() {
         given:
             def collector = new OutputCollector()
-            def suite = new TestDescriptorWrapper(new Descriptor('ClassName', 'ClassName'), null)
-            def test = new TestDescriptorWrapper(new Descriptor('test', 'ClassName'), null)
+            def suite = new TestDescriptorWrapper(new Descriptor(name: 'ClassName', className: 'ClassName'), null)
+            def test = new TestDescriptorWrapper(new Descriptor(name: 'test', className: 'ClassName'), null)
         when:
             collector.collect(suite, 'Suite line 1\n')
             collector.collect(suite, 'Suite line 2\n')
@@ -28,6 +28,7 @@ class OutputCollectorSpec extends Specification {
     @Canonical
     private static class Descriptor implements TestDescriptor {
         String name
+        String displayName
         String className
         boolean composite
         Descriptor parent

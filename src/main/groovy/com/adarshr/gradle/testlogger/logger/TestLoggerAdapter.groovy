@@ -4,7 +4,6 @@ import com.adarshr.gradle.testlogger.TestDescriptorWrapper
 import com.adarshr.gradle.testlogger.TestLoggerExtension
 import com.adarshr.gradle.testlogger.TestResultWrapper
 import com.adarshr.gradle.testlogger.theme.Theme
-import com.adarshr.gradle.testlogger.theme.ThemeFactory
 import groovy.transform.CompileStatic
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.TestDescriptor
@@ -19,10 +18,10 @@ class TestLoggerAdapter implements TestLogger {
     protected final OutputCollector outputCollector
     private final TestLoggerExtension testLoggerExtension
 
-    TestLoggerAdapter(Project project, TestLoggerExtension testLoggerExtension) {
-        this.logger = new ConsoleLogger(project.logger)
+    TestLoggerAdapter(Project project, TestLoggerExtension testLoggerExtension, Theme theme) {
+        this.logger = new ConsoleLogger(project.logger, testLoggerExtension.logLevel)
         this.testLoggerExtension = testLoggerExtension
-        this.theme = ThemeFactory.getTheme(testLoggerExtension)
+        this.theme = theme
         this.outputCollector = new OutputCollector()
     }
 

@@ -6,13 +6,16 @@ import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 import org.gradle.api.tasks.testing.TestResult.ResultType
 
+import static com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA
 import static com.adarshr.gradle.testlogger.util.RendererUtils.escape
 import static java.lang.System.lineSeparator
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
-@InheritConstructors
 @CompileStatic
+@InheritConstructors
 class MochaTheme extends AbstractTheme {
+
+    ThemeType type = MOCHA
 
     @Override
     protected String suiteTextInternal(TestDescriptorWrapper descriptor) {

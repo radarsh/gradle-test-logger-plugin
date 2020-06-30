@@ -5,9 +5,13 @@ import com.adarshr.gradle.testlogger.TestResultWrapper
 import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 
-@InheritConstructors
+import static com.adarshr.gradle.testlogger.theme.ThemeType.PLAIN_PARALLEL
+
 @CompileStatic
+@InheritConstructors
 class PlainParallelTheme extends PlainTheme {
+
+    ThemeType type = PLAIN_PARALLEL
 
     @Override
     protected String suiteTextInternal(TestDescriptorWrapper descriptor) {

@@ -11,11 +11,9 @@ import static java.lang.System.lineSeparator
 @CompileStatic
 abstract class AbstractTheme implements Theme {
 
-    final ThemeType type
     protected final TestLoggerExtension extension
 
-    AbstractTheme(TestLoggerExtension extension) {
-        this.type = extension.theme
+    protected AbstractTheme(TestLoggerExtension extension) {
         this.extension = extension
     }
 

@@ -37,4 +37,12 @@ class ThemeTypeSpec extends Specification {
         expect:
             ThemeType.parallelThemeNames == "'plain-parallel', 'standard-parallel', 'mocha-parallel'"
     }
+
+    @Unroll
+    def "instance of #themeType theme has the correct type set"() {
+        expect:
+            themeType.themeClass.newInstance(null).type == themeType
+        where:
+            themeType << ThemeType.values().toList()
+    }
 }
