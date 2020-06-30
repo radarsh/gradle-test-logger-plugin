@@ -1,6 +1,34 @@
-# Change Log
+# Changelog
 
-## [2.0.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v2.0.0) (2019-10-10)
+## [v2.1.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v2.1.0) (2020-06-30)
+
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v2.0.0...v2.1.0)
+
+**Implemented enhancements:**
+
+- Auto Switch Theme based on --console value and --parallel [\#149](https://github.com/radarsh/gradle-test-logger-plugin/issues/149)
+
+**Fixed bugs:**
+
+- Theme is defaulted to plain even when maxForks is greater than 1 [\#139](https://github.com/radarsh/gradle-test-logger-plugin/issues/139)
+- Plugin version 1.7.1 not working with Gradle 4.8.1  [\#138](https://github.com/radarsh/gradle-test-logger-plugin/issues/138)
+
+**Closed issues:**
+
+- Upgrade to Gradle 6.4.1 [\#150](https://github.com/radarsh/gradle-test-logger-plugin/issues/150)
+- Upgrade to Gradle 6.2 [\#143](https://github.com/radarsh/gradle-test-logger-plugin/issues/143)
+- Add support for kotlin-dsl [\#127](https://github.com/radarsh/gradle-test-logger-plugin/issues/127)
+
+**Merged pull requests:**
+
+- Upgrade to Gradle 6.4.1 [\#151](https://github.com/radarsh/gradle-test-logger-plugin/pull/151) ([radarsh](https://github.com/radarsh))
+- Upgrade to Gradle 6.2 [\#144](https://github.com/radarsh/gradle-test-logger-plugin/pull/144) ([radarsh](https://github.com/radarsh))
+- Seamlessly switch to parallel theme [\#142](https://github.com/radarsh/gradle-test-logger-plugin/pull/142) ([radarsh](https://github.com/radarsh))
+- Add missing inputs to "functionalTest" task [\#140](https://github.com/radarsh/gradle-test-logger-plugin/pull/140) ([theosotr](https://github.com/theosotr))
+- Configuration option for changing the log level [\#124](https://github.com/radarsh/gradle-test-logger-plugin/pull/124) ([rabidaudio](https://github.com/rabidaudio))
+
+## [v2.0.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v2.0.0) (2019-10-10)
+
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.7.1...v2.0.0)
 
 **Closed issues:**
@@ -19,6 +47,7 @@
 - Upgrade to Gradle 5.2 [\#107](https://github.com/radarsh/gradle-test-logger-plugin/pull/107) ([radarsh](https://github.com/radarsh))
 
 ## [v1.7.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.7.1) (2019-10-07)
+
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.7.0...v1.7.1)
 
 **Closed issues:**
@@ -36,6 +65,7 @@
 - Clarify documentation [\#121](https://github.com/radarsh/gradle-test-logger-plugin/pull/121) ([radarsh](https://github.com/radarsh))
 
 ## [v1.7.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.7.0) (2019-05-29)
+
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.6.0...v1.7.0)
 
 **Closed issues:**
@@ -59,6 +89,7 @@
 - Fix double escaping of brackets [\#108](https://github.com/radarsh/gradle-test-logger-plugin/pull/108) ([radarsh](https://github.com/radarsh))
 
 ## [v1.6.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.6.0) (2018-11-20)
+
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.5.0...v1.6.0)
 
 **Implemented enhancements:**
@@ -83,6 +114,7 @@
 - Configure testlogger for each task [\#93](https://github.com/radarsh/gradle-test-logger-plugin/pull/93) ([radarsh](https://github.com/radarsh))
 
 ## [v1.5.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.5.0) (2018-09-08)
+
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.4.0...v1.5.0)
 
 **Implemented enhancements:**
@@ -109,6 +141,7 @@
 - Filter test results by type [\#77](https://github.com/radarsh/gradle-test-logger-plugin/pull/77) ([radarsh](https://github.com/radarsh))
 
 ## [v1.4.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.4.0) (2018-07-31)
+
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.3.1...v1.4.0)
 
 **Implemented enhancements:**
@@ -130,6 +163,7 @@
 - Add support for parallel test execution [\#66](https://github.com/radarsh/gradle-test-logger-plugin/pull/66) ([radarsh](https://github.com/radarsh))
 
 ## [v1.3.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.3.1) (2018-06-25)
+
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.3.0...v1.3.1)
 
 **Closed issues:**
@@ -141,6 +175,7 @@
 - Turn off bright yellow in standard theme [\#65](https://github.com/radarsh/gradle-test-logger-plugin/pull/65) ([radarsh](https://github.com/radarsh))
 
 ## [v1.3.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.3.0) (2018-06-11)
+
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.2.0...v1.3.0)
 
 **Implemented enhancements:**
@@ -165,6 +200,7 @@
 - Added support for nested JUnit5 tests. [\#55](https://github.com/radarsh/gradle-test-logger-plugin/pull/55) ([mithomas](https://github.com/mithomas))
 
 ## [v1.2.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.2.0) (2018-03-31)
+
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.1.2...v1.2.0)
 
 **Implemented enhancements:**
@@ -188,6 +224,7 @@
 - Upgrade to Gradle 4.4 [\#46](https://github.com/radarsh/gradle-test-logger-plugin/pull/46) ([radarsh](https://github.com/radarsh))
 
 ## [v1.1.2](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.1.2) (2017-11-07)
+
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.1.1...v1.1.2)
 
 **Fixed bugs:**
@@ -199,6 +236,7 @@
 - Erase ahead before writing every line [\#43](https://github.com/radarsh/gradle-test-logger-plugin/pull/43) ([radarsh](https://github.com/radarsh))
 
 ## [v1.1.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.1.1) (2017-11-06)
+
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.1.0...v1.1.1)
 
 **Fixed bugs:**
@@ -210,6 +248,7 @@
 - Erase ahead before writing summary text [\#41](https://github.com/radarsh/gradle-test-logger-plugin/pull/41) ([radarsh](https://github.com/radarsh))
 
 ## [v1.1.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.1.0) (2017-11-06)
+
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.0.1...v1.1.0)
 
 **Implemented enhancements:**
@@ -239,6 +278,7 @@
 - Fix test instability [\#24](https://github.com/radarsh/gradle-test-logger-plugin/pull/24) ([radarsh](https://github.com/radarsh))
 
 ## [v1.0.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.0.1) (2017-10-15)
+
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v1.0.0...v1.0.1)
 
 **Implemented enhancements:**
@@ -266,6 +306,9 @@
 - Add Configuration for AppVeyor [\#9](https://github.com/radarsh/gradle-test-logger-plugin/pull/9) ([baynezy](https://github.com/baynezy))
 
 ## [v1.0.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.0.0) (2017-09-29)
+
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/577a89fd0a8f1621802527317ee0bcfbd0f3f49e...v1.0.0)
+
 **Implemented enhancements:**
 
 - Publish plugin [\#5](https://github.com/radarsh/gradle-test-logger-plugin/issues/5)
@@ -284,4 +327,4 @@
 
 
 
-\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
