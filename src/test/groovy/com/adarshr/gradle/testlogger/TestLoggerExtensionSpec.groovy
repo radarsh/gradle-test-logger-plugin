@@ -1,6 +1,7 @@
 package com.adarshr.gradle.testlogger
 
 import com.adarshr.gradle.testlogger.theme.ThemeType
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.testing.logging.TestLogging
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -40,7 +41,8 @@ class TestLoggerExtensionSpec extends Specification {
                 showFailedStandardStreams: 'false',
                 showPassed: 'false',
                 showSkipped: 'false',
-                showFailed: 'false'
+                showFailed: 'false',
+                logLevel: 'warn'
             ]
         when:
             def extension = new TestLoggerExtension()
@@ -57,6 +59,7 @@ class TestLoggerExtensionSpec extends Specification {
             !extension.showPassed
             !extension.showSkipped
             !extension.showFailed
+            extension.logLevel == LogLevel.WARN
     }
 
     def "combine two test extension objects"() {
