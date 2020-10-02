@@ -184,7 +184,7 @@ testlogger {
 }
 ```
 
-The default value of `slowThreshold` is `2` seconds. So all tests that take longer than a second to run will have their
+The default value of `slowThreshold` is `2` seconds. So all tests that take longer than 2 seconds to run will have their
 actual execution time logged.
 
 If you want to turn off the logging of time taken completely, simply set the threshold to a very large value.
