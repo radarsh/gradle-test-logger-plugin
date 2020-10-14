@@ -1,5 +1,24 @@
 # Changelog
 
+## [v2.1.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v2.1.1) (2020-10-15)
+
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v2.1.0...v2.1.1)
+
+**Fixed bugs:**
+
+- Cannot override logLevel using command line [\#161](https://github.com/radarsh/gradle-test-logger-plugin/issues/161)
+- JetBrains IDEA prints the escape codes instead of switching colors [\#148](https://github.com/radarsh/gradle-test-logger-plugin/issues/148)
+
+**Closed issues:**
+
+- Upgrade to Gradle 6.6 [\#153](https://github.com/radarsh/gradle-test-logger-plugin/issues/153)
+- Incorrect coverage reported by JaCoCo and Coveralls [\#152](https://github.com/radarsh/gradle-test-logger-plugin/issues/152)
+
+**Merged pull requests:**
+
+- Fix issue with overriding logLevel [\#169](https://github.com/radarsh/gradle-test-logger-plugin/pull/169) ([radarsh](https://github.com/radarsh))
+- Upgrade to Gradle 6.6.1 [\#167](https://github.com/radarsh/gradle-test-logger-plugin/pull/167) ([radarsh](https://github.com/radarsh))
+
 ## [v2.1.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v2.1.0) (2020-06-30)
 
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v2.0.0...v2.1.0)
@@ -159,7 +178,6 @@
 - Refactor standard stream collectors into OutputCollector abstraction [\#73](https://github.com/radarsh/gradle-test-logger-plugin/pull/73) ([radarsh](https://github.com/radarsh))
 - Add test for ThemeType [\#71](https://github.com/radarsh/gradle-test-logger-plugin/pull/71) ([radarsh](https://github.com/radarsh))
 - Upgrade to Gradle 4.9 [\#70](https://github.com/radarsh/gradle-test-logger-plugin/pull/70) ([radarsh](https://github.com/radarsh))
-- Limit max memory available to Gradle for CircleCI builds [\#69](https://github.com/radarsh/gradle-test-logger-plugin/pull/69) ([radarsh](https://github.com/radarsh))
 - Add support for parallel test execution [\#66](https://github.com/radarsh/gradle-test-logger-plugin/pull/66) ([radarsh](https://github.com/radarsh))
 
 ## [v1.3.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.3.1) (2018-06-25)
@@ -172,6 +190,7 @@
 
 **Merged pull requests:**
 
+- Limit max memory available to Gradle for CircleCI builds [\#69](https://github.com/radarsh/gradle-test-logger-plugin/pull/69) ([radarsh](https://github.com/radarsh))
 - Turn off bright yellow in standard theme [\#65](https://github.com/radarsh/gradle-test-logger-plugin/pull/65) ([radarsh](https://github.com/radarsh))
 
 ## [v1.3.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.3.0) (2018-06-11)
