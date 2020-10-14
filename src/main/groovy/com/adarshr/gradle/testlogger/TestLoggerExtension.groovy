@@ -201,15 +201,17 @@ class TestLoggerExtension {
         override(overrides, 'showSkipped', Boolean)
         override(overrides, 'showFailed', Boolean)
         override(overrides, 'showSimpleNames', Boolean)
+        override(overrides, 'logLevel', LogLevel)
 
         this
     }
 
     private void override(Map<String, String> overrides, String name, Class type) {
         if (overrides.containsKey(name)) {
-            String method = Enum.isAssignableFrom(type) ? 'fromName' : 'valueOf'
+            String method = ThemeType.isAssignableFrom(type) ? 'fromName' : 'valueOf'
+            String value = LogLevel.isAssignableFrom(type) ? overrides[name].toUpperCase() : overrides[name]
 
-            setProperty(name, type.invokeMethod(method, overrides[name]))
+            setProperty(name, type.invokeMethod(method, value))
         }
     }
 }
