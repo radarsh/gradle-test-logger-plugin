@@ -1,7 +1,10 @@
 plugins {
     id 'groovy'
-    id 'com.adarshr.test-logger'
+    id 'com.adarshr.test-logger' apply false
 }
+
+apply from: 'test-marker.gradle'
+apply plugin: 'com.adarshr.test-logger'
 
 repositories {
     mavenLocal()

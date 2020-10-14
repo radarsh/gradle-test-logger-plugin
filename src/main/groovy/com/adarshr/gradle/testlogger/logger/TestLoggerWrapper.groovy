@@ -4,21 +4,38 @@ import com.adarshr.gradle.testlogger.TestLoggerExtension
 import com.adarshr.gradle.testlogger.theme.Theme
 import com.adarshr.gradle.testlogger.theme.ThemeFactory
 import groovy.transform.CompileStatic
+import org.gradle.StartParameter
 import org.gradle.api.tasks.testing.Test
 
 @CompileStatic
 class TestLoggerWrapper implements TestLogger {
 
-    @Delegate
-    private final TestLogger testLoggerDelegate
+    private final StartParameter startParameter
+    private final Test test
+    private final TestLoggerExtension testLoggerExtension
 
-    TestLoggerWrapper(Test test, TestLoggerExtension testLoggerExtension) {
-        Theme theme = ThemeFactory.getTheme(test, testLoggerExtension)
+    private TestLogger testLoggerDelegate
+
+    TestLoggerWrapper(StartParameter startParameter, Test test, TestLoggerExtension testLoggerExtension) {
+        this.startParameter = startParameter
+        this.test = test
+        this.testLoggerExtension = testLoggerExtension
+    }
+
+    @Delegate
+    TestLogger getTestLoggerDelegate() {
+        if (testLoggerDelegate) {
+            return testLoggerDelegate
+        }
+
+        Theme theme = ThemeFactory.getTheme(startParameter, test, testLoggerExtension)
 
         if (theme.type.parallel) {
-            testLoggerDelegate = new ParallelTestLogger(test.project, testLoggerExtension, theme)
+            testLoggerDelegate = new ParallelTestLogger(test.logger, testLoggerExtension, theme)
         } else {
-            testLoggerDelegate = new SequentialTestLogger(test.project, testLoggerExtension, theme)
+            testLoggerDelegate = new SequentialTestLogger(test.logger, testLoggerExtension, theme)
         }
+
+        return testLoggerDelegate
     }
 }

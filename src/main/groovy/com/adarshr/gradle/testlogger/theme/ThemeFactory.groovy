@@ -2,6 +2,7 @@ package com.adarshr.gradle.testlogger.theme
 
 import com.adarshr.gradle.testlogger.TestLoggerExtension
 import groovy.transform.CompileStatic
+import org.gradle.StartParameter
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.testng.TestNGOptions
 
@@ -12,14 +13,14 @@ import static org.gradle.api.logging.configuration.ConsoleOutput.Plain
 @CompileStatic
 class ThemeFactory {
 
-    static Theme getTheme(Test test, TestLoggerExtension extension) {
-        resolveThemeType(test, extension).themeClass.newInstance(extension)
+    static Theme getTheme(StartParameter startParameter, Test test, TestLoggerExtension extension) {
+        resolveThemeType(startParameter, test, extension).themeClass.newInstance(extension)
     }
 
-    private static ThemeType resolveThemeType(Test test, TestLoggerExtension extension) {
+    private static ThemeType resolveThemeType(StartParameter startParameter, Test test, TestLoggerExtension extension) {
         ThemeType themeType = extension.theme
 
-        if (test.project.gradle.startParameter.consoleOutput == Plain) {
+        if (startParameter.consoleOutput == Plain) {
             themeType = PLAIN
         }
 
@@ -28,7 +29,7 @@ class ThemeFactory {
         }
 
         if (themeType != extension.theme) {
-            test.project.logger.info("Test logger theme for task ${test.name} overridden " +
+            test.logger.info("Test logger theme for task ${test.name} overridden " +
                 "from ${extension.theme.name} to ${themeType.name}")
         }
 
