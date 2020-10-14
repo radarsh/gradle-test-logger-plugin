@@ -13,45 +13,20 @@ class TestLoggerPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        createExtensions(project)
+        project.extensions.create(EXTENSION_NAME, TestLoggerExtension, project)
 
-        project.afterEvaluate {
-            project.tasks.withType(Test).configureEach { test ->
-                def testLoggerExtension = buildTestLoggerExtension(test)
+        project.tasks.withType(Test).configureEach { test ->
+            def testExtension = test.extensions.create(EXTENSION_NAME, TestLoggerExtension, project, test)
 
+            test.doFirst {
+                testExtension.originalTestLoggingEvents = test.testLogging.events
                 test.testLogging.lifecycle.events = []
-
-                def testLogger = new TestLoggerWrapper(test, testLoggerExtension)
-
-                test.addTestListener(testLogger)
-                test.addTestOutputListener(testLogger)
             }
+
+            def testLogger = new TestLoggerWrapper(project.gradle.startParameter, test, testExtension)
+
+            test.addTestListener(testLogger)
+            test.addTestOutputListener(testLogger)
         }
-    }
-
-    private static void createExtensions(Project project) {
-        project.extensions.create(EXTENSION_NAME, TestLoggerExtension)
-        project.tasks.withType(Test).configureEach { task ->
-            task.extensions.create(EXTENSION_NAME, TestLoggerExtension)
-        }
-    }
-
-    private static TestLoggerExtension buildTestLoggerExtension(Test test) {
-        def testExtension = test.extensions.findByName(EXTENSION_NAME) as TestLoggerExtension
-        def projectExtension = test.project.extensions.findByName(EXTENSION_NAME) as TestLoggerExtension
-
-        testExtension
-            .undecorate()
-            .reactTo(test.testLogging)
-            .combine(projectExtension)
-            .applyOverrides(overrides)
-    }
-
-    private static Map<String, String> getOverrides() {
-        (System.properties as Map<String, String>).findAll { key, value ->
-            key.startsWith "${EXTENSION_NAME}."
-        }.collectEntries { key, value ->
-            [(key.replace("${EXTENSION_NAME}.", '')): value]
-        } as Map<String, String>
     }
 }

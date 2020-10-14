@@ -2,8 +2,6 @@ package com.adarshr.gradle.testlogger.theme
 
 import com.adarshr.gradle.testlogger.TestLoggerExtension
 import org.gradle.StartParameter
-import org.gradle.api.Project
-import org.gradle.api.invocation.Gradle
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.configuration.ConsoleOutput
 import org.gradle.api.tasks.testing.Test
@@ -16,14 +14,10 @@ class ThemeFactorySpec extends Specification {
     def extensionMock = Mock(TestLoggerExtension)
     def loggerMock = Mock(Logger)
     def testMock = Mock(Test) {
-        getProject() >> Mock(Project) {
-            getGradle() >> Mock(Gradle) {
-                getStartParameter() >> Mock(StartParameter) {
-                    getConsoleOutput() >> ConsoleOutput.Auto
-                }
-            }
-            getLogger() >> loggerMock
-        }
+        getLogger() >> loggerMock
+    }
+    def startParameterMock = Mock(StartParameter) {
+        getConsoleOutput() >> ConsoleOutput.Auto
     }
 
     @Unroll
@@ -31,7 +25,7 @@ class ThemeFactorySpec extends Specification {
         given:
             extensionMock.theme >> themeType
         expect:
-            ThemeFactory.getTheme(testMock, extensionMock).class == theme
+            ThemeFactory.getTheme(startParameterMock, testMock, extensionMock).class == theme
         where:
             themeType                   | theme
             ThemeType.PLAIN             | PlainTheme
@@ -45,19 +39,12 @@ class ThemeFactorySpec extends Specification {
     def "console type of plain overrides any theme configuration"() {
         given:
             extensionMock.theme >> ThemeType.MOCHA
-            testMock = Mock(Test) {
-                getName() >> 'fooTask'
-                getProject() >> Mock(Project) {
-                    getGradle() >> Mock(Gradle) {
-                        getStartParameter() >> Mock(StartParameter) {
-                            getConsoleOutput() >> ConsoleOutput.Plain
-                        }
-                    }
-                    getLogger() >> loggerMock
-                }
+            testMock.name >> 'fooTask'
+            def startParameterMock = Mock(StartParameter) {
+                getConsoleOutput() >> ConsoleOutput.Plain
             }
         when:
-            def theme = ThemeFactory.getTheme(testMock, extensionMock)
+            def theme = ThemeFactory.getTheme(startParameterMock, testMock, extensionMock)
         then:
             theme.type == ThemeType.PLAIN
         and:
@@ -71,7 +58,7 @@ class ThemeFactorySpec extends Specification {
             testMock.maxParallelForks >> 2
             testMock.name >> 'fooTask'
         when:
-            def theme = ThemeFactory.getTheme(testMock, extensionMock)
+            def theme = ThemeFactory.getTheme(startParameterMock, testMock, extensionMock)
         then:
             theme.type == actualTheme
         and:
@@ -94,7 +81,7 @@ class ThemeFactorySpec extends Specification {
                 getParallel() >> 'methods'
             }
         when:
-            def theme = ThemeFactory.getTheme(testMock, extensionMock)
+            def theme = ThemeFactory.getTheme(startParameterMock, testMock, extensionMock)
         then:
             theme.type == actualTheme
         and:

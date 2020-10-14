@@ -1,16 +1,8 @@
-import static org.gradle.api.tasks.testing.TestResult.ResultType.*
+ext.markerLevel = 'lifecycle'
 
-def testExtension
-def projectExtension
-def combinedExtension
-
-afterEvaluate {
-    testExtension = test.testlogger
-    projectExtension = project.testlogger
-    combinedExtension = testExtension.undecorate().combine(projectExtension)
+LogLevel getMarkerLevel() {
+    LogLevel.valueOf(project.property('markerLevel').toString().toUpperCase())
 }
-
-def markerLevel = LogLevel.LIFECYCLE
 
 tasks.withType(Test) {
     boolean started = false
@@ -29,9 +21,9 @@ tasks.withType(Test) {
 
     afterTest { suite, result ->
         if (suite.className.startsWith('com.adarshr') &&
-            result.resultType == SUCCESS && combinedExtension.showPassed ||
-            result.resultType == SKIPPED && combinedExtension.showSkipped ||
-            result.resultType == FAILURE && combinedExtension.showFailed) {
+            result.resultType == TestResult.ResultType.SUCCESS && test.testlogger.showPassed ||
+            result.resultType == TestResult.ResultType.SKIPPED && test.testlogger.showSkipped ||
+            result.resultType == TestResult.ResultType.FAILURE && test.testlogger.showFailed) {
 
             logger.log markerLevel, "__TEST=${suite.className}:${suite.name}__"
         }
