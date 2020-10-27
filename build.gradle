@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath 'org.fusesource.jansi:jansi:1.18'
+        classpath 'org.fusesource.jansi:jansi:2.0'
     }
 }
 
