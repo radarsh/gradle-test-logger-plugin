@@ -105,6 +105,16 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
             !theme.exceptionText(testDescriptorMock, testResultMock)
     }
 
+    def "exception text when showExceptions is true but exception is null"() {
+        given:
+            testLoggerExtensionMock.showExceptions >> true
+            testResultMock.resultType >> FAILURE
+            testResultMock.exception >> null
+            testDescriptorMock.displayName >> 'exception is null test'
+        expect:
+            !theme.exceptionText(testDescriptorMock, testResultMock)
+    }
+
     @Unroll
     def "show duration if slowThreshold is exceeded for resultType #resultType"() {
         given:

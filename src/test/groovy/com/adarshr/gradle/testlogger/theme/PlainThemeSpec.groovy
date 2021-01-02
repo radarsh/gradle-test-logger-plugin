@@ -97,6 +97,17 @@ class PlainThemeSpec extends BaseThemeSpec {
             !theme.exceptionText(testDescriptorMock, testResultMock)
     }
 
+
+    def "exception text when showExceptions is true but exception is null"() {
+        given:
+            testLoggerExtensionMock.showExceptions >> true
+            testResultMock.resultType >> FAILURE
+            testResultMock.exception >> null
+            testDescriptorMock.displayName >> 'exception is null test'
+        expect:
+            !theme.exceptionText(testDescriptorMock, testResultMock)
+    }
+
     def "show duration if slowThreshold is exceeded"() {
         given:
             testResultMock.duration >> '10s'
