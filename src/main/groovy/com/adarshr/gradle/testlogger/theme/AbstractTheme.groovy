@@ -53,7 +53,7 @@ abstract class AbstractTheme implements Theme {
     protected String exceptionText(TestDescriptorWrapper descriptor, TestResultWrapper result, int indent) {
         def line = new StringBuilder()
 
-        if (!extension.showExceptions) {
+        if (!extension.showExceptions || result.exception == null) {
             return line
         }
 
