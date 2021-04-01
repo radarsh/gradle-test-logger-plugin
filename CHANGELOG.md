@@ -1,6 +1,42 @@
 # Changelog
 
-## [v2.1.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v2.1.1) (2020-10-15)
+## [v3.0.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v3.0.0) (2021-04-01)
+
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v2.1.1...v3.0.0)
+
+**Implemented enhancements:**
+
+- Display start of the test [\#165](https://github.com/radarsh/gradle-test-logger-plugin/issues/165)
+
+**Fixed bugs:**
+
+- System property usage causes Gradle 7 to complain \(when using --configuration-cache\) [\#195](https://github.com/radarsh/gradle-test-logger-plugin/issues/195)
+- Stack trace does not show application code [\#170](https://github.com/radarsh/gradle-test-logger-plugin/issues/170)
+- Incompatible with Gradle Configuration Cache  [\#163](https://github.com/radarsh/gradle-test-logger-plugin/issues/163)
+- evaluationDependsOnChildren\(\): No output at all \(Gradle 6.6 RC2\) [\#156](https://github.com/radarsh/gradle-test-logger-plugin/issues/156)
+
+**Closed issues:**
+
+- Upgrade to Gradle 6.7 [\#172](https://github.com/radarsh/gradle-test-logger-plugin/issues/172)
+- Kotlin DSL [\#137](https://github.com/radarsh/gradle-test-logger-plugin/issues/137)
+- Document TestLoggerExtension class [\#136](https://github.com/radarsh/gradle-test-logger-plugin/issues/136)
+
+**Merged pull requests:**
+
+- Document Kotlin DSL [\#200](https://github.com/radarsh/gradle-test-logger-plugin/pull/200) ([radarsh](https://github.com/radarsh))
+- Document extension properties [\#199](https://github.com/radarsh/gradle-test-logger-plugin/pull/199) ([radarsh](https://github.com/radarsh))
+- Bump objenesis from 3.1 to 3.2 [\#197](https://github.com/radarsh/gradle-test-logger-plugin/pull/197) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump jansi from 1.18 to 2.3.2 [\#196](https://github.com/radarsh/gradle-test-logger-plugin/pull/196) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump com.github.kt3k.coveralls from 2.9.0 to 2.11.0 [\#194](https://github.com/radarsh/gradle-test-logger-plugin/pull/194) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump byte-buddy from 1.10.17 to 1.10.22 [\#193](https://github.com/radarsh/gradle-test-logger-plugin/pull/193) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump com.gradle.plugin-publish from 0.12.0 to 0.13.0 [\#189](https://github.com/radarsh/gradle-test-logger-plugin/pull/189) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Fix for NPE when the exception in the TestResult is null. [\#180](https://github.com/radarsh/gradle-test-logger-plugin/pull/180) ([osh-onstructive](https://github.com/osh-onstructive))
+- Bump byte-buddy from 1.10.1 to 1.10.17 [\#176](https://github.com/radarsh/gradle-test-logger-plugin/pull/176) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump commons-io from 2.6 to 2.8.0 [\#174](https://github.com/radarsh/gradle-test-logger-plugin/pull/174) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Upgrade to Gradle 6.7 [\#173](https://github.com/radarsh/gradle-test-logger-plugin/pull/173) ([radarsh](https://github.com/radarsh))
+- Use lazy configuration [\#171](https://github.com/radarsh/gradle-test-logger-plugin/pull/171) ([radarsh](https://github.com/radarsh))
+
+## [v2.1.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v2.1.1) (2020-10-14)
 
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v2.1.0...v2.1.1)
 
@@ -18,6 +54,7 @@
 
 - Fix issue with overriding logLevel [\#169](https://github.com/radarsh/gradle-test-logger-plugin/pull/169) ([radarsh](https://github.com/radarsh))
 - Upgrade to Gradle 6.6.1 [\#167](https://github.com/radarsh/gradle-test-logger-plugin/pull/167) ([radarsh](https://github.com/radarsh))
+- Upgrade plugin publish plugin [\#155](https://github.com/radarsh/gradle-test-logger-plugin/pull/155) ([radarsh](https://github.com/radarsh))
 
 ## [v2.1.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v2.1.0) (2020-06-30)
 
@@ -178,6 +215,7 @@
 - Refactor standard stream collectors into OutputCollector abstraction [\#73](https://github.com/radarsh/gradle-test-logger-plugin/pull/73) ([radarsh](https://github.com/radarsh))
 - Add test for ThemeType [\#71](https://github.com/radarsh/gradle-test-logger-plugin/pull/71) ([radarsh](https://github.com/radarsh))
 - Upgrade to Gradle 4.9 [\#70](https://github.com/radarsh/gradle-test-logger-plugin/pull/70) ([radarsh](https://github.com/radarsh))
+- Limit max memory available to Gradle for CircleCI builds [\#69](https://github.com/radarsh/gradle-test-logger-plugin/pull/69) ([radarsh](https://github.com/radarsh))
 - Add support for parallel test execution [\#66](https://github.com/radarsh/gradle-test-logger-plugin/pull/66) ([radarsh](https://github.com/radarsh))
 
 ## [v1.3.1](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.3.1) (2018-06-25)
@@ -190,7 +228,6 @@
 
 **Merged pull requests:**
 
-- Limit max memory available to Gradle for CircleCI builds [\#69](https://github.com/radarsh/gradle-test-logger-plugin/pull/69) ([radarsh](https://github.com/radarsh))
 - Turn off bright yellow in standard theme [\#65](https://github.com/radarsh/gradle-test-logger-plugin/pull/65) ([radarsh](https://github.com/radarsh))
 
 ## [v1.3.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v1.3.0) (2018-06-11)
