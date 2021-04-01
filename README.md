@@ -25,7 +25,7 @@ Scroll down for more themes and customisation options or visit the [screenshots 
 
 ```groovy
 plugins {
-    id 'com.adarshr.test-logger' version '2.1.1'
+    id 'com.adarshr.test-logger' version '3.0.0'
 }
 ```
 
@@ -39,7 +39,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.adarshr:gradle-test-logger-plugin:2.1.1'
+        classpath 'com.adarshr:gradle-test-logger-plugin:3.0.0'
     }
 }
 
@@ -52,7 +52,7 @@ apply plugin: 'com.adarshr.test-logger'
 |---------------------|-----------------------------|
 | 1.x                 | 4.x                         |
 | 2.x                 | 5.x                         |
-| unreleased          | 6.x                         |
+| 3.x                 | 6.x                         |
 
 ## Configuration
 
