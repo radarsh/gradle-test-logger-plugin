@@ -763,7 +763,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         theme 'plain'
                         logLevel 'quiet'
                     }
-                    markerLevel = LogLevel.QUIET
+                    markerLevel = 'quiet'
                 ''',
                 'clean test --quiet'
             )
@@ -777,7 +777,6 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         and:
             result.task(':test').outcome == SUCCESS
     }
-
 
     def "each test task can have its own testlogger extension"() {
         given:
@@ -812,6 +811,8 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         and:
             result.task(':test').outcome == SUCCESS
         when:
+            temporaryFolder.delete()
+            temporaryFolder.create()
             result = run(
                 'single-spock-test',
                 buildFragment,

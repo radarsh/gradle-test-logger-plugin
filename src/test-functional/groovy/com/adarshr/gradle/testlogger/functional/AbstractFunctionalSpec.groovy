@@ -16,7 +16,7 @@ abstract class AbstractFunctionalSpec extends Specification {
 
     private static final String TEST_ROOT = 'src/test-functional/resources'
 
-    private static final String GRADLE_VERSION = '6.6.1'
+    private static final String GRADLE_VERSION = '6.7'
 
     @Rule
     TemporaryFolder temporaryFolder
@@ -88,9 +88,12 @@ abstract class AbstractFunctionalSpec extends Specification {
 
     protected BuildResult run(String project, String buildFragment, String args) {
         def projectDir = new File(temporaryFolder.root, project)
+        projectDir.mkdir()
         def buildFile = new File(projectDir, 'build.gradle')
+        def testMarkerFile = new File(projectDir, 'test-marker.gradle')
+        testMarkerFile.createNewFile()
+        testMarkerFile << new File(TEST_ROOT, 'test-marker.gradle').text
         copyDirectoryToDirectory(new File("${TEST_ROOT}/${project}"), temporaryFolder.root)
-        buildFile << new File(TEST_ROOT, 'test-marker.gradle').text
         buildFile << buildFragment
 
         runProject(projectDir, args)

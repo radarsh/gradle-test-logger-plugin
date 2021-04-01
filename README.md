@@ -25,7 +25,7 @@ Scroll down for more themes and customisation options or visit the [screenshots 
 
 ```groovy
 plugins {
-    id 'com.adarshr.test-logger' version '2.1.1'
+    id 'com.adarshr.test-logger' version '3.0.0'
 }
 ```
 
@@ -39,14 +39,20 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.adarshr:gradle-test-logger-plugin:2.1.1'
+        classpath 'com.adarshr:gradle-test-logger-plugin:3.0.0'
     }
 }
 
 apply plugin: 'com.adarshr.test-logger'
 ```
 
-Note: Test logger 2.x is incompatible with Gradle 4.x; please use test logger 1.7.1. 
+### Compatibility matrix
+
+| Test logger version | Minimum Gradle version      |
+|---------------------|-----------------------------|
+| 1.x                 | 4.x                         |
+| 2.x                 | 5.x                         |
+| 3.x                 | 6.x                         |
 
 ## Configuration
 
@@ -303,6 +309,49 @@ corresponding property of `Test.testLogging`. The below table demonstrates this 
 In other words, an explicitly configured `testlogger` property, despite it being `false`, takes precedence over any 
 value of `Test.testLogging`.
 
+## Kotlin DSL
+
+If you are using the Kotlin DSL, the syntax of `testlogger` extension DSL changes slightly. The following shows the default
+configuration properties using Kotlin DSL style.
+
+```kotlin
+testlogger {
+    theme = ThemeType.STANDARD
+    showExceptions = true
+    showStackTraces = true
+    showFullStackTraces = false
+    showCauses = true
+    slowThreshold = 2000
+    showSummary = true
+    showSimpleNames = false
+    showPassed = true
+    showSkipped = true
+    showFailed = true
+    showStandardStreams = false
+    showPassedStandardStreams = true
+    showSkippedStandardStreams = true
+    showFailedStandardStreams = true
+    logLevel = LogLevel.LIFECYCLE
+}
+```
+
+One gotcha about Kotlin DSL is that if you have subprojects that are trying to use a different testlogger setting compared to
+the parent project, the syntax changes slightly.
+
+```kotlin
+subprojects {
+
+    apply {
+        plugin("com.adarshr.test-logger")
+    }
+
+    configure<TestLoggerExtension> {
+        theme = ThemeType.STANDARD
+        showExceptions = true
+        ...
+    }
+}
+```
 
 ## FAQ
 

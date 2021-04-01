@@ -84,11 +84,18 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
             result.task(":test").outcome == SUCCESS
     }
 
-    def "theme can be overriden using system property"() {
+    def "theme can be overridden using system property"() {
         when:
             def result = run(
                 'single-spock-test',
-                "testlogger { theme 'mocha' }",
+                '''
+                    testlogger { 
+                        theme 'mocha' 
+                    }
+                    test.doLast { 
+                        System.clearProperty('testlogger.theme') 
+                    }
+                ''',
                 'clean test -Dtestlogger.theme=plain'
             )
         then:
@@ -101,12 +108,6 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
             lines[3] == render('  Test this is a single test PASSED')
         and:
             result.task(":test").outcome == SUCCESS
-        cleanup:
-            run(
-                'single-spock-test',
-                "testlogger { System.clearProperty('testlogger.theme') }",
-                'clean'
-            )
     }
 
     private static String getSymbol() {
