@@ -19,7 +19,7 @@ import static org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT
 
 @CompileStatic
 @SuppressWarnings('unused')
-class TestLoggerExtension {
+class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     private final Property<ThemeType> theme
     private final Property<LogLevel> logLevel
@@ -232,75 +232,100 @@ class TestLoggerExtension {
         this.originalTestLoggingEvents.value(events).finalizeValue()
     }
 
+    /**
+     * Test logger theme. Defaults to 'standard'.
+     *
+     * @param theme the theme.
+     */
     void setTheme(String theme) {
         this.theme.set(ThemeType.fromName(theme))
     }
 
+    @Override
     void setTheme(ThemeType theme) {
         this.theme.set(theme)
     }
 
+    /**
+     * Log level used to print the messages. Defaults to 'lifecycle'.
+     * @param logLevel the log level.
+     */
     void setLogLevel(String logLevel) {
         this.logLevel.set(LogLevel.valueOf(logLevel.toUpperCase()))
     }
 
+    @Override
     void setLogLevel(LogLevel logLevel) {
         this.logLevel.set(logLevel)
     }
 
-    void setShowExceptions(boolean showExceptions) {
+    @Override
+    void setShowExceptions(Boolean showExceptions) {
         this.showExceptions.set(showExceptions)
     }
 
-    void setShowCauses(boolean showCauses) {
+    @Override
+    void setShowCauses(Boolean showCauses) {
         this.showCauses.set(showCauses)
     }
 
-    void setShowStackTraces(boolean showStackTraces) {
+    @Override
+    void setShowStackTraces(Boolean showStackTraces) {
         this.showStackTraces.set(showStackTraces)
     }
 
-    void setShowFullStackTraces(boolean showFullStackTraces) {
+    @Override
+    void setShowFullStackTraces(Boolean showFullStackTraces) {
         this.showFullStackTraces.set(showFullStackTraces)
     }
 
-    void setSlowThreshold(long slowThreshold) {
+    @Override
+    void setSlowThreshold(Long slowThreshold) {
         this.slowThreshold.set(slowThreshold)
     }
 
-    void setShowSummary(boolean showSummary) {
+    @Override
+    void setShowSummary(Boolean showSummary) {
         this.showSummary.set(showSummary)
     }
 
-    void setShowStandardStreams(boolean showStandardStreams) {
+    @Override
+    void setShowStandardStreams(Boolean showStandardStreams) {
         this.showStandardStreams.set(showStandardStreams)
     }
 
-    void setShowPassedStandardStreams(boolean showPassedStandardStreams) {
+    @Override
+    void setShowPassedStandardStreams(Boolean showPassedStandardStreams) {
         this.showPassedStandardStreams.set(showPassedStandardStreams)
     }
 
-    void setShowSkippedStandardStreams(boolean showSkippedStandardStreams) {
+    @Override
+    void setShowSkippedStandardStreams(Boolean showSkippedStandardStreams) {
         this.showSkippedStandardStreams.set(showSkippedStandardStreams)
     }
 
-    void setShowFailedStandardStreams(boolean showFailedStandardStreams) {
+    @Override
+    void setShowFailedStandardStreams(Boolean showFailedStandardStreams) {
         this.showFailedStandardStreams.set(showFailedStandardStreams)
     }
 
-    void setShowPassed(boolean showPassed) {
+    @Override
+    void setShowPassed(Boolean showPassed) {
         this.showPassed.set(showPassed)
     }
 
-    void setShowSkipped(boolean showSkipped) {
+    @Override
+    void setShowSkipped(Boolean showSkipped) {
         this.showSkipped.set(showSkipped)
     }
 
-    void setShowFailed(boolean showFailed) {
+    @Override
+    void setShowFailed(Boolean showFailed) {
         this.showFailed.set(showFailed)
     }
 
-    void setShowSimpleNames(boolean showSimpleNames) {
+    @Override
+    void setShowSimpleNames(Boolean showSimpleNames) {
         this.showSimpleNames.set(showSimpleNames)
     }
 }
