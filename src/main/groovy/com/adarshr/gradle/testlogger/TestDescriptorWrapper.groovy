@@ -28,7 +28,7 @@ class TestDescriptorWrapper {
         def classDisplayName = testDescriptor.properties.classDisplayName as String
         def useClassDisplayName = classDisplayName && classDisplayName != className && !className.endsWith(classDisplayName)
 
-        if (testLoggerExtension.showSimpleNames) {
+        if (testLoggerExtension.getShowSimpleNames()) {
             className = className.substring(className.lastIndexOf('.') + 1)
             className = className.substring(className.lastIndexOf('$') + 1)
         }
