@@ -11,7 +11,7 @@ plugins {
     id 'idea'
     id 'jacoco'
     id 'com.gradle.plugin-publish' version '0.14.0'
-    id 'com.github.kt3k.coveralls' version '2.11.0'
+    id 'com.github.kt3k.coveralls' version '2.12.0'
 }
 
 def thisPlugin =
