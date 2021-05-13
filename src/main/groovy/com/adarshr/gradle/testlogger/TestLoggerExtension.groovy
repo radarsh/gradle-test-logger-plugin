@@ -37,6 +37,7 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
     private final Property<Boolean> showSkipped
     private final Property<Boolean> showFailed
     private final Property<Boolean> showSimpleNames
+    private final Property<Boolean> showSlow
 
     private final SetProperty<TestLogEvent> originalTestLoggingEvents
     private final TestLoggerExtension projectExtension
@@ -60,6 +61,7 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
         this.showSkipped = project.objects.property(Boolean)
         this.showFailed = project.objects.property(Boolean)
         this.showSimpleNames = project.objects.property(Boolean)
+        this.showSlow = project.objects.property(Boolean)
 
         this.originalTestLoggingEvents = project.objects.setProperty(TestLogEvent)
         this.projectExtension = project.extensions.findByType(TestLoggerExtension)
@@ -227,6 +229,15 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
             .getOrElse(false)
     }
 
+    Boolean getShowSlow() {
+        providers.systemProperty('testlogger.showSlow')
+            .forUseAtConfigurationTime()
+            .map { Boolean.valueOf(it) }
+            .orElse(showSlow)
+            .orElse(projectExtension.@showSlow)
+            .getOrElse(true)
+    }
+
     @PackageScope
     void setOriginalTestLoggingEvents(Set<TestLogEvent> events) {
         this.originalTestLoggingEvents.value(events).finalizeValue()
@@ -327,5 +338,10 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
     @Override
     void setShowSimpleNames(Boolean showSimpleNames) {
         this.showSimpleNames.set(showSimpleNames)
+    }
+
+    @Override
+    void setShowSlow(Boolean showSlow) {
+        this.showSlow.set(showSlow)
     }
 }

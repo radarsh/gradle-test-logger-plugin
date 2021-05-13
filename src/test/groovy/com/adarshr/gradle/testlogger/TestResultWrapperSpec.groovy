@@ -128,6 +128,29 @@ class TestResultWrapperSpec extends Specification {
     }
 
     @Unroll
+    def "loggable returns false if showSlow is turned #showSlow"() {
+        given:
+            testResultMock.endTime >> 20000
+            testResultMock.startTime >> 10000
+            testLoggerExtensionMock.slowThreshold >> slowThreshold
+            testLoggerExtensionMock.showSlow >> showSlow
+            testLoggerExtensionMock.showFailed >> showFailed
+            testLoggerExtensionMock.showPassed >> showPassed
+        expect:
+            wrapper.isLoggable() == result
+        where:
+            slowThreshold | showSlow | showPassed | showFailed | result
+            10000         | true     | true       | true       | true
+            9999          | false    | true       | true       | false
+            10000         | true     | true       | false      | true
+            9999          | false    | true       | false      | false
+            10000         | true     | false      | true       | true
+            9999          | false    | false      | true       | false
+            10000         | true     | false      | false      | true
+            9999          | false    | false      | false      | false
+    }
+
+    @Unroll
     def "is medium slow returns #result if slow threshold is #slowThreshold"() {
         given:
             testResultMock.endTime >> 20000
@@ -148,5 +171,26 @@ class TestResultWrapperSpec extends Specification {
             testResultMock.startTime >> 10000
         expect:
             wrapper.duration == '10s'
+    }
+
+    @Unroll
+    def "loggable returns true if test is too slow but the type is disabled"() {
+        given:
+            testLoggerExtensionMock.showPassed >> showPassed
+            testLoggerExtensionMock.showSkipped >> showSkipped
+            testLoggerExtensionMock.showFailed >> showFailed
+            testLoggerExtensionMock.showSlow >> true
+            testResultMock.successfulTestCount >> successfulCount
+            testResultMock.skippedTestCount >> skippedCount
+            testResultMock.failedTestCount >> failedCount
+            testResultMock.endTime >> 20000
+            testResultMock.startTime >> 10000
+        expect:
+            wrapper.loggable
+        where:
+            successfulCount | skippedCount | failedCount | showPassed | showSkipped | showFailed
+            1               | 0            | 0           | false      | true        | true
+            0               | 1            | 0           | true       | false       | true
+            0               | 0            | 1           | true       | true        | false
     }
 }

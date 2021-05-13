@@ -21,7 +21,8 @@ class TestResultWrapper {
     boolean isLoggable() {
         testLoggerExtension.showPassed && testResult.successfulTestCount ||
             testLoggerExtension.showSkipped && (testResult.resultType == SKIPPED || testResult.skippedTestCount) ||
-            testLoggerExtension.showFailed && testResult.failedTestCount
+            testLoggerExtension.showFailed && testResult.failedTestCount ||
+            testLoggerExtension.showSlow && (isTooSlow() || isMediumSlow())
     }
 
     boolean isStandardStreamLoggable() {

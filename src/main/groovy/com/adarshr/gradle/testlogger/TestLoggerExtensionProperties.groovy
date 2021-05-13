@@ -84,4 +84,9 @@ abstract class TestLoggerExtensionProperties {
      * Whether simple class names should be used for displaying test suites. Defaults to false.
      */
     Boolean showSimpleNames
+
+    /**
+     * Whether slow tests should be shown. Defaults to true.
+     */
+    Boolean showSlow
 }
