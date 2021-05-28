@@ -96,7 +96,7 @@ class MochaTheme extends AbstractTheme {
         line << "${indentation}[erase-ahead,green]${result.successfulTestCount} passing [grey](${result.duration})"
 
         if (result.skippedTestCount) {
-            line << "${lineSeparator()}${indentation}[erase-ahead,cyan]${result.skippedTestCount} pending"
+            line << "${lineSeparator()}${indentation}[erase-ahead,cyan]${result.skippedTestCount} skipped"
         }
         if (result.failedTestCount) {
             line << "${lineSeparator()}${indentation}[erase-ahead,red]${result.failedTestCount} failing"
