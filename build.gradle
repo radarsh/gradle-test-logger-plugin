@@ -47,14 +47,14 @@ dependencies {
     }
     testImplementation 'net.bytebuddy:byte-buddy:1.10.22'
     testImplementation 'org.objenesis:objenesis:3.2'
-    testImplementation 'commons-io:commons-io:2.8.0'
+    testImplementation 'commons-io:commons-io:2.11.0'
 
     functionalTestImplementation localGroovy()
     functionalTestImplementation gradleTestKit()
     functionalTestImplementation('org.spockframework:spock-core:1.3-groovy-2.5') {
         exclude module: 'groovy-all'
     }
-    functionalTestImplementation 'commons-io:commons-io:2.6'
+    functionalTestImplementation 'commons-io:commons-io:2.11.0'
 }
 
 gradlePlugin {
