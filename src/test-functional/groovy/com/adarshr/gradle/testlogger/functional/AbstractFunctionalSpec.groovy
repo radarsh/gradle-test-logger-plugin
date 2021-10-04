@@ -4,9 +4,11 @@ import com.adarshr.gradle.testlogger.renderer.AnsiTextRenderer
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.UnexpectedBuildFailure
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+import spock.lang.TempDir
+
+import java.nio.file.Files
+import java.nio.file.Path
 
 import static java.lang.System.lineSeparator
 import static org.apache.commons.io.FileUtils.copyDirectoryToDirectory
@@ -16,10 +18,10 @@ abstract class AbstractFunctionalSpec extends Specification {
 
     private static final String TEST_ROOT = 'src/test-functional/resources'
 
-    private static final String GRADLE_VERSION = '6.7'
+    private static final String GRADLE_VERSION = '7.2'
 
-    @Rule
-    TemporaryFolder temporaryFolder
+    @TempDir
+    Path temporaryFolder
 
     private static final def START_MARKER = '__START__'
     private static final def END_MARKER = '__END__'
@@ -87,16 +89,15 @@ abstract class AbstractFunctionalSpec extends Specification {
     }
 
     protected BuildResult run(String project, String buildFragment, String args) {
-        def projectDir = new File(temporaryFolder.root, project)
-        projectDir.mkdir()
-        def buildFile = new File(projectDir, 'build.gradle')
-        def testMarkerFile = new File(projectDir, 'test-marker.gradle')
-        testMarkerFile.createNewFile()
+        copyDirectoryToDirectory(new File("${TEST_ROOT}/${project}"), temporaryFolder.toFile())
+
+        def buildFile = temporaryFolder.resolve("${project}/build.gradle").toFile()
+        def testMarkerFile = Files.createFile(temporaryFolder.resolve("${project}/test-marker.gradle")).toFile()
+
         testMarkerFile << new File(TEST_ROOT, 'test-marker.gradle').text
-        copyDirectoryToDirectory(new File("${TEST_ROOT}/${project}"), temporaryFolder.root)
         buildFile << buildFragment
 
-        runProject(projectDir, args)
+        runProject(temporaryFolder.resolve(project).toFile(), args)
     }
 
     private BuildResult runProject(File projectDir, String args) {
