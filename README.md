@@ -52,7 +52,7 @@ apply plugin: 'com.adarshr.test-logger'
 |---------------------|-----------------------------|
 | 1.x                 | 4.x                         |
 | 2.x                 | 5.x                         |
-| 3.x                 | 6.x                         |
+| 3.x                 | 6.5                         |
 
 ## Configuration
 

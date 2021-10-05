@@ -1,5 +1,6 @@
 package com.adarshr.gradle.testlogger.functional
 
+import java.nio.file.Files
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -61,7 +62,12 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-spock-tests',
-                'testlogger { showExceptions false }',
+                '''
+                    testlogger {
+                        slowThreshold 5000
+                        showExceptions false 
+                    }
+                ''',
                 'clean test --tests *FirstSpec*fail'
             )
         then:
@@ -298,7 +304,9 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                     testlogger { 
                         theme 'plain' 
                     }
-                    task anotherTask(type: Test) { }
+                    task anotherTask(type: Test) {
+                        useJUnitPlatform()
+                    }
                 ''',
                 'clean anotherTask'
             )
@@ -785,11 +793,13 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                     theme 'standard' 
                 }
                 test {
+                    useJUnitPlatform()
                     testlogger {
                         theme 'plain'
                     }
                 }
                 task anotherTask(type: Test) {
+                    useJUnitPlatform()
                     testlogger {
                         theme 'plain-parallel'
                     }
@@ -811,8 +821,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         and:
             result.task(':test').outcome == SUCCESS
         when:
-            temporaryFolder.delete()
-            temporaryFolder.create()
+            temporaryFolder = Files.createTempDirectory('spock')
             result = run(
                 'single-spock-test',
                 buildFragment,

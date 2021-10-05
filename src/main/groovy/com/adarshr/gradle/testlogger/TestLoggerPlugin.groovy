@@ -15,13 +15,11 @@ class TestLoggerPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.extensions.create(EXTENSION_NAME, TestLoggerExtension, project)
 
-        project.tasks.withType(Test).configureEach { test ->
+        project.tasks.withType(Test).configureEach { Test test ->
             def testExtension = test.extensions.create(EXTENSION_NAME, TestLoggerExtension, project, test)
 
-            test.doFirst {
-                testExtension.originalTestLoggingEvents = test.testLogging.events
-                test.testLogging.lifecycle.events = []
-            }
+            testExtension.originalTestLoggingEvents = test.testLogging.events
+            test.testLogging.lifecycle.events = []
 
             def testLogger = new TestLoggerWrapper(project.gradle.startParameter, test, testExtension)
 

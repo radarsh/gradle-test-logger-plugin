@@ -12,6 +12,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                 'many-spock-tests',
                 '''
                     test {
+                        useJUnitPlatform()
                         maxParallelForks = gradle.startParameter.maxWorkerCount
                     }
                     testlogger { 
@@ -54,6 +55,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                 'single-spock-test',
                 '''
                     test {
+                        useJUnitPlatform()
                         maxParallelForks = gradle.startParameter.maxWorkerCount
                     }
                     testlogger { 
@@ -94,12 +96,14 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                 'sample-spock-tests',
                 '''
                     test {
+                        useJUnitPlatform()
                         maxParallelForks = gradle.startParameter.maxWorkerCount
                     }
                     testlogger {
                         theme 'standard-parallel'
                         showPassed false
                         showExceptions false
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test --tests *FirstSpec --tests *SecondSpec'
@@ -129,6 +133,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                 'sample-spock-tests',
                 '''
                     test {
+                        useJUnitPlatform()
                         maxParallelForks = gradle.startParameter.maxWorkerCount
                     }
                     testlogger {
@@ -136,6 +141,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                         showPassed false
                         showSkipped false
                         showExceptions false
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test --tests *FirstSpec --tests *SecondSpec'
@@ -163,6 +169,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                 'sample-spock-tests',
                 '''
                     test {
+                        useJUnitPlatform()
                         maxParallelForks = gradle.startParameter.maxWorkerCount
                     }
                     testlogger {
@@ -196,6 +203,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                 'sample-spock-tests',
                 '''
                     test {
+                        useJUnitPlatform()
                         maxParallelForks = gradle.startParameter.maxWorkerCount
                     }
                     testlogger {
@@ -246,6 +254,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                 'sample-spock-tests',
                 '''
                     test {
+                        useJUnitPlatform()
                         maxParallelForks = gradle.startParameter.maxWorkerCount
                     }
                     testlogger {
@@ -288,6 +297,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                 'sample-spock-tests',
                 '''
                     test {
+                        useJUnitPlatform()
                         maxParallelForks = gradle.startParameter.maxWorkerCount
                     }
                     testlogger {
@@ -347,6 +357,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                 'sample-spock-tests',
                 '''
                     test {
+                        useJUnitPlatform()
                         maxParallelForks = gradle.startParameter.maxWorkerCount
                     }
                     testlogger {
