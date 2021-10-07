@@ -59,20 +59,23 @@ abstract class AbstractTheme implements Theme {
 
         line << "${lineSeparator()}${lineSeparator()}"
 
-        new StackTracePrinter(descriptor, ' ' * indent, line)
+        new StackTracePrinter(descriptor, ' ' * indent, line, extension)
             .printStackTrace(result.exception)
             .toString()
     }
 
-    private class StackTracePrinter {
+    @CompileStatic
+    private static class StackTracePrinter {
         final TestDescriptorWrapper descriptor
         final String indentation
         final StringBuilder line
+        final TestLoggerExtension extension
 
-        StackTracePrinter(TestDescriptorWrapper descriptor, String indentation, StringBuilder line) {
+        StackTracePrinter(TestDescriptorWrapper descriptor, String indentation, StringBuilder line, TestLoggerExtension extension) {
             this.descriptor = descriptor
             this.indentation = indentation
             this.line = line
+            this.extension = extension
         }
 
         StackTracePrinter printStackTrace(Throwable exception, List<StackTraceElement> parentStackTrace = [], boolean cause = false) {

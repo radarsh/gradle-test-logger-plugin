@@ -59,7 +59,9 @@ class TestLoggerAdapter implements TestLogger {
 
     @Override
     void onOutput(TestDescriptor descriptor, TestOutputEvent outputEvent) {
-        outputCollector.collect(wrap(descriptor), outputEvent.message)
+        if (testLoggerExtension.showStandardStreams) {
+            outputCollector.collect(wrap(descriptor), outputEvent.message)
+        }
     }
 
     private TestDescriptorWrapper wrap(TestDescriptor descriptor) {

@@ -1,5 +1,6 @@
 package com.adarshr.gradle.testlogger.functional
 
+import java.nio.file.Files
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -10,6 +11,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-spock-tests',
+                'testlogger { slowThreshold 5000 }',
                 'clean test --tests *FirstSpec --tests *SecondSpec'
             )
         then:
@@ -61,7 +63,12 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-spock-tests',
-                'testlogger { showExceptions false }',
+                '''
+                    testlogger {
+                        slowThreshold 5000
+                        showExceptions false 
+                    }
+                ''',
                 'clean test --tests *FirstSpec*fail'
             )
         then:
@@ -80,6 +87,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-junit4-tests',
+                'testlogger { slowThreshold 5000 }',
                 'clean test --tests *First*'
             )
         then:
@@ -105,6 +113,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-junit5-vintage-tests',
+                'testlogger { slowThreshold 5000 }',
                 'clean test --tests *First*'
             )
         then:
@@ -130,6 +139,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-junit5-jupiter-tests',
+                'testlogger { slowThreshold 5000 }',
                 'clean test --tests *First*'
             )
         then:
@@ -155,6 +165,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-junit5-jupiter-nested-tests',
+                'testlogger { slowThreshold 5000 }',
                 'clean test'
             )
         then:
@@ -183,6 +194,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-junit5-jupiter-deep-nested-tests',
+                'testlogger { slowThreshold 5000 }',
                 'clean test'
             )
         then:
@@ -205,7 +217,12 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-junit5-jupiter-deep-nested-tests',
-                'testlogger { showSimpleNames true }',
+                '''
+                    testlogger { 
+                        showSimpleNames true
+                        slowThreshold 5000
+                    }
+                ''',
                 'clean test'
             )
         then:
@@ -228,6 +245,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-testng-tests',
+                'testlogger { slowThreshold 5000 }',
                 'clean test --tests *First*'
             )
         then:
@@ -256,7 +274,8 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                 '''
                     testlogger { 
                         theme 'plain' 
-                        showSimpleNames true 
+                        showSimpleNames true
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test'
@@ -276,6 +295,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-spock-tests',
+                'testlogger { slowThreshold 5000 }',
                 'clean test --tests *SecondSpec*pass'
             )
         then:
@@ -297,8 +317,11 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                 '''
                     testlogger { 
                         theme 'plain' 
+                        slowThreshold 5000
                     }
-                    task anotherTask(type: Test) { }
+                    task anotherTask(type: Test) {
+                        useJUnitPlatform()
+                    }
                 ''',
                 'clean anotherTask'
             )
@@ -341,6 +364,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                 '''
                     testlogger { 
                         showSummary false
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test'
@@ -361,6 +385,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                 '''
                     testlogger { 
                         showStandardStreams true
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test'
@@ -400,6 +425,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                 '''
                     testlogger { 
                         showStandardStreams true
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test --tests *SecondSpec'
@@ -423,6 +449,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                 '''
                     testlogger { 
                         showStandardStreams true
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test --tests *FirstSpec'
@@ -461,6 +488,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                     testlogger { 
                         showPassed false
                         showExceptions false
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test --tests *FirstSpec --tests *SecondSpec'
@@ -499,6 +527,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         showPassed false
                         showSkipped false
                         showExceptions false
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test --tests *FirstSpec --tests *SecondSpec'
@@ -536,6 +565,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         showSkipped false
                         showFailed false
                         showExceptions false
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test --tests *FirstSpec --tests *SecondSpec'
@@ -565,6 +595,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         showSkipped false
                         showExceptions false
                         showStandardStreams true
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test --tests *FirstSpec'
@@ -614,6 +645,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         showSkipped true
                         showFailed false
                         showStandardStreams true
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test --tests *FirstSpec --tests *ThirdSpec'
@@ -653,6 +685,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                     testlogger {
                         showStandardStreams true
                         showPassedStandardStreams false
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test --tests *FirstSpec'
@@ -712,6 +745,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         showStandardStreams true
                         showPassedStandardStreams false
                         showFailedStandardStreams false
+                        slowThreshold 5000
                     }
                 ''',
                 'clean test --tests *FirstSpec'
@@ -762,6 +796,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                     testlogger {
                         theme 'plain'
                         logLevel 'quiet'
+                        slowThreshold 5000
                     }
                     markerLevel = 'quiet'
                 ''',
@@ -785,13 +820,17 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                     theme 'standard' 
                 }
                 test {
+                    useJUnitPlatform()
                     testlogger {
                         theme 'plain'
+                        slowThreshold 5000
                     }
                 }
                 task anotherTask(type: Test) {
+                    useJUnitPlatform()
                     testlogger {
                         theme 'plain-parallel'
+                        slowThreshold 5000
                     }
                 }
             '''
@@ -811,8 +850,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         and:
             result.task(':test').outcome == SUCCESS
         when:
-            temporaryFolder.delete()
-            temporaryFolder.create()
+            temporaryFolder = Files.createTempDirectory('spock')
             result = run(
                 'single-spock-test',
                 buildFragment,

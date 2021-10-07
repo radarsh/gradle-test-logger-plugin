@@ -6,7 +6,7 @@ jacocoTestReport {
     executionData "${project.buildDir}/jacoco/test.exec", "${project.buildDir}/jacoco/functionalTest.exec"
 
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.required = true
+        html.required = true
     }
 }

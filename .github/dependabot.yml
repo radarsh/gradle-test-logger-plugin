@@ -1,0 +1,22 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  assignees:
+  - radarsh
+  ignore:
+  - dependency-name: net.bytebuddy:byte-buddy
+    versions:
+    - 1.10.19
+    - 1.10.20
+    - 1.10.21
+  - dependency-name: org.fusesource.jansi:jansi
+    versions:
+    - 2.2.0
+    - 2.3.1
+  - dependency-name: com.github.kt3k.coveralls
+    versions:
+    - 2.10.2
