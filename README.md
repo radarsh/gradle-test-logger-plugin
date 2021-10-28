@@ -1,9 +1,11 @@
 # Gradle Test Logger Plugin
-[![CircleCI branch](https://img.shields.io/circleci/project/github/radarsh/gradle-test-logger-plugin/develop.svg?label=circleci+build)](https://circleci.com/gh/radarsh/gradle-test-logger-plugin/tree/develop)
-[![AppVeyor branch](https://img.shields.io/appveyor/ci/radarsh/gradle-test-logger-plugin/develop.svg?label=appveyor+build)](https://ci.appveyor.com/project/radarsh/gradle-test-logger-plugin/branch/develop)
-[![Coveralls branch](https://img.shields.io/coveralls/radarsh/gradle-test-logger-plugin/develop.svg)](https://coveralls.io/github/radarsh/gradle-test-logger-plugin?branch=develop)
-[![Gradle plugin portal](https://img.shields.io/github/tag/radarsh/gradle-test-logger-plugin.svg?label=gradle+plugin+portal)](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
-[![License](https://img.shields.io/github/license/radarsh/gradle-test-logger-plugin.svg)](https://github.com/radarsh/gradle-test-logger-plugin/blob/develop/LICENSE)
+
+[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/com.adarshr.test-logger?label=version&style=flat-square&logo=gradle)](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
+[![CircleCI branch](https://img.shields.io/circleci/build/github/radarsh/gradle-test-logger-plugin/develop?label=circleci&style=flat-square&logo=circleci)](https://circleci.com/gh/radarsh/gradle-test-logger-plugin/tree/develop)
+[![AppVeyor branch](https://img.shields.io/appveyor/build/radarsh/gradle-test-logger-plugin/develop?label=appveyor&style=flat-square&logo=appveyor)](https://ci.appveyor.com/project/radarsh/gradle-test-logger-plugin/branch/develop)
+[![Coveralls branch](https://img.shields.io/coveralls/github/radarsh/gradle-test-logger-plugin/develop?&style=flat-square&logo=coveralls)](https://coveralls.io/github/radarsh/gradle-test-logger-plugin?branch=develop)
+[![License](https://img.shields.io/github/license/radarsh/gradle-test-logger-plugin?style=flat-square&logo=apache)](https://github.com/radarsh/gradle-test-logger-plugin/blob/develop/LICENSE)
+[![Twitter Follow](https://img.shields.io/twitter/follow/radarsh?label=%40radarsh&logo=twitter&style=flat-square)](https://twitter.com/intent/follow?screen_name=radarsh)
 
 A Gradle plugin for printing beautiful logs on the console while running tests.
 
