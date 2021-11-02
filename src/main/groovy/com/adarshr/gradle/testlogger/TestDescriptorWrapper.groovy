@@ -13,39 +13,49 @@ class TestDescriptorWrapper {
     private final TestDescriptor testDescriptor
     private final TestLoggerExtension testLoggerExtension
 
-    TestDescriptorWrapper(TestDescriptor testDescriptor, TestLoggerExtension testLoggerExtension) {
+    final List<TestDescriptorWrapper> ancestors
+    final int depth
+    final String trail
+
+    TestDescriptorWrapper(TestDescriptor testDescriptor, TestLoggerExtension testLoggerExtension, List<TestDescriptorWrapper> ancestors) {
         this.testDescriptor = testDescriptor
         this.testLoggerExtension = testLoggerExtension
-    }
-
-    String getClassName() {
-        escape(testDescriptor.className)
+        this.depth = ancestors.size()
+        this.ancestors = ancestors
+        this.trail = ancestors.collect { it.displayName }.join(' > ')
     }
 
     @CompileDynamic
-    String getClassDisplayName() {
-        def className = testDescriptor.className
-        def classDisplayName = testDescriptor.properties.classDisplayName as String
-        def useClassDisplayName = classDisplayName && classDisplayName != className && !className.endsWith(classDisplayName)
+    String getId() {
+        testDescriptor.properties.id
+    }
 
-        if (testLoggerExtension.getShowSimpleNames()) {
-            className = className.substring(className.lastIndexOf('.') + 1)
-            className = className.substring(className.lastIndexOf('$') + 1)
+    String getDisplayName() {
+        if (!depth && className && className.endsWith(testDescriptor.displayName)) {
+            if (testLoggerExtension.showSimpleNames) {
+                return escape(simpleClassName)
+            }
+
+            return escape(testDescriptor.className)
         }
 
-        escape(useClassDisplayName ? classDisplayName : className)
+        escape(testDescriptor.displayName)
     }
 
-    @CompileDynamic
-    String getDisplayName() {
-        escape(testDescriptor.properties.displayName ?: testDescriptor.name as String)
+    private String getSimpleClassName() {
+        def clazzName = testDescriptor.className
+
+        clazzName = clazzName.substring(clazzName.lastIndexOf('.') + 1)
+        clazzName = clazzName.substring(clazzName.lastIndexOf('$') + 1)
+
+        clazzName
     }
 
-    String getSuiteKey() {
-        "${testDescriptor.className}:${testDescriptor.className}"
+    String getTrail() {
+        trail
     }
 
-    String getTestKey() {
-        "${testDescriptor.className}:${testDescriptor.name}"
+    int getDepth() {
+        depth
     }
 }

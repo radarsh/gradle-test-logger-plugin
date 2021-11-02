@@ -1,5 +1,6 @@
 package com.adarshr.gradle.testlogger.functional
 
+
 import java.nio.file.Files
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
@@ -12,7 +13,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def result = run(
                 'sample-spock-tests',
                 'testlogger { slowThreshold 5000 }',
-                'clean test --tests *FirstSpec --tests *SecondSpec'
+                'test --tests *FirstSpec --tests *SecondSpec'
             )
         then:
             def output = getLoggerOutput(result.output)
@@ -69,7 +70,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         showExceptions false 
                     }
                 ''',
-                'clean test --tests *FirstSpec*fail'
+                'test --tests *FirstSpec*fail'
             )
         then:
             def lines = getLoggerOutput(result.output).lines
@@ -88,7 +89,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def result = run(
                 'sample-junit4-tests',
                 'testlogger { slowThreshold 5000 }',
-                'clean test --tests *First*'
+                'test --tests *First*'
             )
         then:
             def lines = getLoggerOutput(result.output).lines
@@ -114,7 +115,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def result = run(
                 'sample-junit5-vintage-tests',
                 'testlogger { slowThreshold 5000 }',
-                'clean test --tests *First*'
+                'test --tests *First*'
             )
         then:
             def lines = getLoggerOutput(result.output).lines
@@ -140,7 +141,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def result = run(
                 'sample-junit5-jupiter-tests',
                 'testlogger { slowThreshold 5000 }',
-                'clean test --tests *First*'
+                'test --tests *First*'
             )
         then:
             def lines = getLoggerOutput(result.output).lines
@@ -161,31 +162,56 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(":test").outcome == FAILED
     }
 
+    def "log junit5 jupiter engine parameterised tests"() {
+        when:
+            def result = run(
+                'sample-junit5-jupiter-tests',
+                'testlogger { slowThreshold 5000 }',
+                'test --tests *ParamTest'
+            )
+        then:
+            def lines = getNestedLoggerOutput(result.output).lines
+        and:
+            lines.size() == 8
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.ParamTest[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  Testing parameterized tests[/]')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]    Test [bold-off]param One is not null[green] PASSED[/]')
+            lines[6] == render('[erase-ahead,bold]    Test [bold-off]param Two is not null[green] PASSED[/]')
+            lines[7] == render('[erase-ahead,bold]    Test [bold-off]param Three is not null[green] PASSED[/]')
+        and:
+            result.task(":test").outcome == SUCCESS
+    }
+
     def "log junit5 jupiter engine nested tests"() {
         when:
             def result = run(
                 'sample-junit5-jupiter-nested-tests',
                 'testlogger { slowThreshold 5000 }',
-                'clean test'
+                'test'
             )
         then:
-            def lines = getLoggerOutput(result.output).lines
+            def lines = getNestedLoggerOutput(result.output).lines
         and:
-            lines.size() == 14
+            lines.size() == 16
             lines[0] == render('')
-            lines[1] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetOne[/]')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.NestedTest[/]')
             lines[2] == render('')
-            lines[3] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetOne()[green] PASSED[/]')
-            lines[4] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetOne()[green] PASSED[/]')
-            lines[5] == render('')
-            lines[6] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetThree[/]')
-            lines[7] == render('')
-            lines[8] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetThree()[green] PASSED[/]')
-            lines[9] == render('')
-            lines[10] == render('[erase-ahead,bold]com.adarshr.test.NestedTest$NestedTestsetTwo[/]')
+            lines[3] == render('[erase-ahead,bold]  NestedTestsetThree[/]')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]    Test [bold-off]firstTestOfNestedTestsetThree()[green] PASSED[/]')
+            lines[6] == render('')
+            lines[7] == render('[erase-ahead,bold]  NestedTestsetTwo[/]')
+            lines[8] == render('')
+            lines[9] == render('[erase-ahead,bold]    Test [bold-off]secondTestOfNestedTestsetTwo()[green] PASSED[/]')
+            lines[10] == render('[erase-ahead,bold]    Test [bold-off]firstTestOfNestedTestsetTwo()[green] PASSED[/]')
             lines[11] == render('')
-            lines[12] == render('[erase-ahead,bold]  Test [bold-off]secondTestOfNestedTestsetTwo()[green] PASSED[/]')
-            lines[13] == render('[erase-ahead,bold]  Test [bold-off]firstTestOfNestedTestsetTwo()[green] PASSED[/]')
+            lines[12] == render('[erase-ahead,bold]  NestedTestsetOne[/]')
+            lines[13] == render('')
+            lines[14] == render('[erase-ahead,bold]    Test [bold-off]secondTestOfNestedTestsetOne()[green] PASSED[/]')
+            lines[15] == render('[erase-ahead,bold]    Test [bold-off]firstTestOfNestedTestsetOne()[green] PASSED[/]')
         and:
             result.task(":test").outcome == SUCCESS
     }
@@ -198,17 +224,141 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                 'clean test'
             )
         then:
-            def lines = getLoggerOutput(result.output).lines
+            def lines = getNestedLoggerOutput(result.output).lines
         and:
-            lines.size() == 8
+            lines.size() == 10
             lines[0] == render('')
-            lines[1] == render('[erase-ahead,bold]com.adarshr.test.DeepNestedTest$NestedTestsetLevelOne[/]')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.DeepNestedTest[/]')
             lines[2] == render('')
-            lines[3] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelOne()[green] PASSED[/]')
+            lines[3] == render('[erase-ahead,bold]  NestedTestsetLevelOne[/]')
             lines[4] == render('')
-            lines[5] == render('[erase-ahead,bold]Nested test set level two[/]')
+            lines[5] == render('[erase-ahead,bold]    Test [bold-off]nestedTestsetLevelOne()[green] PASSED[/]')
             lines[6] == render('')
-            lines[7] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelTwo()[green] PASSED[/]')
+            lines[7] == render('[erase-ahead,bold]    Nested test set level two[/]')
+            lines[8] == render('')
+            lines[9] == render('[erase-ahead,bold]      Test [bold-off]nestedTestsetLevelTwo()[green] PASSED[/]')
+        and:
+            result.task(":test").outcome == SUCCESS
+    }
+
+    def "log junit5 jupiter engine deep-nested tests when showStandardStreams is true and theme is standard"() {
+        when:
+            def result = run(
+                'sample-junit5-jupiter-deep-nested-tests',
+                '''
+                    testlogger { 
+                        slowThreshold 5000
+                        showStandardStreams true
+                        theme 'standard' 
+                    }
+                ''',
+                'test'
+            )
+        then:
+            def lines = getNestedLoggerOutput(result.output).lines
+        and:
+            lines.size() == 22
+            lines[0] == render('')
+            lines[1] == render('[default]')
+            lines[2] == render('  DeepNestedTest.beforeAllDeepNestedTest[/]')
+            lines[3] == render('')
+            lines[4] == render('[erase-ahead,bold]com.adarshr.test.DeepNestedTest[/]')
+            lines[5] == render('')
+            lines[6] == render('[erase-ahead,bold]  NestedTestsetLevelOne[/]')
+            lines[7] == render('')
+            lines[8] == render('[erase-ahead,bold]    Test [bold-off]nestedTestsetLevelOne()[green] PASSED[/]')
+            lines[9] == render('[default]')
+            lines[10] == render('      NestedTestsetLevelOne.nestedTestsetLevelOne[/]')
+            lines[11] == render('')
+            lines[12] == render('')
+            lines[13] == render('[erase-ahead,bold]    Nested test set level two[/]')
+            lines[14] == render('')
+            lines[15] == render('[erase-ahead,bold]      Test [bold-off]nestedTestsetLevelTwo()[green] PASSED[/]')
+            lines[16] == render('[default]')
+            lines[17] == render('        NestedTestsetLevelTwo.nestedTestsetLevelTwo[/]')
+            lines[18] == render('')
+            lines[19] == render('[default]')
+            lines[20] == render('  DeepNestedTest.afterAllDeepNestedTest[/]')
+            lines[21] == render('')
+        and:
+            result.task(":test").outcome == SUCCESS
+    }
+
+    def "log junit5 jupiter engine deep-nested tests when showStandardStreams is true and theme is mocha"() {
+        when:
+            def result = run(
+                'sample-junit5-jupiter-deep-nested-tests',
+                '''
+                    testlogger { 
+                        slowThreshold 5000
+                        showStandardStreams true
+                        theme 'mocha' 
+                    }
+                ''',
+                'test'
+            )
+        then:
+            def lines = getNestedLoggerOutput(result.output).lines
+        and:
+            lines.size() == 22
+            lines[0] == render('')
+            lines[1] == render('[grey]')
+            lines[2] == render('    DeepNestedTest.beforeAllDeepNestedTest[/]')
+            lines[3] == render('')
+            lines[4] == render('  [erase-ahead,default]com.adarshr.test.DeepNestedTest[/]')
+            lines[5] == render('')
+            lines[6] == render('    [erase-ahead,default]NestedTestsetLevelOne[/]')
+            lines[7] == render('')
+            lines[8] == render("      [erase-ahead,green]${passedSymbol}[grey] nestedTestsetLevelOne()[/]")
+            lines[9] == render('[grey]')
+            lines[10] == render('          NestedTestsetLevelOne.nestedTestsetLevelOne[/]')
+            lines[11] == render('')
+            lines[12] == render('')
+            lines[13] == render('      [erase-ahead,default]Nested test set level two[/]')
+            lines[14] == render('')
+            lines[15] == render("        [erase-ahead,green]${passedSymbol}[grey] nestedTestsetLevelTwo()[/]")
+            lines[16] == render('[grey]')
+            lines[17] == render('            NestedTestsetLevelTwo.nestedTestsetLevelTwo[/]')
+            lines[18] == render('')
+            lines[19] == render('[grey]')
+            lines[20] == render('    DeepNestedTest.afterAllDeepNestedTest[/]')
+            lines[21] == render('')
+        and:
+            result.task(":test").outcome == SUCCESS
+    }
+
+    def "log junit5 jupiter engine deep-nested tests when showStandardStreams is true and theme is standard-parallel"() {
+        when:
+            def result = run(
+                'sample-junit5-jupiter-deep-nested-tests',
+                '''
+                    testlogger { 
+                        slowThreshold 5000
+                        showStandardStreams true
+                        theme 'standard-parallel' 
+                    }
+                ''',
+                'test'
+            )
+        then:
+            def lines = getNestedLoggerOutput(result.output).lines
+        and:
+            lines.size() == 15
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.DeepNestedTest > NestedTestsetLevelOne[bold-off] nestedTestsetLevelOne()[green] PASSED[/]')
+            lines[2] == render('[default]')
+            lines[3] == render('  DeepNestedTest.beforeAllDeepNestedTest[/]')
+            lines[4] == render('')
+            lines[5] == render('[default]')
+            lines[6] == render('  NestedTestsetLevelOne.nestedTestsetLevelOne[/]')
+            lines[7] == render('')
+            lines[8] == render('[erase-ahead,bold]com.adarshr.test.DeepNestedTest > NestedTestsetLevelOne > Nested test set level two[bold-off] nestedTestsetLevelTwo()[green] PASSED[/]')
+            lines[9] == render('[default]')
+            lines[10] == render('  NestedTestsetLevelTwo.nestedTestsetLevelTwo[/]')
+            lines[11] == render('')
+            lines[12] == render('[default]')
+            lines[13] == render('  DeepNestedTest.afterAllDeepNestedTest[/]')
+            lines[14] == render('')
         and:
             result.task(":test").outcome == SUCCESS
     }
@@ -223,20 +373,73 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         slowThreshold 5000
                     }
                 ''',
-                'clean test'
+                'test'
             )
         then:
             def lines = getLoggerOutput(result.output).lines
         and:
+            lines.size() == 10
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold]DeepNestedTest[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  NestedTestsetLevelOne[/]')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]    Test [bold-off]nestedTestsetLevelOne()[green] PASSED[/]')
+            lines[6] == render('')
+            lines[7] == render('[erase-ahead,bold]    Nested test set level two[/]')
+            lines[8] == render('')
+            lines[9] == render('[erase-ahead,bold]      Test [bold-off]nestedTestsetLevelTwo()[green] PASSED[/]')
+        and:
+            result.task(":test").outcome == SUCCESS
+    }
+
+    def "log kotest tests"() {
+        when:
+            def result = run(
+                'sample-kotest-tests',
+                'test --stacktrace'
+            )
+        then:
+            def lines = getNestedLoggerOutput(result.output).lines
+        and:
+            lines.size() == 15
+            lines[0] == render('')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.WordSpecTest[/]')
+            lines[2] == render('')
+            lines[3] == render('[erase-ahead,bold]  a context should[/]')
+            lines[4] == render('')
+            lines[5] == render('[erase-ahead,bold]    Test [bold-off]have a test[green] PASSED[/]')
+            lines[6] == render('[erase-ahead,bold]    Test [bold-off]have another test[green] PASSED[/]')
+            lines[7] == render('[erase-ahead,bold]    Test [bold-off]have a test with config[yellow] SKIPPED[/]')
+            lines[8] == render('')
+            lines[9] == render('[erase-ahead,bold]  another context when[/]')
+            lines[10] == render('')
+            lines[11] == render('[erase-ahead,bold]    using when should[/]')
+            lines[12] == render('')
+            lines[13] == render('[erase-ahead,bold]      Test [bold-off]have a test[green] PASSED[/]')
+            lines[14] == render('[erase-ahead,bold]      Test [bold-off]have a test with config[green] PASSED[/]')
+        and:
+            result.task(":test").outcome == SUCCESS
+    }
+
+    def "log spek tests"() {
+        when:
+            def result = run(
+                'sample-spek-tests',
+                'test'
+            )
+        then:
+            def lines = getNestedLoggerOutput(result.output).lines
+        and:
             lines.size() == 8
             lines[0] == render('')
-            lines[1] == render('[erase-ahead,bold]NestedTestsetLevelOne[/]')
+            lines[1] == render('[erase-ahead,bold]com.adarshr.test.CalculatorSpec[/]')
             lines[2] == render('')
-            lines[3] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelOne()[green] PASSED[/]')
+            lines[3] == render('[erase-ahead,bold]  A calculator[/]')
             lines[4] == render('')
-            lines[5] == render('[erase-ahead,bold]Nested test set level two[/]')
+            lines[5] == render('[erase-ahead,bold]    addition[/]')
             lines[6] == render('')
-            lines[7] == render('[erase-ahead,bold]  Test [bold-off]nestedTestsetLevelTwo()[green] PASSED[/]')
+            lines[7] == render('[erase-ahead,bold]      Test [bold-off]returns the sum of its arguments[green] PASSED[/]')
         and:
             result.task(":test").outcome == SUCCESS
     }
@@ -246,7 +449,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def result = run(
                 'sample-testng-tests',
                 'testlogger { slowThreshold 5000 }',
-                'clean test --tests *First*'
+                'test --tests *First*'
             )
         then:
             def lines = getLoggerOutput(result.output).lines
@@ -278,7 +481,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         slowThreshold 5000
                     }
                 ''',
-                'clean test'
+                'test'
             )
             def lines = getLoggerOutput(result.output).lines
         then:
@@ -296,7 +499,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def result = run(
                 'sample-spock-tests',
                 'testlogger { slowThreshold 5000 }',
-                'clean test --tests *SecondSpec*pass'
+                'test --tests *SecondSpec*pass'
             )
         then:
             def lines = getLoggerOutput(result.output).lines
@@ -323,7 +526,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         useJUnitPlatform()
                     }
                 ''',
-                'clean anotherTask'
+                'anotherTask'
             )
         then:
             def lines = getLoggerOutput(result.output).lines
@@ -342,7 +545,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def result = run(
                 'slow-spock-test',
                 'testlogger { slowThreshold 1000 }',
-                'clean test'
+                'test'
             )
         then:
             def lines = getLoggerOutput(result.output).lines
@@ -367,7 +570,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         slowThreshold 5000
                     }
                 ''',
-                'clean test'
+                'test'
             )
         then:
             def output = getLoggerOutput(result.output)
@@ -388,16 +591,16 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         slowThreshold 5000
                     }
                 ''',
-                'clean test'
+                'test'
             )
         then:
             def lines = getLoggerOutput(result.output).lines
         and:
             lines.size() == 20
-            lines[0] == render('[default]')
-            lines[1] == render('  stdout setupSpec')
-            lines[2] == render('  stderr setupSpec[/]')
-            lines[3] == render('')
+            lines[0] == render('')
+            lines[1] == render('[default]')
+            lines[2] == render('  stdout setupSpec')
+            lines[3] == render('  stderr setupSpec[/]')
             lines[4] == render('')
             lines[5] == render('[erase-ahead,bold]com.adarshr.test.SingleSpec[/]')
             lines[6] == render('')
@@ -428,7 +631,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         slowThreshold 5000
                     }
                 ''',
-                'clean test --tests *SecondSpec'
+                'test --tests *SecondSpec'
             )
         then:
             def lines = getLoggerOutput(result.output).lines
@@ -452,7 +655,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         slowThreshold 5000
                     }
                 ''',
-                'clean test --tests *FirstSpec'
+                'test --tests *FirstSpec'
             )
         then:
             def output = getLoggerOutput(result.output)
@@ -460,10 +663,10 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def summary = output.summary
         and:
             lines.size() == 12
-            lines[0] == render('[default]')
-            lines[1] == render('  FirstSpec - stdout setupSpec')
-            lines[2] == render('  FirstSpec - stderr setupSpec[/]')
-            lines[3] == render('')
+            lines[0] == render('')
+            lines[1] == render('[default]')
+            lines[2] == render('  FirstSpec - stdout setupSpec')
+            lines[3] == render('  FirstSpec - stderr setupSpec[/]')
             lines[4] == render('')
             lines[5] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[/]')
             lines[6] == render('')
@@ -491,7 +694,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         slowThreshold 5000
                     }
                 ''',
-                'clean test --tests *FirstSpec --tests *SecondSpec'
+                'test --tests *FirstSpec --tests *SecondSpec'
             )
         then:
             def output = getLoggerOutput(result.output)
@@ -530,7 +733,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         slowThreshold 5000
                     }
                 ''',
-                'clean test --tests *FirstSpec --tests *SecondSpec'
+                'test --tests *FirstSpec --tests *SecondSpec'
             )
         then:
             def output = getLoggerOutput(result.output)
@@ -568,7 +771,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         slowThreshold 5000
                     }
                 ''',
-                'clean test --tests *FirstSpec --tests *SecondSpec'
+                'test --tests *FirstSpec --tests *SecondSpec'
             )
         then:
             def output = getLoggerOutput(result.output)
@@ -598,7 +801,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         slowThreshold 5000
                     }
                 ''',
-                'clean test --tests *FirstSpec'
+                'test --tests *FirstSpec'
             )
         then:
             def output = getLoggerOutput(result.output)
@@ -606,10 +809,10 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def summary = output.summary
         and:
             lines.size() == 20
-            lines[0] == render('[default]')
-            lines[1] == render('  FirstSpec - stdout setupSpec')
-            lines[2] == render('  FirstSpec - stderr setupSpec[/]')
-            lines[3] == render('')
+            lines[0] == render('')
+            lines[1] == render('[default]')
+            lines[2] == render('  FirstSpec - stdout setupSpec')
+            lines[3] == render('  FirstSpec - stderr setupSpec[/]')
             lines[4] == render('')
             lines[5] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[/]')
             lines[6] == render('')
@@ -648,7 +851,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         slowThreshold 5000
                     }
                 ''',
-                'clean test --tests *FirstSpec --tests *ThirdSpec'
+                'test --tests *FirstSpec --tests *ThirdSpec'
             )
         then:
             def output = getLoggerOutput(result.output)
@@ -656,10 +859,10 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def summary = output.summary
         and:
             lines.size() == 12
-            lines[0] == render('[default]')
-            lines[1] == render('  FirstSpec - stdout setupSpec')
-            lines[2] == render('  FirstSpec - stderr setupSpec[/]')
-            lines[3] == render('')
+            lines[0] == render('')
+            lines[1] == render('[default]')
+            lines[2] == render('  FirstSpec - stdout setupSpec')
+            lines[3] == render('  FirstSpec - stderr setupSpec[/]')
             lines[4] == render('')
             lines[5] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[/]')
             lines[6] == render('')
@@ -688,7 +891,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         slowThreshold 5000
                     }
                 ''',
-                'clean test --tests *FirstSpec'
+                'test --tests *FirstSpec'
             )
         then:
             def output = getLoggerOutput(result.output)
@@ -696,10 +899,10 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def summary = output.summary
         and:
             lines.size() == 30
-            lines[0] == render('[default]')
-            lines[1] == render('  FirstSpec - stdout setupSpec')
-            lines[2] == render('  FirstSpec - stderr setupSpec[/]')
-            lines[3] == render('')
+            lines[0] == render('')
+            lines[1] == render('[default]')
+            lines[2] == render('  FirstSpec - stdout setupSpec')
+            lines[3] == render('  FirstSpec - stderr setupSpec[/]')
             lines[4] == render('')
             lines[5] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[/]')
             lines[6] == render('')
@@ -748,7 +951,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         slowThreshold 5000
                     }
                 ''',
-                'clean test --tests *FirstSpec'
+                'test --tests *FirstSpec'
             )
         then:
             def output = getLoggerOutput(result.output)
@@ -756,10 +959,10 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def summary = output.summary
         and:
             lines.size() == 22
-            lines[0] == render('[default]')
-            lines[1] == render('  FirstSpec - stdout setupSpec')
-            lines[2] == render('  FirstSpec - stderr setupSpec[/]')
-            lines[3] == render('')
+            lines[0] == render('')
+            lines[1] == render('[default]')
+            lines[2] == render('  FirstSpec - stdout setupSpec')
+            lines[3] == render('  FirstSpec - stderr setupSpec[/]')
             lines[4] == render('')
             lines[5] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[/]')
             lines[6] == render('')
@@ -800,7 +1003,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                     }
                     markerLevel = 'quiet'
                 ''',
-                'clean test --quiet'
+                'test --quiet'
             )
             def lines = getLoggerOutput(result.output).lines
         then:
@@ -838,7 +1041,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             def result = run(
                 'single-spock-test',
                 buildFragment,
-                'clean test'
+                'test'
             )
             def lines = getLoggerOutput(result.output).lines
         then:
@@ -854,12 +1057,13 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result = run(
                 'single-spock-test',
                 buildFragment,
-                'clean anotherTask'
+                'anotherTask'
             )
             lines = getLoggerOutput(result.output).lines
         then:
-            lines.size() == 1
-            lines[0] == render('com.adarshr.test.SingleSpec this is a single test PASSED')
+            lines.size() == 2
+            lines[0] == render('')
+            lines[1] == render('com.adarshr.test.SingleSpec this is a single test PASSED')
         and:
             result.task(':anotherTask').outcome == SUCCESS
     }

@@ -4,6 +4,7 @@ package com.adarshr.gradle.testlogger.theme
 import spock.lang.Unroll
 
 import static java.lang.System.lineSeparator
+import static java.lang.System.setOut
 import static org.gradle.api.tasks.testing.TestResult.ResultType.*
 
 class PlainParallelThemeSpec extends BaseThemeSpec {
@@ -30,7 +31,7 @@ class PlainParallelThemeSpec extends BaseThemeSpec {
     def "after test with result type #resultType"() {
         given:
             testResultMock.resultType >> resultType
-            testDescriptorMock.classDisplayName >> 'ClassName'
+            testDescriptorMock.trail >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -54,7 +55,7 @@ class PlainParallelThemeSpec extends BaseThemeSpec {
             testResultMock.exception >> exception
             testDescriptorMock.displayName >> 'floppy test'
             testDescriptorMock.className >> this.class.name
-            testDescriptorMock.classDisplayName >> this.class.name
+            testDescriptorMock.trail >> this.class.name
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -76,6 +77,7 @@ class PlainParallelThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
             testDescriptorMock.displayName >> 'floppy test'
+            testDescriptorMock.trail >> this.class.name
             testDescriptorMock.className >> this.class.name
         expect:
             theme.exceptionText(testDescriptorMock, testResultMock) ==
@@ -111,7 +113,7 @@ class PlainParallelThemeSpec extends BaseThemeSpec {
             testResultMock.tooSlow >> true
             testResultMock.duration >> '10s'
             testResultMock.resultType >> SUCCESS
-            testDescriptorMock.classDisplayName >> 'ClassName'
+            testDescriptorMock.trail >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -154,7 +156,7 @@ class PlainParallelThemeSpec extends BaseThemeSpec {
             theme = new PlainParallelTheme(testLoggerExtensionMock)
             testResultMock.resultType >> SUCCESS
         expect:
-            theme.testStandardStreamText(streamLines, testResultMock) ==
+            theme.testStandardStreamText(testDescriptorMock, streamLines, testResultMock) ==
                 '''|
                    |  Hello
                    |  World \\[brackets\\] \u001B\\[0mANSI
@@ -167,7 +169,7 @@ class PlainParallelThemeSpec extends BaseThemeSpec {
             theme = new PlainParallelTheme(testLoggerExtensionMock)
             testResultMock.resultType >> SUCCESS
         expect:
-            !theme.testStandardStreamText(streamLines, testResultMock)
+            !theme.testStandardStreamText(testDescriptorMock, streamLines, testResultMock)
     }
 
     def "suite stream text"() {
@@ -176,7 +178,7 @@ class PlainParallelThemeSpec extends BaseThemeSpec {
             theme = new PlainParallelTheme(testLoggerExtensionMock)
             testResultMock.resultType >> SUCCESS
         expect:
-            theme.suiteStandardStreamText(streamLines, testResultMock) ==
+            theme.suiteStandardStreamText(testDescriptorMock, streamLines, testResultMock) ==
                 '''|
                    |  Hello
                    |  World \\[brackets\\] \u001B\\[0mANSI
@@ -189,6 +191,6 @@ class PlainParallelThemeSpec extends BaseThemeSpec {
             theme = new PlainParallelTheme(testLoggerExtensionMock)
             testResultMock.resultType >> SUCCESS
         expect:
-            !theme.suiteStandardStreamText(streamLines, testResultMock)
+            !theme.suiteStandardStreamText(testDescriptorMock, streamLines, testResultMock)
     }
 }

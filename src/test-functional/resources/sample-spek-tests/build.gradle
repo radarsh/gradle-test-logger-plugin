@@ -1,0 +1,26 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.5.31'
+    id 'com.adarshr.test-logger' apply false
+}
+
+apply from: 'test-marker.gradle'
+apply plugin: 'com.adarshr.test-logger'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.jetbrains.kotlin:kotlin-test:1.5.31'
+    testImplementation 'org.spekframework.spek2:spek-dsl-jvm:2.0.17'
+
+    testRuntimeOnly 'org.spekframework.spek2:spek-runner-junit5:2.0.17'
+    testRuntimeOnly 'org.jetbrains.kotlin:kotlin-reflect:1.5.31'
+}
+
+test {
+    useJUnitPlatform {
+        includeEngines 'spek2'
+    }
+}

@@ -29,7 +29,8 @@ class MochaThemeSpec extends BaseThemeSpec {
 
     def "suite text"() {
         given:
-            testDescriptorMock.classDisplayName >> 'ClassName'
+            testDescriptorMock.displayName >> 'ClassName'
+            testDescriptorMock.depth >> 0
         when:
             def actual = theme.suiteText(testDescriptorMock, testResultMock)
         then:
@@ -42,6 +43,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             System.setProperty('os.name', os)
             testResultMock.resultType >> resultType
             testDescriptorMock.displayName >> 'test name'
+            testDescriptorMock.depth >> 1
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -68,6 +70,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             testResultMock.exception >> exception
             testDescriptorMock.displayName >> 'floppy test'
             testDescriptorMock.className >> this.class.name
+            testDescriptorMock.depth >> 1
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -90,6 +93,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             testResultMock.exception >> exception
             testDescriptorMock.displayName >> 'floppy test'
             testDescriptorMock.className >> this.class.name
+            testDescriptorMock.depth >> 1
         expect:
             theme.exceptionText(testDescriptorMock, testResultMock) ==
                 """|[red]
@@ -104,6 +108,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showExceptions >> false
             testResultMock.resultType >> FAILURE
             testDescriptorMock.name >> 'floppy test'
+            testDescriptorMock.depth >> 1
         expect:
             !theme.exceptionText(testDescriptorMock, testResultMock)
     }
@@ -114,6 +119,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> null
             testDescriptorMock.displayName >> 'exception is null test'
+            testDescriptorMock.depth >> 1
         expect:
             !theme.exceptionText(testDescriptorMock, testResultMock)
     }
@@ -125,6 +131,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             testResultMock.duration >> '10s'
             testResultMock.tooSlow >> true
             testDescriptorMock.displayName >> 'test name'
+            testDescriptorMock.depth >> 1
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -142,6 +149,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             testResultMock.duration >> '1.5s'
             testResultMock.mediumSlow >> true
             testDescriptorMock.displayName >> 'test name'
+            testDescriptorMock.depth >> 1
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -199,10 +207,10 @@ class MochaThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> true
             theme = new MochaTheme(testLoggerExtensionMock)
         expect:
-            theme.testStandardStreamText(streamLines, testResultMock) ==
+            theme.testStandardStreamText(testDescriptorMock, streamLines, testResultMock) ==
                 '''|[grey]
-                   |        Hello
-                   |        World \\[brackets\\] \u001B\\[0mANSI[/]
+                   |      Hello
+                   |      World \\[brackets\\] \u001B\\[0mANSI[/]
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 
@@ -211,7 +219,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> false
             theme = new MochaTheme(testLoggerExtensionMock)
         expect:
-            !theme.testStandardStreamText(streamLines, testResultMock)
+            !theme.testStandardStreamText(testDescriptorMock, streamLines, testResultMock)
     }
 
     def "suite stream text"() {
@@ -219,7 +227,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> true
             theme = new MochaTheme(testLoggerExtensionMock)
         expect:
-            theme.suiteStandardStreamText(streamLines, testResultMock) ==
+            theme.suiteStandardStreamText(testDescriptorMock, streamLines, testResultMock) ==
                 '''|[grey]
                    |    Hello
                    |    World \\[brackets\\] \u001B\\[0mANSI[/]
@@ -231,7 +239,7 @@ class MochaThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> false
             theme = new MochaTheme(testLoggerExtensionMock)
         expect:
-            !theme.suiteStandardStreamText(streamLines, testResultMock)
+            !theme.suiteStandardStreamText(testDescriptorMock, streamLines, testResultMock)
     }
 
     private static String getPassedSymbol() {

@@ -37,18 +37,18 @@ abstract class AbstractTheme implements Theme {
     }
 
     @Override
-    final String suiteStandardStreamText(String lines, TestResultWrapper result) {
-        result.loggable ? suiteStandardStreamTextInternal(lines) : ''
+    final String suiteStandardStreamText(TestDescriptorWrapper descriptor, String lines, TestResultWrapper result) {
+        result.loggable ? suiteStandardStreamTextInternal(descriptor, lines) : ''
     }
 
-    protected abstract suiteStandardStreamTextInternal(String lines)
+    protected abstract suiteStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines)
 
     @Override
-    final String testStandardStreamText(String lines, TestResultWrapper result) {
-        result.standardStreamLoggable ? testStandardStreamTextInternal(lines) : ''
+    final String testStandardStreamText(TestDescriptorWrapper descriptor, String lines, TestResultWrapper result) {
+        result.standardStreamLoggable ? testStandardStreamTextInternal(descriptor, lines) : ''
     }
 
-    protected abstract testStandardStreamTextInternal(String lines)
+    protected abstract testStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines)
 
     protected String exceptionText(TestDescriptorWrapper descriptor, TestResultWrapper result, int indent) {
         def line = new StringBuilder()

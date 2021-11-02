@@ -6,6 +6,7 @@ import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.UnexpectedBuildFailure
 import spock.lang.Specification
 import spock.lang.TempDir
+import spock.util.environment.OperatingSystem
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -33,15 +34,18 @@ abstract class AbstractFunctionalSpec extends Specification {
 
     private static final List<Map<String, String>> FILTER_PATTERNS = [
         [pattern: $/(?ms)${lineSeparator()}Unexpected exception thrown.*?${lineSeparator() * 2}/$, replacement: ''],
-        [pattern: $/(?ms)> Task .*?${lineSeparator()}/$, replacement: '']
+        [pattern: $/(?ms)> Task .*?${lineSeparator()}/$, replacement: ''],
+        [pattern: $/(?m)${lineSeparator()}.*EngineDiscoveryOrchestrator.*${lineSeparator()}/$, replacement: ''],
+        [pattern: $/(?m).*tests were Method or class mismatch.*${lineSeparator() * 2}/$, replacement: ''],
+        [pattern: $/app///$, replacement: ''],
+        [pattern: $/(?m).*EngineDiscoveryOrchestrator.*/$, replacement: ''],
+        [pattern: $/(?m).*tests were Method or class mismatch.*/$, replacement: ''],
     ]
 
     private AnsiTextRenderer ansi = new AnsiTextRenderer()
 
     protected TestLoggerOutput getLoggerOutput(String text) {
-        FILTER_PATTERNS.each { it ->
-            text = text.replaceAll(it.pattern, it.replacement)
-        }
+        text = filterLines(text)
 
         def allLines = text.readLines()
         def lines = allLines
@@ -62,6 +66,8 @@ abstract class AbstractFunctionalSpec extends Specification {
     }
 
     protected TestLoggerOutput getParallelLoggerOutput(String text) {
+        text = filterLines(text)
+
         def allLines = text.readLines()
         def lines = allLines
             .subList(allLines.indexOf(START_MARKER) + 1, allLines.indexOf(SUMMARY_MARKER))
@@ -78,6 +84,26 @@ abstract class AbstractFunctionalSpec extends Specification {
         }
 
         new TestLoggerOutput(lines: map.sort().values().flatten(), summary: summary)
+    }
+
+    protected TestLoggerOutput getNestedLoggerOutput(String text) {
+        text = filterLines(text)
+
+        def allLines = text.readLines()
+        def lines = allLines
+            .subList(allLines.indexOf(START_MARKER) + 1, allLines.indexOf(SUMMARY_MARKER))
+            .findAll { !it.startsWith(SUITE_MARKER) && !it.startsWith(TEST_MARKER) }
+        def summary = allLines.subList(allLines.indexOf(SUMMARY_MARKER) + 1, allLines.indexOf(END_MARKER))
+
+        new TestLoggerOutput(lines: lines, summary: summary)
+    }
+
+    private String filterLines(String text) {
+        FILTER_PATTERNS.each { it ->
+            text = text.replaceAll(it.pattern, it.replacement)
+        }
+
+        text
     }
 
     protected String render(String ansiText) {
@@ -113,5 +139,9 @@ abstract class AbstractFunctionalSpec extends Specification {
         } catch (UnexpectedBuildFailure e) {
             e.buildResult
         }
+    }
+
+    protected static String getPassedSymbol() {
+        OperatingSystem.current.windows ? '√' : '✔'
     }
 }

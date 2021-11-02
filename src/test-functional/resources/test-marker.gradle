@@ -1,7 +1,12 @@
 ext.markerLevel = 'lifecycle'
+ext.printFirstNewLine = true
 
 LogLevel getMarkerLevel() {
     LogLevel.valueOf(project.property('markerLevel').toString().toUpperCase())
+}
+
+boolean getPrintFirstNewLine() {
+    project.property('printFirstNewLine').asBoolean()
 }
 
 tasks.withType(Test) {
@@ -25,7 +30,11 @@ tasks.withType(Test) {
             result.resultType == TestResult.ResultType.SKIPPED && test.testlogger.showSkipped ||
             result.resultType == TestResult.ResultType.FAILURE && test.testlogger.showFailed) {
 
-            logger.log markerLevel, "__TEST=${suite.className}:${suite.name}__"
+            logger.log markerLevel, "__TEST=${suite.className}:${suite.name}__${printFirstNewLine ? '\n' : ''}"
+
+            if (printFirstNewLine) {
+                printFirstNewLine = false
+            }
         }
     }
 

@@ -20,7 +20,7 @@ class StandardParallelTheme extends StandardTheme {
 
     @Override
     protected String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result) {
-        super.testTextInternal("[erase-ahead,bold]${descriptor.classDisplayName}[bold-off] ${descriptor.displayName}", descriptor, result)
+        super.testTextInternal("[erase-ahead,bold]${descriptor.trail}[bold-off] ${descriptor.displayName}", descriptor, result)
     }
 
     @Override
@@ -29,12 +29,12 @@ class StandardParallelTheme extends StandardTheme {
     }
 
     @Override
-    protected String suiteStandardStreamTextInternal(String lines) {
+    protected String suiteStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines) {
         super.standardStreamTextInternal(lines, 2)
     }
 
     @Override
-    protected String testStandardStreamTextInternal(String lines) {
+    protected String testStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines) {
         super.standardStreamTextInternal(lines, 2)
     }
 }

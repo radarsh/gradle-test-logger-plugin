@@ -15,7 +15,7 @@ interface Theme {
 
     String summaryText(TestDescriptorWrapper descriptor, TestResultWrapper result)
 
-    String suiteStandardStreamText(String lines, TestResultWrapper result)
+    String suiteStandardStreamText(TestDescriptorWrapper descriptor, String lines, TestResultWrapper result)
 
-    String testStandardStreamText(String lines, TestResultWrapper result)
+    String testStandardStreamText(TestDescriptorWrapper descriptor, String lines, TestResultWrapper result)
 }

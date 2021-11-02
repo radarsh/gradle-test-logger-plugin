@@ -24,12 +24,12 @@ class PlainTheme extends AbstractTheme {
 
     @Override
     protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
-        "${descriptor.classDisplayName}${lineSeparator()}"
+        "${'  ' * descriptor.depth}${descriptor.displayName}${lineSeparator()}"
     }
 
     @Override
     protected String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result) {
-        testTextInternal("  Test ${descriptor.displayName} ${RESULT_TYPE_MAPPING[result.resultType]}", descriptor, result)
+        testTextInternal("${'  ' * descriptor.depth}Test ${descriptor.displayName} ${RESULT_TYPE_MAPPING[result.resultType]}", descriptor, result)
     }
 
     protected String testTextInternal(String start, TestDescriptorWrapper descriptor, TestResultWrapper result) {
@@ -44,6 +44,11 @@ class PlainTheme extends AbstractTheme {
         }
 
         line
+    }
+
+    @Override
+    protected String exceptionText(TestDescriptorWrapper descriptor, TestResultWrapper result, int indent) {
+        super.exceptionText(descriptor, result, getType().parallel ? indent : indent * descriptor.depth)
     }
 
     @Override
@@ -81,13 +86,13 @@ class PlainTheme extends AbstractTheme {
     }
 
     @Override
-    protected String suiteStandardStreamTextInternal(String lines) {
-        standardStreamTextInternal(lines, 2)
+    protected String suiteStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines) {
+        standardStreamTextInternal(lines, descriptor.depth * 2 + 2)
     }
 
     @Override
-    protected String testStandardStreamTextInternal(String lines) {
-        standardStreamTextInternal(lines, 4)
+    protected String testStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines) {
+        standardStreamTextInternal(lines, descriptor.depth * 2 + 2)
     }
 
     protected String standardStreamTextInternal(String lines, int indent) {

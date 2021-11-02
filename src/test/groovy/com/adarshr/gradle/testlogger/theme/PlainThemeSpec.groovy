@@ -23,7 +23,8 @@ class PlainThemeSpec extends BaseThemeSpec {
 
     def "suite text"() {
         given:
-            testDescriptorMock.classDisplayName >> 'ClassName'
+            testDescriptorMock.displayName >> 'ClassName'
+            testDescriptorMock.depth >> 0
         when:
             def actual = theme.suiteText(testDescriptorMock, testResultMock)
         then:
@@ -35,6 +36,7 @@ class PlainThemeSpec extends BaseThemeSpec {
         given:
             testResultMock.resultType >> resultType
             testDescriptorMock.displayName >> 'test name'
+            testDescriptorMock.depth >> 1
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -57,6 +59,7 @@ class PlainThemeSpec extends BaseThemeSpec {
             testResultMock.exception >> exception
             testDescriptorMock.displayName >> 'floppy test'
             testDescriptorMock.className >> this.class.name
+            testDescriptorMock.depth >> 1
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -79,6 +82,7 @@ class PlainThemeSpec extends BaseThemeSpec {
             testResultMock.exception >> exception
             testDescriptorMock.displayName >> 'floppy test'
             testDescriptorMock.className >> this.class.name
+            testDescriptorMock.depth >> 1
         expect:
             theme.exceptionText(testDescriptorMock, testResultMock) ==
                 """|
@@ -93,6 +97,7 @@ class PlainThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showExceptions >> false
             testResultMock.resultType >> FAILURE
             testDescriptorMock.displayName >> 'floppy test'
+            testDescriptorMock.depth >> 1
         expect:
             !theme.exceptionText(testDescriptorMock, testResultMock)
     }
@@ -104,6 +109,7 @@ class PlainThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> null
             testDescriptorMock.displayName >> 'exception is null test'
+            testDescriptorMock.depth >> 1
         expect:
             !theme.exceptionText(testDescriptorMock, testResultMock)
     }
@@ -114,6 +120,7 @@ class PlainThemeSpec extends BaseThemeSpec {
             testResultMock.tooSlow >> true
             testResultMock.resultType >> SUCCESS
             testDescriptorMock.displayName >> 'test name'
+            testDescriptorMock.depth >> 1
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -154,10 +161,10 @@ class PlainThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> true
             theme = new PlainTheme(testLoggerExtensionMock)
         expect:
-            theme.testStandardStreamText(streamLines, testResultMock) ==
+            theme.testStandardStreamText(testDescriptorMock, streamLines, testResultMock) ==
                 '''|
-                   |    Hello
-                   |    World \\[brackets\\] \u001B\\[0mANSI
+                   |  Hello
+                   |  World \\[brackets\\] \u001B\\[0mANSI
                    |'''.stripMargin().replace('\n', lineSeparator())
     }
 
@@ -166,7 +173,7 @@ class PlainThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> false
             theme = new PlainTheme(testLoggerExtensionMock)
         expect:
-            !theme.testStandardStreamText(streamLines, testResultMock)
+            !theme.testStandardStreamText(testDescriptorMock, streamLines, testResultMock)
     }
 
     def "suite stream text"() {
@@ -174,7 +181,7 @@ class PlainThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> true
             theme = new PlainTheme(testLoggerExtensionMock)
         expect:
-            theme.suiteStandardStreamText(streamLines, testResultMock) ==
+            theme.suiteStandardStreamText(testDescriptorMock, streamLines, testResultMock) ==
                 '''|
                    |  Hello
                    |  World \\[brackets\\] \u001B\\[0mANSI
@@ -186,6 +193,6 @@ class PlainThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> false
             theme = new PlainTheme(testLoggerExtensionMock)
         expect:
-            !theme.suiteStandardStreamText(streamLines, testResultMock)
+            !theme.suiteStandardStreamText(testDescriptorMock, streamLines, testResultMock)
     }
 }
