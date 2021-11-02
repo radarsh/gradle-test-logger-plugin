@@ -11,7 +11,12 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'single-spock-test',
-                "testlogger { theme 'plain' }",
+                '''
+                    testlogger { 
+                        theme 'plain'
+                        slowThreshold 5000 
+                    }
+                ''',
                 'clean test'
             )
         then:
@@ -31,7 +36,12 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'single-spock-test',
-                "testlogger { theme 'standard' }",
+                '''
+                    testlogger { 
+                        theme 'standard'
+                        slowThreshold 5000 
+                    }
+                ''',
                 'clean test --console plain'
             )
         then:
@@ -50,7 +60,12 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'single-spock-test',
-                "testlogger { theme 'standard' }",
+                '''
+                    testlogger { 
+                        theme 'standard'
+                        slowThreshold 5000 
+                    }
+                ''',
                 'clean test'
             )
         then:
@@ -69,7 +84,12 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'single-spock-test',
-                "testlogger { theme 'mocha' }",
+                '''
+                    testlogger { 
+                        theme 'mocha'
+                        slowThreshold 5000 
+                    }
+                ''',
                 'clean test'
             )
         then:
@@ -90,7 +110,8 @@ class ThemeSwitchingSpec extends AbstractFunctionalSpec {
                 'single-spock-test',
                 '''
                     testlogger { 
-                        theme 'mocha' 
+                        theme 'mocha'
+                        slowThreshold 5000
                     }
                     test.doLast { 
                         System.clearProperty('testlogger.theme') 

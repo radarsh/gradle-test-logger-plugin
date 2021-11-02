@@ -36,7 +36,7 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
         given:
             System.setProperty('os.name', os)
             testResultMock.resultType >> resultType
-            testDescriptorMock.classDisplayName >> 'ClassName'
+            testDescriptorMock.trail >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -63,8 +63,8 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
             testDescriptorMock.displayName >> 'floppy test'
+            testDescriptorMock.trail >> this.class.name
             testDescriptorMock.className >> this.class.name
-            testDescriptorMock.classDisplayName >> this.class.name
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -86,6 +86,7 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
             testDescriptorMock.displayName >> 'floppy test'
+            testDescriptorMock.trail >> this.class.name
             testDescriptorMock.className >> this.class.name
         expect:
             theme.exceptionText(testDescriptorMock, testResultMock) ==
@@ -121,7 +122,7 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> resultType
             testResultMock.duration >> '10s'
             testResultMock.tooSlow >> true
-            testDescriptorMock.classDisplayName >> 'ClassName'
+            testDescriptorMock.trail >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -139,7 +140,7 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> resultType
             testResultMock.duration >> '1.5s'
             testResultMock.mediumSlow >> true
-            testDescriptorMock.classDisplayName >> 'ClassName'
+            testDescriptorMock.trail >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -198,7 +199,7 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> true
             theme = new MochaParallelTheme(testLoggerExtensionMock)
         expect:
-            theme.testStandardStreamText(streamLines, testResultMock) ==
+            theme.testStandardStreamText(testDescriptorMock, streamLines, testResultMock) ==
                 '''|[grey]
                    |    Hello
                    |    World \\[brackets\\] \u001B\\[0mANSI[/]
@@ -210,7 +211,7 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> false
             theme = new MochaParallelTheme(testLoggerExtensionMock)
         expect:
-            !theme.testStandardStreamText(streamLines, testResultMock)
+            !theme.testStandardStreamText(testDescriptorMock, streamLines, testResultMock)
     }
 
     def "suite stream text"() {
@@ -218,7 +219,7 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> true
             theme = new MochaParallelTheme(testLoggerExtensionMock)
         expect:
-            theme.suiteStandardStreamText(streamLines, testResultMock) ==
+            theme.suiteStandardStreamText(testDescriptorMock, streamLines, testResultMock) ==
                 '''|[grey]
                    |    Hello
                    |    World \\[brackets\\] \u001B\\[0mANSI[/]
@@ -230,7 +231,7 @@ class MochaParallelThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> false
             theme = new MochaParallelTheme(testLoggerExtensionMock)
         expect:
-            !theme.suiteStandardStreamText(streamLines, testResultMock)
+            !theme.suiteStandardStreamText(testDescriptorMock, streamLines, testResultMock)
     }
 
     private static String getPassedSymbol() {

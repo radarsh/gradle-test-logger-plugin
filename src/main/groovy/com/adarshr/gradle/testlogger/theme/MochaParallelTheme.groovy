@@ -20,7 +20,7 @@ class MochaParallelTheme extends MochaTheme {
 
     @Override
     protected String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result) {
-        super.testTextInternal("  [erase-ahead,default]${descriptor.classDisplayName} ", descriptor, result)
+        super.testTextInternal("  [erase-ahead,default]${descriptor.trail} ", descriptor, result)
     }
 
     @Override
@@ -34,12 +34,12 @@ class MochaParallelTheme extends MochaTheme {
     }
 
     @Override
-    protected String suiteStandardStreamTextInternal(String lines) {
+    protected String suiteStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines) {
         super.standardStreamTextInternal(lines, 4)
     }
 
     @Override
-    protected String testStandardStreamTextInternal(String lines) {
+    protected String testStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines) {
         super.standardStreamTextInternal(lines, 4)
     }
 }

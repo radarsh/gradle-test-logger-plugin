@@ -1,5 +1,5 @@
 plugins {
-    id 'groovy'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.31'
     id 'com.adarshr.test-logger' apply false
 }
 
@@ -12,8 +12,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.codehaus.groovy:groovy:3.0.8'
-    testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+    testImplementation 'io.kotest:kotest-runner-junit5-jvm:4.6.3'
 }
 
 test {

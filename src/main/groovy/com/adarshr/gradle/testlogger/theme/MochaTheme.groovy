@@ -19,12 +19,12 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
-        "  [erase-ahead,default]${descriptor.classDisplayName}[/]${lineSeparator()}"
+        "  ${'  ' * descriptor.depth}[erase-ahead,default]${descriptor.displayName}[/]${lineSeparator()}"
     }
 
     @Override
     protected String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result) {
-        testTextInternal('    [erase-ahead]', descriptor, result)
+        testTextInternal("  ${'  ' * descriptor.depth}[erase-ahead]", descriptor, result)
     }
 
     protected String testTextInternal(String start, TestDescriptorWrapper descriptor, TestResultWrapper result) {
@@ -70,7 +70,7 @@ class MochaTheme extends AbstractTheme {
 
     @Override
     String exceptionText(TestDescriptorWrapper descriptor, TestResultWrapper result) {
-        exceptionText(descriptor, result, 6)
+        exceptionText(descriptor, result, 6 * descriptor.depth)
     }
 
     @Override
@@ -106,13 +106,13 @@ class MochaTheme extends AbstractTheme {
     }
 
     @Override
-    protected String suiteStandardStreamTextInternal(String lines) {
-        standardStreamTextInternal(lines, 4)
+    protected String suiteStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines) {
+        standardStreamTextInternal(lines, descriptor.depth * 2 + 4)
     }
 
     @Override
-    protected String testStandardStreamTextInternal(String lines) {
-        standardStreamTextInternal(lines, 8)
+    protected String testStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines) {
+        standardStreamTextInternal(lines, descriptor.depth * 2 + 6)
     }
 
     protected String standardStreamTextInternal(String lines, int indent) {

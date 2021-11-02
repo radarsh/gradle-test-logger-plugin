@@ -39,6 +39,8 @@ public class NestedTest {
     public class NestedTestsetThree {
 
         @Test
-        public void firstTestOfNestedTestsetThree() { Assertions.assertEquals(1, 1); }
+        public void firstTestOfNestedTestsetThree() {
+            Assertions.assertEquals(1, 1);
+        }
     }
 }

@@ -37,18 +37,18 @@ abstract class AbstractTheme implements Theme {
     }
 
     @Override
-    final String suiteStandardStreamText(String lines, TestResultWrapper result) {
-        result.loggable ? suiteStandardStreamTextInternal(lines) : ''
+    final String suiteStandardStreamText(TestDescriptorWrapper descriptor, String lines, TestResultWrapper result) {
+        result.loggable ? suiteStandardStreamTextInternal(descriptor, lines) : ''
     }
 
-    protected abstract suiteStandardStreamTextInternal(String lines)
+    protected abstract suiteStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines)
 
     @Override
-    final String testStandardStreamText(String lines, TestResultWrapper result) {
-        result.standardStreamLoggable ? testStandardStreamTextInternal(lines) : ''
+    final String testStandardStreamText(TestDescriptorWrapper descriptor, String lines, TestResultWrapper result) {
+        result.standardStreamLoggable ? testStandardStreamTextInternal(descriptor, lines) : ''
     }
 
-    protected abstract testStandardStreamTextInternal(String lines)
+    protected abstract testStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines)
 
     protected String exceptionText(TestDescriptorWrapper descriptor, TestResultWrapper result, int indent) {
         def line = new StringBuilder()
@@ -59,20 +59,23 @@ abstract class AbstractTheme implements Theme {
 
         line << "${lineSeparator()}${lineSeparator()}"
 
-        new StackTracePrinter(descriptor, ' ' * indent, line)
+        new StackTracePrinter(descriptor, ' ' * indent, line, extension)
             .printStackTrace(result.exception)
             .toString()
     }
 
-    private class StackTracePrinter {
+    @CompileStatic
+    private static class StackTracePrinter {
         final TestDescriptorWrapper descriptor
         final String indentation
         final StringBuilder line
+        final TestLoggerExtension extension
 
-        StackTracePrinter(TestDescriptorWrapper descriptor, String indentation, StringBuilder line) {
+        StackTracePrinter(TestDescriptorWrapper descriptor, String indentation, StringBuilder line, TestLoggerExtension extension) {
             this.descriptor = descriptor
             this.indentation = indentation
             this.line = line
+            this.extension = extension
         }
 
         StackTracePrinter printStackTrace(Throwable exception, List<StackTraceElement> parentStackTrace = [], boolean cause = false) {

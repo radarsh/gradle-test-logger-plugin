@@ -4,9 +4,12 @@ import com.adarshr.gradle.testlogger.renderer.AnsiTextRenderer
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.UnexpectedBuildFailure
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+import spock.lang.TempDir
+import spock.util.environment.OperatingSystem
+
+import java.nio.file.Files
+import java.nio.file.Path
 
 import static java.lang.System.lineSeparator
 import static org.apache.commons.io.FileUtils.copyDirectoryToDirectory
@@ -16,10 +19,10 @@ abstract class AbstractFunctionalSpec extends Specification {
 
     private static final String TEST_ROOT = 'src/test-functional/resources'
 
-    private static final String GRADLE_VERSION = '6.7'
+    private static final String GRADLE_VERSION = '7.2'
 
-    @Rule
-    TemporaryFolder temporaryFolder
+    @TempDir
+    Path temporaryFolder
 
     private static final def START_MARKER = '__START__'
     private static final def END_MARKER = '__END__'
@@ -31,15 +34,18 @@ abstract class AbstractFunctionalSpec extends Specification {
 
     private static final List<Map<String, String>> FILTER_PATTERNS = [
         [pattern: $/(?ms)${lineSeparator()}Unexpected exception thrown.*?${lineSeparator() * 2}/$, replacement: ''],
-        [pattern: $/(?ms)> Task .*?${lineSeparator()}/$, replacement: '']
+        [pattern: $/(?ms)> Task .*?${lineSeparator()}/$, replacement: ''],
+        [pattern: $/(?m)${lineSeparator()}.*EngineDiscoveryOrchestrator.*${lineSeparator()}/$, replacement: ''],
+        [pattern: $/(?m).*tests were Method or class mismatch.*${lineSeparator() * 2}/$, replacement: ''],
+        [pattern: $/app///$, replacement: ''],
+        [pattern: $/(?m).*EngineDiscoveryOrchestrator.*/$, replacement: ''],
+        [pattern: $/(?m).*tests were Method or class mismatch.*/$, replacement: ''],
     ]
 
     private AnsiTextRenderer ansi = new AnsiTextRenderer()
 
     protected TestLoggerOutput getLoggerOutput(String text) {
-        FILTER_PATTERNS.each { it ->
-            text = text.replaceAll(it.pattern, it.replacement)
-        }
+        text = filterLines(text)
 
         def allLines = text.readLines()
         def lines = allLines
@@ -60,6 +66,8 @@ abstract class AbstractFunctionalSpec extends Specification {
     }
 
     protected TestLoggerOutput getParallelLoggerOutput(String text) {
+        text = filterLines(text)
+
         def allLines = text.readLines()
         def lines = allLines
             .subList(allLines.indexOf(START_MARKER) + 1, allLines.indexOf(SUMMARY_MARKER))
@@ -78,6 +86,26 @@ abstract class AbstractFunctionalSpec extends Specification {
         new TestLoggerOutput(lines: map.sort().values().flatten(), summary: summary)
     }
 
+    protected TestLoggerOutput getNestedLoggerOutput(String text) {
+        text = filterLines(text)
+
+        def allLines = text.readLines()
+        def lines = allLines
+            .subList(allLines.indexOf(START_MARKER) + 1, allLines.indexOf(SUMMARY_MARKER))
+            .findAll { !it.startsWith(SUITE_MARKER) && !it.startsWith(TEST_MARKER) }
+        def summary = allLines.subList(allLines.indexOf(SUMMARY_MARKER) + 1, allLines.indexOf(END_MARKER))
+
+        new TestLoggerOutput(lines: lines, summary: summary)
+    }
+
+    private String filterLines(String text) {
+        FILTER_PATTERNS.each { it ->
+            text = text.replaceAll(it.pattern, it.replacement)
+        }
+
+        text
+    }
+
     protected String render(String ansiText) {
         ansi.render(ansiText)
     }
@@ -87,16 +115,15 @@ abstract class AbstractFunctionalSpec extends Specification {
     }
 
     protected BuildResult run(String project, String buildFragment, String args) {
-        def projectDir = new File(temporaryFolder.root, project)
-        projectDir.mkdir()
-        def buildFile = new File(projectDir, 'build.gradle')
-        def testMarkerFile = new File(projectDir, 'test-marker.gradle')
-        testMarkerFile.createNewFile()
+        copyDirectoryToDirectory(new File("${TEST_ROOT}/${project}"), temporaryFolder.toFile())
+
+        def buildFile = temporaryFolder.resolve("${project}/build.gradle").toFile()
+        def testMarkerFile = Files.createFile(temporaryFolder.resolve("${project}/test-marker.gradle")).toFile()
+
         testMarkerFile << new File(TEST_ROOT, 'test-marker.gradle').text
-        copyDirectoryToDirectory(new File("${TEST_ROOT}/${project}"), temporaryFolder.root)
         buildFile << buildFragment
 
-        runProject(projectDir, args)
+        runProject(temporaryFolder.resolve(project).toFile(), args)
     }
 
     private BuildResult runProject(File projectDir, String args) {
@@ -112,5 +139,9 @@ abstract class AbstractFunctionalSpec extends Specification {
         } catch (UnexpectedBuildFailure e) {
             e.buildResult
         }
+    }
+
+    protected static String getPassedSymbol() {
+        OperatingSystem.current.windows ? '√' : '✔'
     }
 }

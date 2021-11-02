@@ -30,7 +30,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
     def "after test with result type #resultType"() {
         given:
             testResultMock.resultType >> resultType
-            testDescriptorMock.classDisplayName >> 'ClassName'
+            testDescriptorMock.trail >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -53,8 +53,8 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
             testDescriptorMock.displayName >> 'floppy test'
+            testDescriptorMock.trail >> this.class.name
             testDescriptorMock.className >> this.class.name
-            testDescriptorMock.classDisplayName >> this.class.name
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
         then:
@@ -78,6 +78,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> FAILURE
             testResultMock.exception >> exception
             testDescriptorMock.displayName >> 'floppy test'
+            testDescriptorMock.trail >> this.class.name
             testDescriptorMock.className >> this.class.name
         expect:
             theme.exceptionText(testDescriptorMock, testResultMock) ==
@@ -116,7 +117,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> resultType
             testResultMock.tooSlow >> true
             testResultMock.duration >> '10s'
-            testDescriptorMock.classDisplayName >> 'ClassName'
+            testDescriptorMock.trail >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -134,7 +135,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             testResultMock.resultType >> resultType
             testResultMock.duration >> '1.5s'
             testResultMock.mediumSlow >> true
-            testDescriptorMock.classDisplayName >> 'ClassName'
+            testDescriptorMock.trail >> 'ClassName'
             testDescriptorMock.displayName >> 'test name'
         when:
             def actual = theme.testText(testDescriptorMock, testResultMock)
@@ -180,7 +181,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> true
             theme = new StandardParallelTheme(testLoggerExtensionMock)
         expect:
-            theme.testStandardStreamText(streamLines, testResultMock) ==
+            theme.testStandardStreamText(testDescriptorMock, streamLines, testResultMock) ==
                 '''|[default]
                    |  Hello
                    |  World \\[brackets\\] \u001B\\[0mANSI[/]
@@ -192,7 +193,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> false
             theme = new StandardParallelTheme(testLoggerExtensionMock)
         expect:
-            !theme.testStandardStreamText(streamLines, testResultMock)
+            !theme.testStandardStreamText(testDescriptorMock, streamLines, testResultMock)
     }
 
     def "suite stream text"() {
@@ -200,7 +201,7 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> true
             theme = new StandardParallelTheme(testLoggerExtensionMock)
         expect:
-            theme.suiteStandardStreamText(streamLines, testResultMock) ==
+            theme.suiteStandardStreamText(testDescriptorMock, streamLines, testResultMock) ==
                 '''|[default]
                    |  Hello
                    |  World \\[brackets\\] \u001B\\[0mANSI[/]
@@ -212,6 +213,6 @@ class StandardParallelThemeSpec extends BaseThemeSpec {
             testLoggerExtensionMock.showStandardStreams >> false
             theme = new StandardParallelTheme(testLoggerExtensionMock)
         expect:
-            !theme.suiteStandardStreamText(streamLines, testResultMock)
+            !theme.suiteStandardStreamText(testDescriptorMock, streamLines, testResultMock)
     }
 }
