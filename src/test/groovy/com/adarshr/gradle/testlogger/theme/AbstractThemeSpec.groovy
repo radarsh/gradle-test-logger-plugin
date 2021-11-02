@@ -74,7 +74,7 @@ class AbstractThemeSpec extends BaseThemeSpec {
         given:
             testResultMock.loggable >> loggable
         expect:
-            theme.suiteStandardStreamText('lines', testResultMock) == expected
+            theme.suiteStandardStreamText(testDescriptorMock, 'lines', testResultMock) == expected
         where:
             expected                          | loggable
             'suiteStandardStreamTextInternal' | true
@@ -86,7 +86,7 @@ class AbstractThemeSpec extends BaseThemeSpec {
         given:
             testResultMock.standardStreamLoggable >> loggable
         expect:
-            theme.testStandardStreamText('lines', testResultMock) == expected
+            theme.testStandardStreamText(testDescriptorMock, 'lines', testResultMock) == expected
         where:
             expected                         | loggable
             'testStandardStreamTextInternal' | true
@@ -208,12 +208,12 @@ class AbstractThemeSpec extends BaseThemeSpec {
         }
 
         @Override
-        protected suiteStandardStreamTextInternal(String lines) {
+        protected suiteStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines) {
             'suiteStandardStreamTextInternal'
         }
 
         @Override
-        protected testStandardStreamTextInternal(String lines) {
+        protected testStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines) {
             'testStandardStreamTextInternal'
         }
 

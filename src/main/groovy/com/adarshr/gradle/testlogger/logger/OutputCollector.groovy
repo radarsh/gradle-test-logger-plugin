@@ -13,18 +13,12 @@ class OutputCollector {
     private final Map<String, StringBuilder> collector = [:]
 
     void collect(TestDescriptorWrapper descriptor, String output) {
-        collector.computeIfAbsent(descriptor.testKey, mappingFunction) << output
+        collector.computeIfAbsent(descriptor.id, mappingFunction) << output
     }
 
-    String removeSuiteOutput(TestDescriptorWrapper descriptor) {
-        def output = collector.computeIfAbsent(descriptor.suiteKey, mappingFunction).toString()
-        collector.remove(descriptor.suiteKey).length = 0
-        output
-    }
-
-    String removeTestOutput(TestDescriptorWrapper descriptor) {
-        def output = collector.computeIfAbsent(descriptor.testKey, mappingFunction).toString()
-        collector.remove(descriptor.testKey).length = 0
+    String pop(TestDescriptorWrapper descriptor) {
+        def output = collector.computeIfAbsent(descriptor.id, mappingFunction).toString()
+        collector.remove(descriptor.id).length = 0
         output
     }
 }

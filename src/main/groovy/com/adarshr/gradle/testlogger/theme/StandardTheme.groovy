@@ -18,12 +18,12 @@ class StandardTheme extends AbstractTheme {
 
     @Override
     protected String suiteTextInternal(TestDescriptorWrapper descriptor) {
-        "[erase-ahead,bold]${descriptor.classDisplayName}[/]${lineSeparator()}"
+        "[erase-ahead,bold]${'  ' * descriptor.depth}${descriptor.displayName}[/]${lineSeparator()}"
     }
 
     @Override
     protected String testTextInternal(TestDescriptorWrapper descriptor, TestResultWrapper result) {
-        testTextInternal("[erase-ahead,bold]  Test [bold-off]${descriptor.displayName}", descriptor, result)
+        testTextInternal("[erase-ahead,bold]${'  ' * descriptor.depth}Test [bold-off]${descriptor.displayName}", descriptor, result)
     }
 
     protected String testTextInternal(String start, TestDescriptorWrapper descriptor, TestResultWrapper result) {
@@ -57,7 +57,7 @@ class StandardTheme extends AbstractTheme {
 
     @Override
     protected String exceptionText(TestDescriptorWrapper descriptor, TestResultWrapper result, int indent) {
-        def exceptionText = super.exceptionText(descriptor, result, indent)
+        def exceptionText = super.exceptionText(descriptor, result, getType().parallel ? indent : indent * descriptor.depth)
 
         exceptionText ? "[red]${exceptionText}" : ''
     }
@@ -98,13 +98,13 @@ class StandardTheme extends AbstractTheme {
     }
 
     @Override
-    protected String suiteStandardStreamTextInternal(String lines) {
-        standardStreamTextInternal(lines, 2)
+    protected String suiteStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines) {
+        standardStreamTextInternal(lines, descriptor.depth * 2 + 2)
     }
 
     @Override
-    protected String testStandardStreamTextInternal(String lines) {
-        standardStreamTextInternal(lines, 4)
+    protected String testStandardStreamTextInternal(TestDescriptorWrapper descriptor, String lines) {
+        standardStreamTextInternal(lines, descriptor.depth * 2 + 2)
     }
 
     protected String standardStreamTextInternal(String lines, int indent) {

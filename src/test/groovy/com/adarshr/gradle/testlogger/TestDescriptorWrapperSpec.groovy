@@ -2,91 +2,75 @@ package com.adarshr.gradle.testlogger
 
 import org.gradle.api.tasks.testing.TestDescriptor
 import spock.lang.Specification
-import spock.lang.Unroll
-
 
 class TestDescriptorWrapperSpec extends Specification {
 
     def testDescriptorMock = GroovyMock(TestDescriptor)
     def testLoggerExtensionMock = Mock(TestLoggerExtension)
-    def wrapper = new TestDescriptorWrapper(testDescriptorMock, testLoggerExtensionMock)
+    def wrapper = new TestDescriptorWrapper(testDescriptorMock, testLoggerExtensionMock, [
+        Mock(TestDescriptorWrapper) { displayName >> 'great grand parent' },
+        Mock(TestDescriptorWrapper) { displayName >> 'grand parent' },
+        Mock(TestDescriptorWrapper) { displayName >> 'parent' },
+    ])
 
-    def "className escapes special characters in delegate's className"() {
+    def "id delegates to id property"() {
         given:
-            testDescriptorMock.className >> 'ClassName [escaped]'
+            testDescriptorMock.properties >> [id: 'identifier']
         expect:
-            wrapper.className == 'ClassName \\[escaped\\]'
+            wrapper.id == 'identifier'
     }
 
-    def "classDisplayName delegates to classDisplayName property if present"() {
+    def "trail is constructed based on ancestors"() {
         given:
-            testDescriptorMock.properties >> [classDisplayName: 'class display name [escaped]']
-            testDescriptorMock.className >> 'ClassName [escaped]'
+            testDescriptorMock.displayName >> 'child'
         expect:
-            wrapper.classDisplayName == 'class display name \\[escaped\\]'
+            wrapper.trail == 'great grand parent > grand parent > parent'
     }
 
-    @Unroll
-    def "classDisplayName is #expected when classDisplayName property = #classDisplayName, className = #className and showSimpleNames = #showSimpleNames"() {
+    def "depth is constructed based on ancestors"() {
         given:
-            testDescriptorMock.properties >> [classDisplayName: classDisplayName]
-            testDescriptorMock.className >> className
-        and:
-            testLoggerExtensionMock.showSimpleNames >> showSimpleNames
+            testDescriptorMock.displayName >> 'child'
         expect:
-            wrapper.classDisplayName == expected
-        where:
-            classDisplayName   | className                  | showSimpleNames | expected
-            'Test'             | 'com.adarshr.Test'         | false           | 'com.adarshr.Test'
-            'A test'           | 'com.adarshr.Test'         | false           | 'A test'
-            ''                 | 'com.adarshr.Test'         | false           | 'com.adarshr.Test'
-            null               | 'com.adarshr.Test'         | false           | 'com.adarshr.Test'
-            'Two'              | 'com.adarshr.Test$One$Two' | false           | 'com.adarshr.Test$One$Two'
-            'com.adarshr.Test' | 'com.adarshr.Test'         | false           | 'com.adarshr.Test'
-            'Test'             | 'com.adarshr.Test'         | true            | 'Test'
-            'A test'           | 'com.adarshr.Test'         | true            | 'A test'
-            ''                 | 'com.adarshr.Test'         | true            | 'Test'
-            null               | 'com.adarshr.Test'         | true            | 'Test'
-            'Two'              | 'com.adarshr.Test$One$Two' | true            | 'Two'
-            'com.adarshr.Test' | 'com.adarshr.Test'         | true            | 'Test'
+            wrapper.depth == 3
     }
 
-    def "classDisplayName falls back to className if classDisplayName property is missing"() {
+    def "display name is escaped"() {
         given:
-            testDescriptorMock.properties >> [:]
-            testDescriptorMock.className >> 'ClassName [escaped]'
-        expect:
-            wrapper.classDisplayName == 'ClassName \\[escaped\\]'
-    }
-
-    def "displayName delegates to displayName property if present"() {
-        given:
-            testDescriptorMock.properties >> [displayName: 'display name [escaped]']
-            testDescriptorMock.name >> 'test name [escaped]'
+            testDescriptorMock.displayName >> 'display name [escaped]'
         expect:
             wrapper.displayName == 'display name \\[escaped\\]'
     }
 
-    def "displayName falls back to name if displayName property is missing"() {
+    def "display name of top level descriptor is #displayName if actual display name #actualDisplayName, className is #className and showSimpleNames is false"() {
         given:
-            testDescriptorMock.properties >> [:]
-            testDescriptorMock.name >> 'test name [escaped]'
+            wrapper = new TestDescriptorWrapper(testDescriptorMock, testLoggerExtensionMock, [])
+            testDescriptorMock.displayName >> actualDisplayName
+            testDescriptorMock.className >> className
+            testLoggerExtensionMock.showSimpleNames >> false
         expect:
-            wrapper.displayName == 'test name \\[escaped\\]'
+            wrapper.displayName == displayName
+        where:
+            className                  | actualDisplayName  | displayName
+            'com.adarshr.Test'         | 'Test'             | 'com.adarshr.Test'
+            'com.adarshr.Test'         | 'Bar'              | 'Bar'
+            'com.adarshr.Test'         | 'com.adarshr.Test' | 'com.adarshr.Test'
+            'com.adarshr.Test$One$Two' | 'Two'              | 'com.adarshr.Test$One$Two'
     }
 
-    def "get suite key"() {
+    def "display name of top level descriptor is #displayName when actual display name is #actualDisplayName, className is #className and showSimpleNames is true"() {
         given:
-            testDescriptorMock.className >> 'ClassName'
+            wrapper = new TestDescriptorWrapper(testDescriptorMock, testLoggerExtensionMock, [])
+            testDescriptorMock.displayName >> actualDisplayName
+            testDescriptorMock.className >> className
+            testLoggerExtensionMock.showSimpleNames >> true
         expect:
-            wrapper.suiteKey == 'ClassName:ClassName'
-    }
-
-    def "get test key"() {
-        given:
-            testDescriptorMock.className >> 'ClassName'
-            testDescriptorMock.name >> 'test name'
-        expect:
-            wrapper.testKey == 'ClassName:test name'
+            wrapper.displayName == displayName
+        where:
+            className                  | actualDisplayName | displayName
+            'com.adarshr.Test'         | 'Test'            | 'Test'
+            'com.adarshr.Test'         | 'Bar'             | 'Bar'
+            'com.adarshr.Test$One$Two' | 'Two'             | 'Two'
+            'com.adarshr.Test$One$Two' | 'Two'             | 'Two'
+            'com.adarshr.Test$One$Two' | 'Bar'             | 'Bar'
     }
 }

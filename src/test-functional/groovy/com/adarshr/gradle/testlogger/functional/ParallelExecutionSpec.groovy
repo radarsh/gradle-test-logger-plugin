@@ -19,6 +19,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                         theme 'plain-parallel'
                         slowThreshold 5000
                     }
+                    printFirstNewLine = false
                  ''',
                 'clean test'
             )
@@ -64,6 +65,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                         showStandardStreams true
                         slowThreshold 5000
                     }
+                    printFirstNewLine = false
                  ''',
                 'clean test'
             )
@@ -107,6 +109,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                         showExceptions false
                         slowThreshold 5000
                     }
+                    printFirstNewLine = false
                 ''',
                 'clean test --tests *FirstSpec --tests *SecondSpec'
             )
@@ -145,6 +148,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                         showExceptions false
                         slowThreshold 5000
                     }
+                    printFirstNewLine = false
                 ''',
                 'clean test --tests *FirstSpec --tests *SecondSpec'
             )
@@ -182,6 +186,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                         showExceptions false
                         slowThreshold 5000
                     }
+                    printFirstNewLine = false
                 ''',
                 'clean test --tests *FirstSpec --tests *SecondSpec'
             )
@@ -217,6 +222,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                         showStandardStreams true
                         slowThreshold 5000
                     }
+                    printFirstNewLine = false
                 ''',
                 'clean test --tests *FirstSpec'
             )
@@ -269,6 +275,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                         showStandardStreams true
                         slowThreshold 5000
                     }
+                    printFirstNewLine = false
                 ''',
                 'clean test --tests *FirstSpec --tests *ThirdSpec'
             )
@@ -311,6 +318,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                         showPassedStandardStreams false
                         slowThreshold 5000
                     }
+                    printFirstNewLine = false
                 ''',
                 'clean test --tests *FirstSpec'
             )
@@ -373,6 +381,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                         showFailedStandardStreams false
                         slowThreshold 5000
                     }
+                    printFirstNewLine = false
                 ''',
                 'clean test --tests *FirstSpec'
             )
