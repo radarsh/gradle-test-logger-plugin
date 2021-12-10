@@ -76,6 +76,7 @@ testlogger {
     showPassed true
     showSkipped true
     showFailed true
+    showOnlySlow true
     showStandardStreams false
     showPassedStandardStreams true
     showSkippedStandardStreams true
@@ -266,10 +267,11 @@ testlogger {
     showPassed false
     showSkipped false
     showFailed true
+    showOnlySlow true
 }
 ```
 
-By default all the above three flags are turned on. If you have chosen to display standard streams by setting
+By default all the above four flags are turned on. If you have chosen to display standard streams by setting
 `showStandardStreams` flag to `true`, any output produced by filtered out tests will not be displayed.
 
 ### Change log level
@@ -329,6 +331,7 @@ testlogger {
     showPassed = true
     showSkipped = true
     showFailed = true
+    showOnlySlow = true
     showStandardStreams = false
     showPassedStandardStreams = true
     showSkippedStandardStreams = true
