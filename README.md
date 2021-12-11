@@ -76,7 +76,7 @@ testlogger {
     showPassed true
     showSkipped true
     showFailed true
-    showOnlySlow true
+    showOnlySlow false
     showStandardStreams false
     showPassedStandardStreams true
     showSkippedStandardStreams true
@@ -267,7 +267,7 @@ testlogger {
     showPassed false
     showSkipped false
     showFailed true
-    showOnlySlow true
+    showOnlySlow false
 }
 ```
 
@@ -331,7 +331,7 @@ testlogger {
     showPassed = true
     showSkipped = true
     showFailed = true
-    showOnlySlow = true
+    showOnlySlow = false
     showStandardStreams = false
     showPassedStandardStreams = true
     showSkippedStandardStreams = true

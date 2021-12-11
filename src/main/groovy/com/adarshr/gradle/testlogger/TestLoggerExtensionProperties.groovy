@@ -86,7 +86,7 @@ abstract class TestLoggerExtensionProperties {
     Boolean showSimpleNames
 
     /**
-     * Whether only slow tests should be shown. Defaults to true.
+     * Whether only slow tests should be shown. Defaults to false.
      */
     Boolean showOnlySlow
 }

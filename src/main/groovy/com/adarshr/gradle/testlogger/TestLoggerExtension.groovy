@@ -235,7 +235,7 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
             .map { Boolean.valueOf(it) }
             .orElse(showOnlySlow)
             .orElse(projectExtension.@showOnlySlow)
-            .getOrElse(true)
+            .getOrElse(false)
     }
 
     @PackageScope
