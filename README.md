@@ -271,7 +271,7 @@ testlogger {
 }
 ```
 
-By default all the above four flags are turned on. If you have chosen to display standard streams by setting
+By default the flags `showPassed`, `showSkipped` and `showFailed` are turned on while `showOnlySlow` will be off. If you have chosen to display standard streams by setting
 `showStandardStreams` flag to `true`, any output produced by filtered out tests will not be displayed.
 
 ### Change log level

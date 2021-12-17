@@ -132,6 +132,9 @@ class TestResultWrapperSpec extends Specification {
         given:
             testResultMock.endTime >> 20000
             testResultMock.startTime >> 10000
+            testResultMock.successfulTestCount >> 1
+            testResultMock.failedTestCount >> 1
+            testResultMock.skippedTestCount >> 1
             testLoggerExtensionMock.slowThreshold >> slowThreshold
             testLoggerExtensionMock.showOnlySlow >> showOnlySlow
             testLoggerExtensionMock.showFailed >> showFailed
@@ -141,12 +144,12 @@ class TestResultWrapperSpec extends Specification {
         where:
             slowThreshold | showOnlySlow | showPassed | showFailed | result
             10000         | true         | true       | true       | true
-            9999          | false        | true       | true       | false
+            9999          | false        | true       | true       | true
             10000         | true         | true       | false      | true
-            9999          | false        | true       | false      | false
+            9999          | false        | true       | false      | true
             10000         | true         | false      | true       | true
-            9999          | false        | false      | true       | false
-            10000         | true         | false      | false      | true
+            9999          | false        | false      | true       | true
+            10000         | true         | false      | false      | false
             9999          | false        | false      | false      | false
     }
 
@@ -186,7 +189,7 @@ class TestResultWrapperSpec extends Specification {
             testResultMock.endTime >> 20000
             testResultMock.startTime >> 10000
         expect:
-            wrapper.loggable
+            !wrapper.loggable
         where:
             successfulCount | skippedCount | failedCount | showPassed | showSkipped | showFailed
             1               | 0            | 0           | false      | true        | true

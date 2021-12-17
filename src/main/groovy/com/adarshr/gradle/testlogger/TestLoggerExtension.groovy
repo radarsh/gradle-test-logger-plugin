@@ -229,7 +229,7 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
             .getOrElse(false)
     }
 
-    Boolean getshowOnlySlow() {
+    Boolean getShowOnlySlow() {
         providers.systemProperty('testlogger.showOnlySlow')
             .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
