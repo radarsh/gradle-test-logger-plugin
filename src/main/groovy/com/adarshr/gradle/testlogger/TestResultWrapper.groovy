@@ -4,8 +4,6 @@ import com.adarshr.gradle.testlogger.util.TimeUtils
 import groovy.transform.CompileStatic
 import org.gradle.api.tasks.testing.TestResult
 
-import static org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
-
 @CompileStatic
 class TestResultWrapper {
 
@@ -19,9 +17,17 @@ class TestResultWrapper {
     }
 
     boolean isLoggable() {
-        testLoggerExtension.showPassed && testResult.successfulTestCount ||
-            testLoggerExtension.showSkipped && (testResult.resultType == SKIPPED || testResult.skippedTestCount) ||
-            testLoggerExtension.showFailed && testResult.failedTestCount
+        boolean showPassed = testLoggerExtension.showPassed && testResult.successfulTestCount
+        boolean showSkipped = testLoggerExtension.showSkipped && (testResult.resultType == TestResult.ResultType.SKIPPED || testResult.skippedTestCount)
+        boolean showFailed = testLoggerExtension.showFailed && testResult.failedTestCount
+        if (showPassed || showSkipped || showFailed) {
+            boolean showSlow = testLoggerExtension.showOnlySlow && (!isTooSlow() || !isMediumSlow())
+            if (showSlow) {
+                return false
+            }
+            return true
+        }
+        return false
     }
 
     boolean isStandardStreamLoggable() {
