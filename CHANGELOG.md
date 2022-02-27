@@ -1,5 +1,26 @@
 # Changelog
 
+## [v3.2.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v3.2.0) (2022-02-27)
+
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v3.1.0...v3.2.0)
+
+**Implemented enhancements:**
+
+- Add filter: hide regular passing tests, show slow passing tests [\#158](https://github.com/radarsh/gradle-test-logger-plugin/issues/158)
+
+**Merged pull requests:**
+
+- Bump byte-buddy from 1.12.6 to 1.12.7 [\#255](https://github.com/radarsh/gradle-test-logger-plugin/pull/255) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump com.gradle.enterprise from 3.8 to 3.8.1 [\#254](https://github.com/radarsh/gradle-test-logger-plugin/pull/254) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump com.gradle.plugin-publish from 0.18.0 to 0.19.0 [\#251](https://github.com/radarsh/gradle-test-logger-plugin/pull/251) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump com.gradle.enterprise from 3.7.2 to 3.8 [\#250](https://github.com/radarsh/gradle-test-logger-plugin/pull/250) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump byte-buddy from 1.12.2 to 1.12.6 [\#249](https://github.com/radarsh/gradle-test-logger-plugin/pull/249) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump com.gradle.enterprise from 3.4.1 to 3.7.2 [\#244](https://github.com/radarsh/gradle-test-logger-plugin/pull/244) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump byte-buddy from 1.11.22 to 1.12.2 [\#243](https://github.com/radarsh/gradle-test-logger-plugin/pull/243) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump com.gradle.plugin-publish from 0.17.0 to 0.18.0 [\#242](https://github.com/radarsh/gradle-test-logger-plugin/pull/242) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump com.gradle.plugin-publish from 0.16.0 to 0.17.0 [\#238](https://github.com/radarsh/gradle-test-logger-plugin/pull/238) ([dependabot[bot]](https://github.com/apps/dependabot))
+- adds filter for showing only slow tests [\#207](https://github.com/radarsh/gradle-test-logger-plugin/pull/207) ([grimmjo](https://github.com/grimmjo))
+
 ## [v3.1.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v3.1.0) (2021-11-02)
 
 [Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v3.0.0...v3.1.0)
