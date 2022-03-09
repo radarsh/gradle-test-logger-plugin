@@ -8,7 +8,7 @@ import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.provider.SetProperty
-import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.testing.AbstractTestTask
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 import static com.adarshr.gradle.testlogger.theme.ThemeType.STANDARD
@@ -42,9 +42,9 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
     private final SetProperty<TestLogEvent> originalTestLoggingEvents
     private final TestLoggerExtension projectExtension
     private final ProviderFactory providers
-    private final Test test
+    private final AbstractTestTask test
 
-    TestLoggerExtension(Project project, Test test = null) {
+    TestLoggerExtension(Project project, AbstractTestTask test = null) {
         this.theme = project.objects.property(ThemeType)
         this.logLevel = project.objects.property(LogLevel)
         this.showExceptions = project.objects.property(Boolean)
