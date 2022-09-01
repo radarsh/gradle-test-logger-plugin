@@ -43,7 +43,7 @@ dependencies {
     implementation 'org.fusesource.jansi:jansi:2.4.0'
 
     testImplementation gradleTestKit()
-    testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+    testImplementation 'org.spockframework:spock-core:2.2-groovy-4.0'
     testImplementation 'net.bytebuddy:byte-buddy:1.12.7'
     testImplementation 'org.objenesis:objenesis:3.2'
     testImplementation 'commons-io:commons-io:2.11.0'
