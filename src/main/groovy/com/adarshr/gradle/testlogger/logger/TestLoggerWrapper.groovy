@@ -5,18 +5,18 @@ import com.adarshr.gradle.testlogger.theme.Theme
 import com.adarshr.gradle.testlogger.theme.ThemeFactory
 import groovy.transform.CompileStatic
 import org.gradle.StartParameter
-import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.testing.AbstractTestTask
 
 @CompileStatic
 class TestLoggerWrapper implements TestLogger {
 
     private final StartParameter startParameter
-    private final Test test
+    private final AbstractTestTask test
     private final TestLoggerExtension testLoggerExtension
 
     private TestLogger testLoggerDelegate
 
-    TestLoggerWrapper(StartParameter startParameter, Test test, TestLoggerExtension testLoggerExtension) {
+    TestLoggerWrapper(StartParameter startParameter, AbstractTestTask test, TestLoggerExtension testLoggerExtension) {
         this.startParameter = startParameter
         this.test = test
         this.testLoggerExtension = testLoggerExtension

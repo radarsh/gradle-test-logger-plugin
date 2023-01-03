@@ -4,7 +4,7 @@ import com.adarshr.gradle.testlogger.logger.TestLoggerWrapper
 import groovy.transform.CompileStatic
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.testing.AbstractTestTask
 
 @CompileStatic
 class TestLoggerPlugin implements Plugin<Project> {
@@ -15,7 +15,7 @@ class TestLoggerPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.extensions.create(EXTENSION_NAME, TestLoggerExtension, project)
 
-        project.tasks.withType(Test).configureEach { Test test ->
+        project.tasks.withType(AbstractTestTask).configureEach { AbstractTestTask test ->
             def testExtension = test.extensions.create(EXTENSION_NAME, TestLoggerExtension, project, test)
 
             testExtension.originalTestLoggingEvents = test.testLogging.events
