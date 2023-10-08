@@ -12,11 +12,11 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.jetbrains.kotlin:kotlin-test:1.5.31'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test:1.9.10'
     testImplementation 'org.spekframework.spek2:spek-dsl-jvm:2.0.19'
 
     testRuntimeOnly 'org.spekframework.spek2:spek-runner-junit5:2.0.19'
-    testRuntimeOnly 'org.jetbrains.kotlin:kotlin-reflect:1.5.31'
+    testRuntimeOnly 'org.jetbrains.kotlin:kotlin-reflect:1.9.10'
 }
 
 test {
