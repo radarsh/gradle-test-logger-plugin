@@ -3,7 +3,7 @@ version: 2.0
 jobs:
     build:
         docker:
-            - image: circleci/openjdk:8-jdk
+            - image: cimg/openjdk:17.0
         working_directory: ~/repo
         environment:
             JVM_OPTS: -Xmx4096m
@@ -47,7 +47,7 @@ jobs:
 
     publish:
         docker:
-            - image: circleci/openjdk:8-jdk
+            - image: cimg/openjdk:17.0
         working_directory: ~/repo
         environment:
             JVM_OPTS: -Xmx3200m

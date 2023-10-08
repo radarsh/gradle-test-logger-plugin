@@ -54,6 +54,10 @@ dependencies {
     functionalTestImplementation 'commons-io:commons-io:2.14.0'
 }
 
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(8)
+}
+
 gradlePlugin {
     plugins {
         testLoggerPlugin {
