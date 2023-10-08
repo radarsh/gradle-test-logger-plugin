@@ -4,6 +4,7 @@ import com.adarshr.gradle.testlogger.renderer.AnsiTextRenderer
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.UnexpectedBuildFailure
+import org.gradle.util.GradleVersion
 import spock.lang.Specification
 import spock.lang.TempDir
 import spock.util.environment.OperatingSystem
@@ -18,8 +19,6 @@ import static org.apache.commons.io.FileUtils.copyDirectoryToDirectory
 abstract class AbstractFunctionalSpec extends Specification {
 
     private static final String TEST_ROOT = 'src/test-functional/resources'
-
-    private static final String GRADLE_VERSION = '7.2'
 
     @TempDir
     Path temporaryFolder
@@ -129,7 +128,7 @@ abstract class AbstractFunctionalSpec extends Specification {
     private BuildResult runProject(File projectDir, String args) {
         try {
             GradleRunner.create()
-                .withGradleVersion(GRADLE_VERSION)
+                .withGradleVersion(GradleVersion.current().version)
                 .withProjectDir(projectDir)
                 .withPluginClasspath()
                 .withDebug(true)

@@ -1,17 +1,15 @@
-pluginBundle {
+gradlePlugin {
     website = 'https://github.com/radarsh/gradle-test-logger-plugin'
     vcsUrl = 'https://github.com/radarsh/gradle-test-logger-plugin'
-    description = 'A Gradle plugin for printing beautiful logs on the console while running tests'
-    tags = ['test', 'logging', 'console', 'terminal', 'groovy']
-}
 
-gradlePlugin {
     plugins {
         testLoggerPlugin {
             id = 'com.adarshr.test-logger'
             displayName = 'Gradle Test Logger Plugin'
             description = 'A Gradle plugin for printing beautiful logs on the console while running tests'
             implementationClass = 'com.adarshr.gradle.testlogger.TestLoggerPlugin'
+            description = 'A Gradle plugin for printing beautiful logs on the console while running tests'
+            tags = ['test', 'logging', 'console', 'terminal', 'groovy']
         }
     }
 }

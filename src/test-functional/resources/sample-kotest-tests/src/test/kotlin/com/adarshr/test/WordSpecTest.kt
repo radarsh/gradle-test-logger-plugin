@@ -2,7 +2,7 @@ package com.adarshr.test
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.comparables.shouldBeGreaterThan
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 
 
@@ -28,7 +28,7 @@ class WordSpecTest : WordSpec() {
                 "have a test" {
                     2.shouldBeGreaterThan(1)
                 }
-                "have a test with config".config(timeout = Duration.milliseconds(10000)) {
+                "have a test with config".config(timeout = 10000.milliseconds) {
                     2.shouldBeGreaterThan(1)
                 }
             }
