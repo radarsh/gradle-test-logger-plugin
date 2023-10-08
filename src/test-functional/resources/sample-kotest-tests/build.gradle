@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'io.kotest:kotest-runner-junit5-jvm:4.6.4'
+    testImplementation 'io.kotest:kotest-runner-junit5-jvm:5.7.2'
 }
 
 test {
