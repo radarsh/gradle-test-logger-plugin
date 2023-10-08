@@ -23,10 +23,10 @@ jobs:
                 key: v1-dependencies-{{ checksum "build.gradle" }}
             - run:
                 name: Run tests
-                command: GRADLE_OPTS="-Xms256m -Xmx2048m" ./gradlew build --no-daemon --scan
+                command: GRADLE_OPTS="-Xms256m -Xmx2048m" ./gradlew build --no-daemon
             - run:
                 name: Code coverage
-                command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew jacocoTestReport coveralls --no-daemon --scan
+                command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew jacocoTestReport coveralls --no-daemon
             - run:
                 name: Save reports
                 command: |
@@ -68,7 +68,7 @@ jobs:
             - run:
                 name: Publish plugin
                 command:
-                    GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew clean publishPlugins --no-daemon --scan
+                    GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew clean publishPlugins --no-daemon
                     -Pgradle.publish.key=${GRADLE_PUBLISH_KEY}
                     -Pgradle.publish.secret=${GRADLE_PUBLISH_SECRET}
 

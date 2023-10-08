@@ -3,7 +3,7 @@ jacoco {
 }
 
 jacocoTestReport {
-    executionData "${project.buildDir}/jacoco/test.exec", "${project.buildDir}/jacoco/functionalTest.exec"
+    executionData layout.buildDirectory.file("jacoco/test.exec").get().asFile, layout.buildDirectory.file("jacoco/functionalTest.exec").get().asFile
 
     reports {
         xml.required = true
