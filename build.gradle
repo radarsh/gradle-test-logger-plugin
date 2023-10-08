@@ -44,7 +44,7 @@ dependencies {
 
     testImplementation gradleTestKit()
     testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
-    testImplementation 'net.bytebuddy:byte-buddy:1.12.18'
+    testImplementation 'net.bytebuddy:byte-buddy:1.14.8'
     testImplementation 'org.objenesis:objenesis:3.3'
     testImplementation 'commons-io:commons-io:2.11.0'
 
