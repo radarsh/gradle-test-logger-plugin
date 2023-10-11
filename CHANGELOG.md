@@ -1,15 +1,26 @@
 # Changelog
 
-## [v3.2.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v3.2.0) (2022-02-27)
+## [v4.0.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v4.0.0) (2023-10-11)
 
-[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v3.1.0...v3.2.0)
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v3.2.0...v4.0.0)
 
-**Implemented enhancements:**
+**Fixed bugs:**
 
-- Add filter: hide regular passing tests, show slow passing tests [\#158](https://github.com/radarsh/gradle-test-logger-plugin/issues/158)
+- The `Provider.forUseAtConfigurationTime` method has been deprecated.	 [\#321](https://github.com/radarsh/gradle-test-logger-plugin/issues/321)
+
+**Closed issues:**
+
+- Upgrade to Gradle 7.5.x [\#295](https://github.com/radarsh/gradle-test-logger-plugin/issues/295)
 
 **Merged pull requests:**
 
+- Update compatibility matrix [\#323](https://github.com/radarsh/gradle-test-logger-plugin/pull/323) ([radarsh](https://github.com/radarsh))
+- Adopt Gradle 8 [\#322](https://github.com/radarsh/gradle-test-logger-plugin/pull/322) ([Goooler](https://github.com/Goooler))
+- Upgrade to plugin publish 1.0.0 [\#298](https://github.com/radarsh/gradle-test-logger-plugin/pull/298) ([radarsh](https://github.com/radarsh))
+- Bump dependency versions [\#297](https://github.com/radarsh/gradle-test-logger-plugin/pull/297) ([radarsh](https://github.com/radarsh))
+- Upgrade to Gradle 7.5.1 [\#296](https://github.com/radarsh/gradle-test-logger-plugin/pull/296) ([radarsh](https://github.com/radarsh))
+- Bump Gradle enterprise plugin version [\#294](https://github.com/radarsh/gradle-test-logger-plugin/pull/294) ([radarsh](https://github.com/radarsh))
+- Bump com.gradle.enterprise from 3.8.1 to 3.11.2 [\#293](https://github.com/radarsh/gradle-test-logger-plugin/pull/293) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump byte-buddy from 1.12.6 to 1.12.7 [\#255](https://github.com/radarsh/gradle-test-logger-plugin/pull/255) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump com.gradle.enterprise from 3.8 to 3.8.1 [\#254](https://github.com/radarsh/gradle-test-logger-plugin/pull/254) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump com.gradle.plugin-publish from 0.18.0 to 0.19.0 [\#251](https://github.com/radarsh/gradle-test-logger-plugin/pull/251) ([dependabot[bot]](https://github.com/apps/dependabot))
@@ -20,6 +31,14 @@
 - Bump com.gradle.plugin-publish from 0.17.0 to 0.18.0 [\#242](https://github.com/radarsh/gradle-test-logger-plugin/pull/242) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump com.gradle.plugin-publish from 0.16.0 to 0.17.0 [\#238](https://github.com/radarsh/gradle-test-logger-plugin/pull/238) ([dependabot[bot]](https://github.com/apps/dependabot))
 - adds filter for showing only slow tests [\#207](https://github.com/radarsh/gradle-test-logger-plugin/pull/207) ([grimmjo](https://github.com/grimmjo))
+
+## [v3.2.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v3.2.0) (2022-02-27)
+
+[Full Changelog](https://github.com/radarsh/gradle-test-logger-plugin/compare/v3.1.0...v3.2.0)
+
+**Implemented enhancements:**
+
+- Add filter: hide regular passing tests, show slow passing tests [\#158](https://github.com/radarsh/gradle-test-logger-plugin/issues/158)
 
 ## [v3.1.0](https://github.com/radarsh/gradle-test-logger-plugin/tree/v3.1.0) (2021-11-02)
 
@@ -87,7 +106,7 @@
 - Bump com.github.kt3k.coveralls from 2.9.0 to 2.11.0 [\#194](https://github.com/radarsh/gradle-test-logger-plugin/pull/194) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Bump byte-buddy from 1.10.17 to 1.10.22 [\#193](https://github.com/radarsh/gradle-test-logger-plugin/pull/193) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Bump com.gradle.plugin-publish from 0.12.0 to 0.13.0 [\#189](https://github.com/radarsh/gradle-test-logger-plugin/pull/189) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-- Fix for NPE when the exception in the TestResult is null. [\#180](https://github.com/radarsh/gradle-test-logger-plugin/pull/180) ([osh-onstructive](https://github.com/osh-onstructive))
+- Fix for NPE when the exception in the TestResult is null. [\#180](https://github.com/radarsh/gradle-test-logger-plugin/pull/180) ([osh-zuri](https://github.com/osh-zuri))
 - Bump byte-buddy from 1.10.1 to 1.10.17 [\#176](https://github.com/radarsh/gradle-test-logger-plugin/pull/176) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Bump commons-io from 2.6 to 2.8.0 [\#174](https://github.com/radarsh/gradle-test-logger-plugin/pull/174) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Upgrade to Gradle 6.7 [\#173](https://github.com/radarsh/gradle-test-logger-plugin/pull/173) ([radarsh](https://github.com/radarsh))
