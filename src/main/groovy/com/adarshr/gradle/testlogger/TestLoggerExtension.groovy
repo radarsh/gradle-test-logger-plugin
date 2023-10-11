@@ -71,7 +71,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     ThemeType getTheme() {
         providers.systemProperty('testlogger.theme')
-            .forUseAtConfigurationTime()
             .map { ThemeType.fromName(it) }
             .orElse(theme)
             .orElse(projectExtension.@theme)
@@ -80,7 +79,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     LogLevel getLogLevel() {
         providers.systemProperty('testlogger.logLevel')
-            .forUseAtConfigurationTime()
             .map { LogLevel.valueOf(it.toUpperCase()) }
             .orElse(logLevel)
             .orElse(projectExtension.@logLevel)
@@ -89,7 +87,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowExceptions() {
         providers.systemProperty('testlogger.showExceptions')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showExceptions)
             .orElse(projectExtension.@showExceptions)
@@ -101,7 +98,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowCauses() {
         providers.systemProperty('testlogger.showCauses')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showCauses)
             .orElse(projectExtension.@showCauses)
@@ -113,7 +109,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowStackTraces() {
         providers.systemProperty('testlogger.showStackTraces')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showStackTraces)
             .orElse(projectExtension.@showStackTraces)
@@ -125,7 +120,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowFullStackTraces() {
         providers.systemProperty('testlogger.showFullStackTraces')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showFullStackTraces)
             .orElse(projectExtension.@showFullStackTraces)
@@ -137,7 +131,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Long getSlowThreshold() {
         providers.systemProperty('testlogger.slowThreshold')
-            .forUseAtConfigurationTime()
             .map { Long.valueOf(it) }
             .orElse(slowThreshold)
             .orElse(projectExtension.@slowThreshold)
@@ -146,7 +139,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowSummary() {
         providers.systemProperty('testlogger.showSummary')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showSummary)
             .orElse(projectExtension.@showSummary)
@@ -155,7 +147,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowStandardStreams() {
         providers.systemProperty('testlogger.showStandardStreams')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showStandardStreams)
             .orElse(projectExtension.@showStandardStreams)
@@ -168,7 +159,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowPassedStandardStreams() {
         providers.systemProperty('testlogger.showPassedStandardStreams')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showPassedStandardStreams)
             .orElse(projectExtension.@showPassedStandardStreams)
@@ -177,7 +167,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowSkippedStandardStreams() {
         providers.systemProperty('testlogger.showSkippedStandardStreams')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showSkippedStandardStreams)
             .orElse(projectExtension.@showSkippedStandardStreams)
@@ -186,7 +175,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowFailedStandardStreams() {
         providers.systemProperty('testlogger.showFailedStandardStreams')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showFailedStandardStreams)
             .orElse(projectExtension.@showFailedStandardStreams)
@@ -195,7 +183,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowPassed() {
         providers.systemProperty('testlogger.showPassed')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showPassed)
             .orElse(projectExtension.@showPassed)
@@ -204,7 +191,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowSkipped() {
         providers.systemProperty('testlogger.showSkipped')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showSkipped)
             .orElse(projectExtension.@showSkipped)
@@ -213,7 +199,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowFailed() {
         providers.systemProperty('testlogger.showFailed')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showFailed)
             .orElse(projectExtension.@showFailed)
@@ -222,7 +207,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowSimpleNames() {
         providers.systemProperty('testlogger.showSimpleNames')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showSimpleNames)
             .orElse(projectExtension.@showSimpleNames)
@@ -231,7 +215,6 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
 
     Boolean getShowOnlySlow() {
         providers.systemProperty('testlogger.showOnlySlow')
-            .forUseAtConfigurationTime()
             .map { Boolean.valueOf(it) }
             .orElse(showOnlySlow)
             .orElse(projectExtension.@showOnlySlow)

@@ -11,8 +11,8 @@ plugins {
     id 'maven-publish'
     id 'idea'
     id 'jacoco'
-    id 'com.gradle.plugin-publish' version '0.19.0'
-    id 'com.github.kt3k.coveralls' version '2.12.0'
+    id 'com.gradle.plugin-publish' version '1.2.1'
+    id 'com.github.kt3k.coveralls' version '2.12.2'
 }
 
 def thisPlugin =
@@ -22,10 +22,6 @@ def thisPlugin =
 apply from: 'gradle/publishing.gradle'
 apply from: 'gradle/coverage.gradle'
 apply plugin: thisPlugin
-
-repositories {
-    mavenCentral()
-}
 
 sourceSets {
     functionalTest {
@@ -38,20 +34,23 @@ sourceSets {
 }
 
 dependencies {
-    implementation gradleApi()
-    implementation localGroovy()
+    compileOnly gradleApi()
+    compileOnly localGroovy()
     implementation 'org.fusesource.jansi:jansi:2.4.0'
 
     testImplementation gradleTestKit()
     testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
-    testImplementation 'net.bytebuddy:byte-buddy:1.12.7'
-    testImplementation 'org.objenesis:objenesis:3.2'
-    testImplementation 'commons-io:commons-io:2.11.0'
+    testImplementation 'net.bytebuddy:byte-buddy:1.14.9'
+    testImplementation 'org.objenesis:objenesis:3.3'
+    testImplementation 'commons-io:commons-io:2.14.0'
 
-    functionalTestImplementation localGroovy()
     functionalTestImplementation gradleTestKit()
     functionalTestImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
-    functionalTestImplementation 'commons-io:commons-io:2.11.0'
+    functionalTestImplementation 'commons-io:commons-io:2.14.0'
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(8)
 }
 
 gradlePlugin {
@@ -69,7 +68,7 @@ idea {
     }
 }
 
-test {
+tasks.named("test") {
     useJUnitPlatform()
 
     testClassesDirs += sourceSets.functionalTest.output.classesDirs
@@ -83,7 +82,9 @@ test {
     exclude 'com/adarshr/gradle/testlogger/functional/**'
 }
 
-task functionalTest(type: Test) {
+tasks.register("functionalTest", Test) {
+    dependsOn 'pluginUnderTestMetadata', 'testClasses'
+
     useJUnitPlatform()
 
     inputs.dir "$projectDir/src/test-functional/resources"
@@ -101,6 +102,6 @@ task functionalTest(type: Test) {
     include 'com/adarshr/gradle/testlogger/functional/**'
 }
 
-tasks.check.dependsOn 'functionalTest'
-tasks.functionalTest.dependsOn 'pluginUnderTestMetadata', 'testClasses'
-tasks.functionalTest.mustRunAfter 'test'
+tasks.named("check") {
+    dependsOn("functionalTest")
+}

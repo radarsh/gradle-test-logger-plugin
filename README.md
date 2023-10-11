@@ -27,7 +27,7 @@ Scroll down for more themes and customisation options or visit the [screenshots 
 
 ```groovy
 plugins {
-    id 'com.adarshr.test-logger' version '3.2.0'
+    id 'com.adarshr.test-logger' version '4.0.0'
 }
 ```
 
@@ -41,7 +41,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.adarshr:gradle-test-logger-plugin:3.2.0'
+        classpath 'com.adarshr:gradle-test-logger-plugin:4.0.0'
     }
 }
 
@@ -50,11 +50,12 @@ apply plugin: 'com.adarshr.test-logger'
 
 ### Compatibility matrix
 
-| Test logger version | Minimum Gradle version      |
-|---------------------|-----------------------------|
-| 1.x                 | 4.x                         |
-| 2.x                 | 5.x                         |
-| 3.x                 | 6.5                         |
+| Test logger version | Minimum Gradle version |
+|---------------------|------------------------|
+| 1.x                 | 4.x                    |
+| 2.x                 | 5.x                    |
+| 3.x                 | 6.5                    |
+| 4.x                 | 7.6                    |
 
 ## Configuration
 
