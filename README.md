@@ -50,11 +50,12 @@ apply plugin: 'com.adarshr.test-logger'
 
 ### Compatibility matrix
 
-| Test logger version | Minimum Gradle version      |
-|---------------------|-----------------------------|
-| 1.x                 | 4.x                         |
-| 2.x                 | 5.x                         |
-| 3.x                 | 6.5                         |
+| Test logger version | Minimum Gradle version |
+|---------------------|------------------------|
+| 1.x                 | 4.x                    |
+| 2.x                 | 5.x                    |
+| 3.x                 | 6.5                    |
+| 4.x                 | 7.6                    |
 
 ## Configuration
 
