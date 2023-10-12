@@ -397,7 +397,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
         when:
             def result = run(
                 'sample-kotest-tests',
-                'test --stacktrace'
+                'test'
             )
         then:
             def lines = getNestedLoggerOutput(result.output).lines
