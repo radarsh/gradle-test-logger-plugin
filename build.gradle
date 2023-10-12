@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath 'org.fusesource.jansi:jansi:2.4.0'
+        classpath 'org.fusesource.jansi:jansi:2.4.1'
         classpath localGroovy()
     }
 }
@@ -36,7 +36,7 @@ sourceSets {
 dependencies {
     compileOnly gradleApi()
     compileOnly localGroovy()
-    implementation 'org.fusesource.jansi:jansi:2.4.0'
+    implementation 'org.fusesource.jansi:jansi:2.4.1'
 
     testImplementation gradleTestKit()
     testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
