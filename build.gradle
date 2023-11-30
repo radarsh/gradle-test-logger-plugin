@@ -42,11 +42,11 @@ dependencies {
     testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
     testImplementation 'net.bytebuddy:byte-buddy:1.14.9'
     testImplementation 'org.objenesis:objenesis:3.3'
-    testImplementation 'commons-io:commons-io:2.14.0'
+    testImplementation 'commons-io:commons-io:2.15.1'
 
     functionalTestImplementation gradleTestKit()
     functionalTestImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
-    functionalTestImplementation 'commons-io:commons-io:2.14.0'
+    functionalTestImplementation 'commons-io:commons-io:2.15.1'
 }
 
 java {
