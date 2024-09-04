@@ -388,3 +388,31 @@ from JUnit Platform 1.3](https://junit.org/junit5/docs/current/user-guide/#runni
 
 The test logger plugin however, is fully compatible with the [Gradle native way](https://docs.gradle.org/current/userguide/java_testing.html#using_junit5) of
 using JUnit 5.
+
+### I see the test output twice. How can I fix it?
+
+Example:
+
+```text
+> Task :myTest
+org.project.MyTest
+  Test test() FAILED
+  org.opentest4j.AssertionFailedError: expected: <Optional[String]> but was: <Optional.empty>
+
+
+MyTest > test() FAILED
+    org.opentest4j.AssertionFailedError: expected: <Optional[String]> but was: <Optional.empty>
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+```
+
+Then, you still have `testLogging` of gradle enabled. Example setting:
+
+
+```groovy
+  testLogging {
+    events = ["FAILED"]
+    exceptionFormat "full"
+  }
+```
+
+Solution: Remove that setting from your `build.gradle`.
