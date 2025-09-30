@@ -50,6 +50,8 @@ apply plugin: 'com.adarshr.test-logger'
 
 ### Compatibility matrix
 
+Note: Java 17 is a pre-requisite
+
 | Test logger version | Minimum Gradle version |
 |---------------------|------------------------|
 | 1.x                 | 4.x                    |
