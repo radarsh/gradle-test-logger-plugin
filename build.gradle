@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath 'org.fusesource.jansi:jansi:2.4.0'
+        classpath 'org.fusesource.jansi:jansi:2.4.2'
         classpath localGroovy()
     }
 }
@@ -11,7 +11,7 @@ plugins {
     id 'maven-publish'
     id 'idea'
     id 'jacoco'
-    id 'com.gradle.plugin-publish' version '1.2.1'
+    id 'com.gradle.plugin-publish' version '2.0.0'
     id 'com.github.kt3k.coveralls' version '2.12.2'
 }
 
@@ -36,19 +36,19 @@ sourceSets {
 dependencies {
     compileOnly gradleApi()
     compileOnly localGroovy()
-    implementation 'org.fusesource.jansi:jansi:2.4.0'
+    implementation 'org.fusesource.jansi:jansi:2.4.2'
 
     testImplementation gradleTestKit()
     testImplementation 'org.spockframework:spock-core:2.4-M6-groovy-4.0'
-    testImplementation 'net.bytebuddy:byte-buddy:1.14.9'
+    testImplementation 'net.bytebuddy:byte-buddy:1.17.7'
     testImplementation 'org.objenesis:objenesis:3.3'
-    testImplementation 'commons-io:commons-io:2.14.0'
+    testImplementation 'commons-io:commons-io:2.20.0'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     functionalTestImplementation gradleTestKit()
     functionalTestImplementation 'org.spockframework:spock-core:2.4-M6-groovy-4.0'
-    functionalTestImplementation 'commons-io:commons-io:2.14.0'
+    functionalTestImplementation 'commons-io:commons-io:2.20.0'
 
     functionalTestRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
