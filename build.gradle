@@ -39,14 +39,18 @@ dependencies {
     implementation 'org.fusesource.jansi:jansi:2.4.0'
 
     testImplementation gradleTestKit()
-    testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+    testImplementation 'org.spockframework:spock-core:2.4-M6-groovy-4.0'
     testImplementation 'net.bytebuddy:byte-buddy:1.14.9'
     testImplementation 'org.objenesis:objenesis:3.3'
     testImplementation 'commons-io:commons-io:2.14.0'
 
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
     functionalTestImplementation gradleTestKit()
-    functionalTestImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+    functionalTestImplementation 'org.spockframework:spock-core:2.4-M6-groovy-4.0'
     functionalTestImplementation 'commons-io:commons-io:2.14.0'
+
+    functionalTestRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 java {
@@ -64,11 +68,11 @@ gradlePlugin {
 
 idea {
     module {
-        testSourceDirs += file('src/test-functional/groovy')
+        testSources.from(file('src/test-functional/groovy'))
     }
 }
 
-tasks.named("test") {
+tasks.named("test", Test) {
     useJUnitPlatform()
 
     testClassesDirs += sourceSets.functionalTest.output.classesDirs

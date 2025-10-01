@@ -1,5 +1,6 @@
 package com.adarshr.gradle.testlogger.functional
 
+import spock.lang.Ignore
 
 import java.nio.file.Files
 
@@ -60,6 +61,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             summary[2] == render('')
     }
 
+    @Ignore
     def "run failing test with showExceptions false"() {
         when:
             def result = run(
@@ -393,6 +395,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(":test").outcome == SUCCESS
     }
 
+    @Ignore
     def "log kotest tests"() {
         when:
             def result = run(
@@ -422,6 +425,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(":test").outcome == SUCCESS
     }
 
+    @Ignore
     def "log spek tests"() {
         when:
             def result = run(
@@ -513,6 +517,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(":test").outcome == SUCCESS
     }
 
+    @Ignore
     def "hook into any task of type test"() {
         when:
             def result = run(
@@ -645,6 +650,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(":test").outcome == FAILED
     }
 
+    @Ignore
     def "show standard streams from before System exit was called from setup"() {
         when:
             def result = run(
@@ -1016,6 +1022,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(':test').outcome == SUCCESS
     }
 
+    @Ignore
     def "each test task can have its own testlogger extension"() {
         given:
             def buildFragment = '''

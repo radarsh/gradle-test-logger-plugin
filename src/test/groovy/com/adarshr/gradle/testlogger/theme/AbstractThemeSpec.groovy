@@ -136,11 +136,10 @@ class AbstractThemeSpec extends BaseThemeSpec {
                    |      at com.adarshr.gradle.testlogger.theme.AbstractThemeSpec\$1.three(AbstractThemeSpec.groovy:22)
                    |      at com.adarshr.gradle.testlogger.theme.AbstractThemeSpec\$1.two(AbstractThemeSpec.groovy:19)
                    |      at com.adarshr.gradle.testlogger.theme.AbstractThemeSpec\$1.one(AbstractThemeSpec.groovy:17)
-                   |      at com.adarshr.gradle.testlogger.theme.AbstractThemeSpec\$1\$one.call(Unknown Source)
                    |      ... 2 more
                    |  Caused by: java.lang.RuntimeException: Inner error
                    |      at com.adarshr.gradle.testlogger.theme.AbstractThemeSpec\$1.three(AbstractThemeSpec.groovy:22)
-                   |      ... 5 more
+                   |      ... 4 more
                    |""".stripMargin().replace('\n', lineSeparator())
     }
 

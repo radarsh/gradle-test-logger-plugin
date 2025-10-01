@@ -12,8 +12,9 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.codehaus.groovy:groovy:3.0.19'
-    testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+    testImplementation 'org.apache.groovy:groovy:4.0.26'
+    testImplementation 'org.spockframework:spock-core:2.4-M6-groovy-4.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
