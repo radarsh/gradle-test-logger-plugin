@@ -5,7 +5,6 @@
 [![AppVeyor branch](https://img.shields.io/appveyor/build/radarsh/gradle-test-logger-plugin/develop?label=appveyor&style=flat-square&logo=appveyor)](https://ci.appveyor.com/project/radarsh/gradle-test-logger-plugin/branch/develop)
 [![Coveralls branch](https://img.shields.io/coveralls/github/radarsh/gradle-test-logger-plugin/develop?&style=flat-square&logo=coveralls)](https://coveralls.io/github/radarsh/gradle-test-logger-plugin?branch=develop)
 [![License](https://img.shields.io/github/license/radarsh/gradle-test-logger-plugin?style=flat-square&logo=apache)](https://github.com/radarsh/gradle-test-logger-plugin/blob/develop/LICENSE)
-[![Twitter Follow](https://img.shields.io/twitter/follow/radarsh?label=%40radarsh&logo=twitter&style=flat-square)](https://twitter.com/intent/follow?screen_name=radarsh)
 
 A Gradle plugin for printing beautiful logs on the console while running tests.
 
@@ -23,29 +22,10 @@ Scroll down for more themes and customisation options or visit the [screenshots 
 
 ## Usage
 
-### Using the plugins DSL
-
 ```groovy
 plugins {
     id 'com.adarshr.test-logger' version '4.0.0'
 }
-```
-
-### Using legacy plugin application
-
-```groovy
-buildscript {
-    repositories {
-        maven {
-            url 'https://plugins.gradle.org/m2/'
-        }
-    }
-    dependencies {
-        classpath 'com.adarshr:gradle-test-logger-plugin:4.0.0'
-    }
-}
-
-apply plugin: 'com.adarshr.test-logger'
 ```
 
 ### Compatibility matrix
