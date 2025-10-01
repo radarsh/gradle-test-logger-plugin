@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     testImplementation 'io.kotest:kotest-runner-junit5-jvm:5.7.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
