@@ -2,9 +2,7 @@ package com.adarshr.test
 
 import spock.lang.Ignore
 import spock.lang.Specification
-import spock.lang.Stepwise
 
-@Stepwise
 class FirstSpec extends Specification {
 
     def setupSpec() {

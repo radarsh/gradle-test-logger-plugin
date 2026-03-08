@@ -1,6 +1,5 @@
 package com.adarshr.gradle.testlogger.functional
 
-import spock.lang.Ignore
 
 import java.nio.file.Files
 
@@ -33,7 +32,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                    |  1 == 2
                    |    |
                    |    false
-                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:41)
+                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:39)
                    |[/]'''.stripMargin())
             lines[13] == render('[erase-ahead,bold]  Test [bold-off]this test should be skipped[yellow] SKIPPED[/]')
             lines[14] == render('')
@@ -61,7 +60,6 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             summary[2] == render('')
     }
 
-    @Ignore
     def "run failing test with showExceptions false"() {
         when:
             def result = run(
@@ -395,7 +393,6 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(":test").outcome == SUCCESS
     }
 
-    @Ignore
     def "log kotest tests"() {
         when:
             def result = run(
@@ -425,7 +422,6 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(":test").outcome == SUCCESS
     }
 
-    @Ignore
     def "log spek tests"() {
         when:
             def result = run(
@@ -517,7 +513,6 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(":test").outcome == SUCCESS
     }
 
-    @Ignore
     def "hook into any task of type test"() {
         when:
             def result = run(
@@ -527,8 +522,10 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                         theme 'plain' 
                         slowThreshold 5000
                     }
-                    task anotherTask(type: Test) {
+                    tasks.register('anotherTask', Test) {
                         useJUnitPlatform()
+                        testClassesDirs = testing.suites.test.sources.output.classesDirs
+                        classpath = testing.suites.test.sources.runtimeClasspath
                     }
                 ''',
                 'anotherTask'
@@ -650,7 +647,6 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(":test").outcome == FAILED
     }
 
-    @Ignore
     def "show standard streams from before System exit was called from setup"() {
         when:
             def result = run(
@@ -682,7 +678,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             lines[10] == render('    FirstSpec - this test should pass - stderr setup[/]')
         and:
             summary[0] == render('')
-            summary[1].startsWith render('[erase-ahead,bold,green]SUCCESS: [default]Executed 1 tests in')
+            summary[1].startsWith render('[erase-ahead,bold,red]FAILURE: [default]Executed 1 tests in')
             summary[1].endsWith render('(1 skipped)[/]')
             summary[2] == render('')
         and:
@@ -921,7 +917,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                    |  1 == 2
                    |    |
                    |    false
-                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:41)
+                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:39)
                    |[/]'''.stripMargin())
             lines[17] == render('[default]')
             lines[18] == render('    FirstSpec - this test should fail - stdout setup')
@@ -981,7 +977,7 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                    |  1 == 2
                    |    |
                    |    false
-                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:41)
+                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:39)
                    |[/]'''.stripMargin())
             lines[17] == render('[erase-ahead,bold]  Test [bold-off]this test should be skipped[yellow] SKIPPED[/]')
             lines[18] == render('[default]')
@@ -1022,7 +1018,6 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
             result.task(':test').outcome == SUCCESS
     }
 
-    @Ignore
     def "each test task can have its own testlogger extension"() {
         given:
             def buildFragment = '''
@@ -1038,6 +1033,8 @@ class TestLoggerPluginSpec extends AbstractFunctionalSpec {
                 }
                 task anotherTask(type: Test) {
                     useJUnitPlatform()
+                    testClassesDirs = testing.suites.test.sources.output.classesDirs
+                    classpath = testing.suites.test.sources.runtimeClasspath
                     testlogger {
                         theme 'plain-parallel'
                         slowThreshold 5000

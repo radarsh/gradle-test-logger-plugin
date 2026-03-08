@@ -341,7 +341,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                    |  1 == 2
                    |    |
                    |    false
-                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:41)
+                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:39)
                    |[/]'''.stripMargin())
             lines[14] == render('[default]')
             lines[15] == render('  FirstSpec - this test should fail - stdout setup')
@@ -404,7 +404,7 @@ class ParallelExecutionSpec extends AbstractFunctionalSpec {
                    |  1 == 2
                    |    |
                    |    false
-                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:41)
+                   |      at com.adarshr.test.FirstSpec.this test should fail(FirstSpec.groovy:39)
                    |[/]'''.stripMargin())
             lines[14] == render('[erase-ahead,bold]com.adarshr.test.FirstSpec[bold-off] this test should be skipped[yellow] SKIPPED[/]')
             lines[15] == render('[default]')
