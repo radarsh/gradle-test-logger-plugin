@@ -7,12 +7,16 @@ import org.gradle.api.GradleException
 enum ThemeType {
     //@formatter:off
     //                  name                    parallel    themeClass              parallelFallback
-    PLAIN(              'plain',                false,      PlainTheme,             'plain-parallel'),
-    PLAIN_PARALLEL(     'plain-parallel',       true,       PlainParallelTheme,     null),
-    STANDARD(           'standard',             false,      StandardTheme,          'standard-parallel'),
-    STANDARD_PARALLEL(  'standard-parallel',    true,       StandardParallelTheme,  null),
-    MOCHA(              'mocha',                false,      MochaTheme,             'mocha-parallel'),
-    MOCHA_PARALLEL(     'mocha-parallel',       true,       MochaParallelTheme,     null)
+    PLAIN(               'plain',                false,      PlainTheme,             'plain-parallel'),
+    PLAIN_PARALLEL(      'plain-parallel',       true,       PlainParallelTheme,     null),
+    STANDARD(            'standard',             false,      StandardTheme,          'standard-parallel'),
+    STANDARD_PARALLEL(   'standard-parallel',    true,       StandardParallelTheme,  null),
+    MOCHA(               'mocha',                false,      MochaTheme,             'mocha-parallel'),
+    MOCHA_PARALLEL(      'mocha-parallel',       true,       MochaParallelTheme,     null),
+    MAVEN(               'maven',                false,      MavenTheme,             'maven-parallel'),
+    MAVEN_PARALLEL(      'maven-parallel',       true,       MavenParallelTheme,     null),
+    MAVEN_PLAIN(         'maven-plain',          false,      MavenPlainTheme,        'maven-plain-parallel'),
+    MAVEN_PLAIN_PARALLEL('maven-plain-parallel', true,       MavenPlainParallelTheme,null)
     //@formatter:on
 
     final String name
