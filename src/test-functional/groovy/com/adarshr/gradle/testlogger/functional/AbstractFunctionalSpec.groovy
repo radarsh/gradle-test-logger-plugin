@@ -132,7 +132,7 @@ abstract class AbstractFunctionalSpec extends Specification {
                 .withProjectDir(projectDir)
                 .withPluginClasspath()
                 .withDebug(true)
-                .withArguments(args.split(' '))
+                .withArguments(args.split(' ').toList() + ['--configuration-cache', '--stacktrace'])
                 .forwardOutput()
                 .build()
         } catch (UnexpectedBuildFailure e) {

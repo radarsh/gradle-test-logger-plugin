@@ -3,16 +3,28 @@ package com.adarshr.gradle.testlogger.logger
 import com.adarshr.gradle.testlogger.TestLoggerExtension
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import org.gradle.StartParameter
+import org.gradle.api.Project
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.configuration.ConsoleOutput
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.testing.Test
 import spock.lang.Specification
+import java.util.concurrent.Callable
 
 class TestLoggerWrapperSpec extends Specification {
 
     def extensionMock = Mock(TestLoggerExtension)
+    def projectMock = Mock(Project) {
+        provider(_ as Callable<?>) >> { Callable callable ->
+            def result = callable.call()
+            return Mock(Provider) {
+                get() >> result
+            }
+        }
+    }
     def testMock = Mock(Test) {
         getLogger() >> Mock(Logger)
+        getProject() >> projectMock
     }
     def startParameterMock = Mock(StartParameter) {
         getConsoleOutput() >> ConsoleOutput.Auto
