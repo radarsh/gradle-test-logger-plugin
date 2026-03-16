@@ -40,7 +40,7 @@ dependencies {
     testImplementation gradleTestKit()
     testImplementation 'org.spockframework:spock-core:2.4-M6-groovy-4.0'
     testImplementation 'net.bytebuddy:byte-buddy:1.14.9'
-    testImplementation 'org.objenesis:objenesis:3.3'
+    testImplementation 'org.objenesis:objenesis:3.4'
     testImplementation 'commons-io:commons-io:2.14.0'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
