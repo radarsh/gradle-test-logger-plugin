@@ -89,4 +89,9 @@ abstract class TestLoggerExtensionProperties {
      * Whether only slow tests should be shown. Defaults to false.
      */
     Boolean showOnlySlow
+
+    /**
+     * Whether test distribution details (e.g., partition and session info) should be shown. Defaults to true.
+     */
+    Boolean showDistributionDetails
 }
