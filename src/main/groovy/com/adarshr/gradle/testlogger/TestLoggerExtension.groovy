@@ -38,6 +38,7 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
     private final Property<Boolean> showFailed
     private final Property<Boolean> showSimpleNames
     private final Property<Boolean> showOnlySlow
+    private final Property<Boolean> showDistributionDetails
 
     private final SetProperty<TestLogEvent> originalTestLoggingEvents
     private final TestLoggerExtension projectExtension
@@ -62,6 +63,7 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
         this.showFailed = project.objects.property(Boolean)
         this.showSimpleNames = project.objects.property(Boolean)
         this.showOnlySlow = project.objects.property(Boolean)
+        this.showDistributionDetails = project.objects.property(Boolean)
 
         this.originalTestLoggingEvents = project.objects.setProperty(TestLogEvent)
         this.projectExtension = project.extensions.findByType(TestLoggerExtension)
@@ -221,6 +223,14 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
             .getOrElse(false)
     }
 
+    Boolean getShowDistributionDetails() {
+        providers.systemProperty('testlogger.showDistributionDetails')
+            .map { Boolean.valueOf(it) }
+            .orElse(showDistributionDetails)
+            .orElse(projectExtension.@showDistributionDetails)
+            .getOrElse(true)
+    }
+
     @PackageScope
     void setOriginalTestLoggingEvents(Set<TestLogEvent> events) {
         this.originalTestLoggingEvents.value(events).finalizeValue()
@@ -326,5 +336,10 @@ class TestLoggerExtension extends TestLoggerExtensionProperties {
     @Override
     void setShowOnlySlow(Boolean showOnlySlow) {
         this.showOnlySlow.set(showOnlySlow)
+    }
+
+    @Override
+    void setShowDistributionDetails(Boolean showDistributionDetails) {
+        this.showDistributionDetails.set(showDistributionDetails)
     }
 }

@@ -73,4 +73,41 @@ class TestDescriptorWrapperSpec extends Specification {
             'com.adarshr.Test$One$Two' | 'Two'             | 'Two'
             'com.adarshr.Test$One$Two' | 'Bar'             | 'Bar'
     }
+
+    def "trail includes all ancestors when showDistributionDetails is true"() {
+        given:
+            testLoggerExtensionMock.showDistributionDetails >> true
+            wrapper = new TestDescriptorWrapper(testDescriptorMock, testLoggerExtensionMock, [
+                Mock(TestDescriptorWrapper) { displayName >> 'Distributed Test Run :test' },
+                Mock(TestDescriptorWrapper) { displayName >> 'Partition 1 in session 2 on uuid' },
+                Mock(TestDescriptorWrapper) { displayName >> 'SuspendTest' },
+            ])
+        expect:
+            wrapper.trail == 'Distributed Test Run :test > Partition 1 in session 2 on uuid > SuspendTest'
+    }
+
+    def "trail filters distribution ancestors when showDistributionDetails is false"() {
+        given:
+            testLoggerExtensionMock.showDistributionDetails >> false
+            wrapper = new TestDescriptorWrapper(testDescriptorMock, testLoggerExtensionMock, [
+                Mock(TestDescriptorWrapper) { displayName >> 'Distributed Test Run :test' },
+                Mock(TestDescriptorWrapper) { displayName >> 'Partition 1 in session 2 on uuid' },
+                Mock(TestDescriptorWrapper) { displayName >> 'SuspendTest' },
+            ])
+        expect:
+            wrapper.trail == 'SuspendTest'
+    }
+
+    def "trail filters only distribution-related ancestors when showDistributionDetails is false"() {
+        given:
+            testLoggerExtensionMock.showDistributionDetails >> false
+            wrapper = new TestDescriptorWrapper(testDescriptorMock, testLoggerExtensionMock, [
+                Mock(TestDescriptorWrapper) { displayName >> 'Distributed Test Run :test' },
+                Mock(TestDescriptorWrapper) { displayName >> 'Partition 1 in session 2 on uuid' },
+                Mock(TestDescriptorWrapper) { displayName >> ':test' },
+                Mock(TestDescriptorWrapper) { displayName >> 'SuspendTest' },
+            ])
+        expect:
+            wrapper.trail == ':test > SuspendTest'
+    }
 }

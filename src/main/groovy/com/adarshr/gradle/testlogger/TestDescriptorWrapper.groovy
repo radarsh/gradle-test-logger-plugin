@@ -22,7 +22,22 @@ class TestDescriptorWrapper {
         this.testLoggerExtension = testLoggerExtension
         this.depth = ancestors.size()
         this.ancestors = ancestors
-        this.trail = ancestors.collect { it.displayName }.join(' > ')
+        this.trail = buildTrail(ancestors, testLoggerExtension)
+    }
+
+    private static String buildTrail(List<TestDescriptorWrapper> ancestors, TestLoggerExtension extension) {
+        var filteredAncestors = ancestors
+        if (!extension.showDistributionDetails) {
+            filteredAncestors = ancestors.findAll { ancestor ->
+                !isDistributionAncestor(ancestor.displayName)
+            }
+        }
+        return filteredAncestors.collect { it.displayName }.join(' > ')
+    }
+
+    private static boolean isDistributionAncestor(String displayName) {
+        return displayName.startsWith('Distributed Test Run') ||
+               displayName.contains('Partition') && displayName.contains('session')
     }
 
     @CompileDynamic
